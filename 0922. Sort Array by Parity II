@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> sortArrayByParityII(vector<int>& nums) {
+        vector<int> odd;
+        vector<int> even;
+        int i,n=nums.size(),o=0,e=0;
+        for(int j:nums){
+            if(j%2==0){
+                even.push_back(j);
+            }else{
+                odd.push_back(j);
+            }
+        }
+        for(i=0;i<n;i++){
+            if(i%2==0){
+                nums[i]=even[e];
+                e++;
+            }else{
+                nums[i]=odd[o];
+                o++;
+            }
+        }
+        return nums;
+    }
+};
