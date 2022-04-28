@@ -1,0 +1,21 @@
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==1||n==1){
+            return 1;
+        }
+        if(n==2){
+            return m;
+        }
+        int arr[]=new int[n];
+        Arrays.fill(arr,1);
+        int sum=0;
+        m--;
+        while(m!=0){
+            for(int i=1;i<arr.length;i++){
+                arr[i]+=arr[i-1];
+            }
+            m--;
+        }
+        return arr[arr.length-1];
+    }
+}
