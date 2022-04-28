@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string makeGood(string s) {
+        string good_str;
+        stack<char> gs;
+        for(int i=0;i<s.length();i++){
+            if(gs.size()==0){
+                gs.push(s[i]);
+                continue;
+            }
+            if((int)s[i]==((int)gs.top()+32) || (int)s[i]==((int)gs.top()-32)){
+                gs.pop();
+            }else{
+                gs.push(s[i]);
+            }
+        }
+        while(!gs.empty()){
+            good_str.push_back(gs.top());
+            gs.pop();
+        }
+        reverse(good_str.begin(),good_str.end());
+        return good_str;
+    }
+};
