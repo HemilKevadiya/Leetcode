@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int i,n=nums.size(),positive=0,negative=1;
+        vector<int> ans(n);
+        for(auto j:nums){
+            if(j>0){
+                ans[positive]=j;
+                positive+=2;
+            }else{
+                ans[negative]=j;
+                negative+=2;
+            }
+        }
+        return ans;
+    }
+};
