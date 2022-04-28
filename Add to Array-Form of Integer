@@ -1,0 +1,59 @@
+class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& num, int k) {
+        if(num.at(0)==0){
+            num.clear();
+            while(k!=0){
+                num.push_back(k%10);
+                k/=10;
+            }
+            reverse(num.begin(),num.end());
+            return num;
+        }
+        int tmp=k,digits=0;
+        while(tmp!=0){
+            digits++;
+            tmp/=10;
+        }
+        vector<int> temp;
+        if(num.size()<digits){
+            for(int i=0;i<digits;i++){
+                temp.push_back(0);
+            }
+            for(int i=0;i<num.size();i++){
+                temp.push_back(num.at(i));
+            }
+            for(int i=temp.size()-1;i>=1;i--){
+                while(k!=0){
+                    temp.at(i)+=k%10;
+                    k/=10;
+                    break;
+                }
+                if(temp.at(i)>9){
+                    temp.at(i)-=10;
+                    temp.at(i-1)+=1;
+                }
+            }
+        }else{
+            temp.push_back(0);
+            for(int i=1;i<=num.size();i++){
+                temp.push_back(num.at(i-1));
+            }
+        }
+        for(int i=temp.size()-1;i>=1;i--){
+            while(k!=0){
+                temp.at(i)+=k%10;
+                k/=10;
+                break;
+            }
+            if(temp.at(i)>9){
+                temp.at(i)-=10;
+                temp.at(i-1)+=1;
+            }
+        }
+        while(temp.at(0)==0){
+            temp=vector<int>(temp.begin()+1,temp.end());
+        }
+        return temp;
+    }
+};
