@@ -1,0 +1,232 @@
+class Solution {
+public:
+    void one(int n, char words[500]){
+        if(n==1){
+            strcat(words,"One ");
+        }else if(n==2){
+            strcat(words,"Two ");
+        }else if(n==3){
+            strcat(words,"Three ");
+        }else if(n==4){
+            strcat(words,"Four ");
+        }else if(n==5){
+            strcat(words,"Five ");
+        }else if(n==6){
+            strcat(words,"Six ");
+        }else if(n==7){
+            strcat(words,"Seven ");
+        }else if(n==8){
+            strcat(words,"Eight ");
+        }else if(n==9){
+            strcat(words,"Nine ");
+        }          
+        // string str[]={"One","Two","Three","Four","Five","Six","Seven","Eight","Ten"};
+        // string out[]=str[n-1];
+        // strcat(words,out);
+    }
+    void ten(int n, char words[500]){
+        if(n==2){
+            strcat(words,"Twenty ");
+        }else if(n==3){
+            strcat(words,"Thirty ");
+        }else if(n==4){
+            strcat(words,"Forty ");
+        }else if(n==5){
+            strcat(words,"Fifty ");
+        }else if(n==6){
+            strcat(words,"Sixty ");
+        }else if(n==7){
+            strcat(words,"Seventy ");
+        }else if(n==8){
+            strcat(words,"Eighty ");
+        }else if(n==9){
+            strcat(words,"Ninety ");
+        }
+    }
+    void teen(int n, char words[500]){
+        if(n==1){
+            strcat(words,"Eleven ");
+        }else if(n==2){
+            strcat(words,"Twelve ");
+        }else if(n==3){
+            strcat(words,"Thirteen ");
+        }else if(n==4){
+            strcat(words,"Fourteen ");
+        }else if(n==5){
+            strcat(words,"Fifteen ");
+        }else if(n==6){
+            strcat(words,"Sixteen ");
+        }else if(n==7){
+            strcat(words,"Seventeen ");
+        }else if(n==8){
+            strcat(words,"Eighteen ");
+        }else if(n==9){
+            strcat(words,"Nineteen ");
+        }else if(n==0){
+            strcat(words,"Ten ");
+        }              
+    }
+    string numberToWords(int num) {
+        stack<int> temp;
+        int check=0;
+        string dummy;
+        char words[500]={'\0'};
+        int temp_num = num;
+        while(temp_num!=0){
+            temp.push(temp_num%10);
+            temp_num/=10;
+        }
+        // int m=temp.size();
+        // for(int i=0;i<m;i++){
+        //     cout<<temp.top()<<" ";
+        //     temp.pop();
+        // }
+        if(num==0){
+            return "Zero";
+        }
+        if(num==10){
+            return "Ten";
+        }
+        if(num>=1000000000){
+            one(temp.top(),words);
+            num-=temp.top()*1000000000;
+            temp.pop();
+            strcat(words,"Billion ");
+        }
+        if(num>=100000000){
+            while(temp.size()>9){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*100000000;
+            temp.pop();
+            if(temp.top()==0){
+                int inter=temp.top();
+                temp.pop();
+                if(temp.top()==0){
+                    strcat(words,"Hundred Million ");
+                }
+                else{
+                    strcat(words,"Hundred ");
+                }
+            }else{
+                strcat(words,"Hundred ");
+            }
+        }
+        if(num>=10000000){
+            while(temp.size()>8){
+                temp.pop();
+            }
+            if(temp.top()==1){
+                temp.pop();
+                teen(temp.top(),words);
+                num-=(temp.top()+10)*1000000;
+                temp.pop();
+                strcat(words,"Million ");
+            }else{
+                ten(temp.top(),words);
+                num-=temp.top()*10000000;
+                temp.pop();
+                if(temp.top()==0){
+                    strcat(words,"Million ");
+                }
+            }
+        }
+        if(num>=1000000){
+            while(temp.size()>7){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*1000000;
+            temp.pop();
+            strcat(words,"Million ");
+        }
+        check=0;
+        if(num>=100000){
+            while(temp.size()>6){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*100000;
+            temp.pop();
+            if(temp.top()==0){
+                int inter=temp.top();
+                temp.pop();
+                if(temp.top()==0){
+                    strcat(words,"Hundred Thousand ");
+                }
+                else{
+                    strcat(words,"Hundred ");
+                }
+            }else{
+                strcat(words,"Hundred ");
+            }
+        }
+        if(num>=10000){
+            while(temp.size()>5){
+                temp.pop();
+            }
+            if(temp.top()==1){
+                temp.pop();
+                teen(temp.top(),words);
+                num-=(temp.top()+10)*1000;
+                temp.pop();
+                strcat(words,"Thousand ");
+            }else{
+                ten(temp.top(),words);
+                num-=temp.top()*10000;
+                temp.pop();
+                if(temp.top()==0){
+                    strcat(words,"Thousand ");
+                }
+            }
+        }
+        if(num>=1000){
+            while(temp.size()>4){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*1000;
+            temp.pop();
+            strcat(words,"Thousand ");
+        }
+        if(num>=100){
+            while(temp.size()>3){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*100;
+            temp.pop();
+            strcat(words,"Hundred ");
+        }
+        if(num>=10){
+            while(temp.size()>2){
+                temp.pop();
+            }
+            if(temp.top()==1){
+                temp.pop();
+                teen(temp.top(),words);
+                num-=(temp.top()+10)*1;
+                temp.pop();
+            }else{
+                ten(temp.top(),words);
+                num-=temp.top()*10;
+                temp.pop();
+            }
+        }
+        if(num>=1){
+            while(temp.size()>1){
+                temp.pop();
+            }
+            one(temp.top(),words);
+            num-=temp.top()*1;
+            temp.pop();
+        }
+        string final_output;
+        string s = words;
+        if(s[s.length()-1]==' '){
+            s.pop_back();
+        }
+        return s;
+    }
+};
