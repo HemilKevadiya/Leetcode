@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int minMoves(int target, int maxDoubles) {
+        if(maxDoubles==0){
+            return target-1;
+        }
+        int steps=0;
+        while(target!=1){
+            if(maxDoubles==0){
+                steps+=target-1;
+                break;
+            }
+            if(target%2!=0){
+                target--;
+                steps++;
+            }else{
+                target/=2;
+                maxDoubles--;
+                steps++;
+            }
+        }
+        return steps;
+    }
+};
