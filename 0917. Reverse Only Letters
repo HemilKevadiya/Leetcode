@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string reverseOnlyLetters(string s) {
+        int i,n=s.length();
+        vector<int> cns;
+        string s1;
+        for(i=0;i<n;i++){
+            int asc = (int)s[i];
+            if((asc>=97 && asc<=122) || (asc>=65 && asc<=90)){
+                cns.push_back(i);
+                s1.push_back(s[i]);
+            }
+        }
+        int vl = cns.size();
+        reverse(s1.begin(),s1.end());
+        for(i=0;i<vl;i++){
+            s[cns[i]] = s1[i];
+        }
+        return s;
+    }
+};
