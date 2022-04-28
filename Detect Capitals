@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        int n=word.length(),caps=0,smalls=0,flag=0;
+        if(word[0]>='A' && word[0]<='Z'){
+            flag=1;
+            caps++;
+        }else{
+            smalls++;
+        }
+        for(int i=1;i<n;i++){
+            if(word[i]>='a' && word[i]<='z'){
+                smalls++;
+            }else{
+                caps++;
+            }
+        }
+        if(smalls==n || caps==n || (caps==1 && smalls==n-1 && flag==1)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
