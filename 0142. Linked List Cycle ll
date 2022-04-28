@@ -1,0 +1,22 @@
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        unordered_set<ListNode*> map;
+        ListNode* temp = head;
+        ListNode* cycle = NULL;
+        if(head==NULL){
+            return cycle;
+        }
+        while(temp->next!=NULL){
+            if(map.find(temp->next)!=map.end()){
+                cycle = temp->next;
+                temp->next=NULL;
+                break;
+            }else{
+                map.insert(temp);
+            }
+            temp = temp->next;
+        }
+        return cycle;
+    }
+};
