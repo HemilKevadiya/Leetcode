@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        unordered_set<ListNode*> map;
+        ListNode* temp = head;
+        if(head==NULL || head->next==NULL){
+            return false;
+        }
+        while(temp->next!=NULL){
+            if(map.find(temp->next)!=map.end()){
+                temp->next=NULL;
+                return true;
+            }else{
+                map.insert(temp);
+            }
+            temp = temp->next;
+        }
+        return false;
+    }
+};
