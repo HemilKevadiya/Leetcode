@@ -1,0 +1,32 @@
+class MinStack {
+    int top_ele;
+    vector<int> arr;
+public:
+    MinStack() {
+        this->top_ele=-1;
+    }
+    
+    void push(int val) {
+        top_ele++;
+        arr.push_back(val);
+    }
+    
+    void pop() {
+        top_ele--;
+        arr.pop_back();
+    }
+    
+    int top() {
+        return arr[top_ele];
+    }
+    
+    int getMin() {
+        int min=INT_MAX;
+        for(int i=0;i<arr.size();i++){
+            if(min>arr[i]){
+                min=arr[i];
+            }
+        }
+        return min;
+    }
+};
