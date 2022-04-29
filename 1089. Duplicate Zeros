@@ -1,0 +1,17 @@
+class Solution {
+public:
+    void duplicateZeros(vector<int>& arr) {
+        vector<int> copy;
+        copy = arr;
+        arr.clear();
+        int n = copy.size(),i=0;
+        while(arr.size()<n){
+            cout<<arr.size()<<" ";
+            arr.push_back(copy[i]);
+            if(copy[i]==0 && arr.size()<n){
+                arr.push_back(copy[i]);
+            }
+            i++;
+        }
+    }
+};
