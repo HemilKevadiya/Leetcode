@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        int size1=num1.length(),size2=num2.length();
+        int zeroes = abs(size1-size2);
+        if(size1<size2){
+            reverse(num1.begin(),num1.end());
+            for(int i=0;i<zeroes;i++){
+                num1.push_back('0');
+            }
+            reverse(num1.begin(),num1.end());
+        }else if(size1>size2){
+            reverse(num2.begin(),num2.end());
+            for(int i=0;i<zeroes;i++){
+                num2.push_back('0');
+            }
+            reverse(num2.begin(),num2.end());
+        }
+        size1 = num1.length();
+        int carry=0;
+        for(int i=size1-1;i>=0;i--){
+            // cout<<num1[i]<<" ";
+            char a = num1[i]; char b = num2[i];
+            int sum = (a - '0') + (b - '0');
+            sum+=carry;
+            cout<<sum<<" ";
+            if(sum>=10){
+                sum-=10;
+                carry=1;
+            }else{
+                carry=0;
+            }
+            num1[i]=sum + '0';
+        }
+        if(carry==1){
+            reverse(num1.begin(),num1.end());
+            num1.push_back(carry);
+            num1[num1.length()-1] +='0';
+            reverse(num1.begin(),num1.end());
+        }
+        return num1;
+    }
+};
