@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int getDecimalValue(ListNode* head) {
+        ListNode* temp = head;
+        vector<int> bits;
+        int count=0;
+        while(temp!=NULL){
+            count++;
+            bits.push_back(temp->val);
+            temp = temp->next;
+        }
+        int num=0,i=0;
+        while(count>0){
+            if(bits[i++]==0){
+                count--;
+            }else{
+                num+=pow(2,--count);
+            }
+        }
+        return num;
+    }
+};
