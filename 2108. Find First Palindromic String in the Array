@@ -1,0 +1,19 @@
+class Solution {
+    bool palindromeChecker(string s){
+        string s1 = s;
+        reverse(s1.begin(),s1.end());
+        return s1==s;
+    }
+public:
+    string firstPalindrome(vector<string>& words) {
+        int i,n=words.size();
+        string s1;
+        for(i=0;i<n;i++){
+            if(palindromeChecker(words[i])){
+                s1 = words[i];
+                break;
+            }
+        }
+        return s1;
+    }
+};
