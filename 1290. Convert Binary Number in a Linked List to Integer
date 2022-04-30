@@ -1,22 +1,28 @@
 class Solution {
+     ListNode* reverseList(ListNode* head) {
+        ListNode* current = head;
+        ListNode* prev = NULL;
+        ListNode* next = head;
+        while(current!=NULL){
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+         return prev;
+    }
 public:
     int getDecimalValue(ListNode* head) {
+        head = reverseList(head);
         ListNode* temp = head;
-        vector<int> bits;
-        int count=0;
+        int count=0,number=0;
         while(temp!=NULL){
-            count++;
-            bits.push_back(temp->val);
-            temp = temp->next;
-        }
-        int num=0,i=0;
-        while(count>0){
-            if(bits[i++]==0){
-                count--;
-            }else{
-                num+=pow(2,--count);
+            if(temp->val==1){
+                number+=pow(2,count);
             }
+            temp = temp->next;
+            count++;
         }
-        return num;
+        return number;
     }
 };
