@@ -1,0 +1,43 @@
+class Solution {
+  ListNode* reverseList(ListNode* head) {
+        ListNode* current = head;
+        ListNode* prev = NULL;
+        ListNode* next = head;
+        while(current!=NULL){
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }  
+public:
+    bool isPalindrome(ListNode* head) {
+        vector<int> visited;
+        ListNode* ptr1 = head;
+        ListNode* ptr2 = head;
+        int flag=0,i=0;
+        while(ptr2->next!=NULL){
+            visited.push_back(ptr1->val);
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next->next;
+            if(ptr2==NULL){
+                flag=1;
+                break;
+            }
+        }
+        if(flag){
+            ptr1 = reverseList(ptr1);
+        }else{
+            ptr1 = reverseList(ptr1->next);
+        }
+        while(ptr1!=NULL){
+            if(visited[i]!=ptr1->val){
+                return false;
+            }
+            i++;
+            ptr1 = ptr1->next;
+        }
+        return true;
+    }
+};
