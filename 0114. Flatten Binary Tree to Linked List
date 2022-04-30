@@ -1,0 +1,35 @@
+class Solution {
+    vector<int> iter;
+    void preOrder(TreeNode* root){
+        stack<TreeNode*> nodes;
+        while(root!=NULL || !nodes.empty()){
+            if(root!=NULL){
+                iter.push_back(root->val);
+                if(root->right!=NULL){
+                    nodes.push(root->right);
+                }
+                root=root->left;
+            }else{
+                root=nodes.top();
+                nodes.pop();
+            }
+        }
+    }
+
+public:
+    void flatten(TreeNode* root) {
+        preOrder(root);
+        if(root==NULL){
+            return;
+        }
+        root->left = NULL; root->right = NULL;
+        root->val = iter[0];
+        int i=1,n=iter.size();
+        while(i<n){
+            TreeNode* newNode = new TreeNode(iter[i]);
+            root->right = newNode;
+            root = root->right;
+            i++;
+        }
+    }
+};
