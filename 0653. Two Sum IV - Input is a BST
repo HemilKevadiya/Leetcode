@@ -1,0 +1,26 @@
+class Solution {
+    vector<int> nodes;
+    unordered_multiset<int> set;
+    void preOrder(TreeNode* root){
+        if(root!=NULL){
+            nodes.push_back(root->val);
+            set.insert(root->val);
+            preOrder(root->left);
+            preOrder(root->right);
+        }
+    }
+public:
+    bool findTarget(TreeNode* root, int k) {
+        preOrder(root);
+        if(nodes.size()==1 && nodes[0]!=k){
+            return false;
+        }
+        int i,n=nodes.size();
+        for(i=0;i<n;i++){
+            if(set.find(k-nodes[i])!=set.end() && k-nodes[i]!=nodes[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+};
