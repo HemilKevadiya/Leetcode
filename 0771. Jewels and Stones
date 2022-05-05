@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int numJewelsInStones(string jewels, string stones) {
+        unordered_set<char> jewel;
+        int i,n=jewels.length(),count=0;
+        for(i=0;i<n;i++){
+            jewel.insert(jewels[i]);
+        }
+        n=stones.length();
+        for(i=0;i<n;i++){
+            if(jewel.find(stones[i])!=jewel.end()){
+                count++;
+            }
+        }
+        return count;
+    }
+};
