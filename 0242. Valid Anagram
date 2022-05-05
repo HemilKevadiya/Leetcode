@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.length()!=t.length()){
+            return false;
+        }
+        unordered_multiset<char> ana;
+        int n=s.length(),i;
+        for(i=0;i<n;i++){
+            ana.insert(s[i]);
+        }
+        for(i=0;i<n;i++){
+            if(ana.find(t[i])==ana.end()){
+                return false;
+            }
+            ana.erase(ana.find(t[i]));
+        }
+        return true;
+    }
+};
