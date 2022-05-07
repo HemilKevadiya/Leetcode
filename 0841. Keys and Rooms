@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        //basic BFS, if every node not visited then that room(s) can't be visited
+        queue<int> line;
+        int i=0,n=rooms.size();
+        vector<int> visited(n);
+        vector<int> BFS;
+        line.push(0);
+        int ver;
+        BFS.push_back(ver);
+        while(!line.empty()){
+            ver=line.front();
+            line.pop();
+            for(auto j:rooms[ver]){
+                if(visited[j]!=1){
+                    visited[j]=1;
+                    BFS.push_back(j);
+                    line.push(j);
+                }
+            }
+            visited[ver]=1;
+            if(line.empty()){
+                break;
+            }
+            ver=line.front();
+        }
+        return !(BFS.size()!=n);
+    }
+};
