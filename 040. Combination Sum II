@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> sums;
+    void combo(int idx,vector<int> candidates,vector<int> a,int target,int n){
+        if(target==0){
+            sums.push_back(a);
+            return;
+        }
+        for(int i=idx;i<n;i++){//to choose whether to pick elements after the index
+            if(candidates[i]>target){//if the element we are about to choose is greater than target
+                break;
+            }
+            if(i>idx && candidates[i]==candidates[i-1]){//to avoid duplicate combinations
+                continue;
+            }
+            a.push_back(candidates[i]);//included in the solution
+            combo(i+1,candidates,a,target-candidates[i],n);//check with the next index(as you can only include an element one time with the target being target-included element)
+            a.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        int n = candidates.size();
+        vector<int> a;
+        sort(candidates.begin(),candidates.end());
+        combo(0,candidates,a,target,n);
+        return sums;
+    }
+};
