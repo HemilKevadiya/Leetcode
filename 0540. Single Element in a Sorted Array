@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int i,n=nums.size();
+        unordered_map<int,int> map;
+        for(i=0;i<n;i++){
+            map[nums[i]]++;
+        }
+        for(auto j:map){
+            if(j.second==1){
+                i=j.first;
+                break;
+            }
+        }
+        return i;
+    }
+};
