@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<vector<int>> subs;
+    void f(int i,vector<int> nums,vector<int> a,int n){
+        subs.push_back(a);
+        for(int j=i;j<n;j++){
+            if(j!=i && nums[j]==nums[j-1]){
+                continue;
+            }
+            a.push_back(nums[j]); //nums[j] is included
+            f(j+1,nums,a,n); //call the function with the next index
+            a.pop_back(); //nums[j] is not included
+            //here,we do not make another call for not including nums[j] as it will be called in the for loop again
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> a;
+        sort(nums.begin(),nums.end());
+        f(0,nums,a,n);
+        return subs;
+    }
+};
