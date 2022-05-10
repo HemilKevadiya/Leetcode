@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<vector<int>> subs;
+    void f(int i,vector<int> nums,vector<int> a,int n){
+        if(i==n){ 
+            subs.push_back(a);
+            return;
+        }
+        a.push_back(nums[i]); //nums[i] is included
+        f(i+1,nums,a,n); //call the function with the next index
+        a.pop_back(); //nums[i] is not included
+        f(i+1,nums,a,n);
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> a;
+        f(0,nums,a,n);
+        return subs;
+    }
+};
