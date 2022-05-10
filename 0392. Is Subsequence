@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int m = s.length();
+        int n = t.length();
+        int i = 0, j = 0;
+        while(i<m && j<n){//iterate i over s, iterate j over t
+            if(s[i]==t[j]){//if character from string s is found in string then check for the next character
+                i++;
+            }
+            j++;//to check t
+        }
+        return i==m;
+    }
+};
