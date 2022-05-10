@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> sums;
+    void combo(int idx,vector<int> a,int target,vector<int> nums,int n){
+        if(target==0){
+            sums.push_back(a);
+            return;
+        }
+        if(idx==n){
+            return;
+        }
+        if(nums[idx]<=target){
+            a.push_back(nums[idx]);
+            combo(idx,a,target-nums[idx],nums,n);
+            a.pop_back();
+        }
+        combo(idx+1,a,target,nums,n);
+    }
+    vector<vector<int>> combinationSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<int> a;
+        combo(0,a,target,nums,n);
+        return sums;
+    }
+};
