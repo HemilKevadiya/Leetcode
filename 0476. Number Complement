@@ -1,0 +1,8 @@
+class Solution {
+public:
+    int findComplement(int num) {
+        int n=0;
+        while(int(num/pow(2,n++))!=0);
+        return pow(2,n-1)-1-num;
+    }
+};
