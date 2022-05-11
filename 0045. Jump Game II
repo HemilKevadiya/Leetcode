@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if(nums.size()==1) return 0;
+        int ans = 1,n = nums.size();
+        int low = 1 , high = nums[0];//a window from index 1 to the maximum jump you can make from index 0 is created
+        while(high<n-1){
+            int farthest = 0;
+            for(int i=low;i<=high;i++){
+                farthest = max(farthest,i+nums[i]); //to note the maximum jump you can make from the given window
+            }
+            low = high+1;
+            high = farthest;
+            ans++;
+        }
+        return ans;
+    }
+};
