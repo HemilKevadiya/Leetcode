@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<vector<int>> combinations;
+    void f(vector<int>& ans,int n,int k,int idx){
+        if(ans.size()==k){//combination of size k is found
+            combinations.push_back(ans);
+            return;
+        }
+        for(int i=idx;i<=n;i++){//as combinations are in sequence we only need to iterate forward
+            ans.push_back(i);
+            f(ans,n,k,i+1); //we call the function with the next number as we need to move forward only
+            ans.pop_back();
+        }
+    }
+    vector<vector<int>> combine(int n, int k) {
+        vector<int> ans;
+        f(ans,n,k,1);
+        return combinations;
+    }
+};
