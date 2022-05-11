@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> a;
+    void permutations(vector<int> nums,vector<int>& picked,vector<int>& ans,int n){
+        if(ans.size()==n){
+            a.push_back(ans);
+            return;
+        }
+        for(int i=0;i<n;i++){
+            if(picked[i]!=1){//if the element is already in the permutation, don't include it again
+                ans.push_back(nums[i]);
+                picked[i]=1;
+                permutations(nums,picked,ans,n);
+                ans.pop_back();//we need to make another combination
+                picked[i]=0;
+            }
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> picked(n);
+        vector<int> ans;
+        permutations(nums,picked,ans,n);
+        return a;
+    }
+};
