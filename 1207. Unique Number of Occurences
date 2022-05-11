@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool uniqueOccurrences(vector<int>& arr) {
+        unordered_map<int,int> map;
+        unordered_set<int> set;
+        vector<int> occur;
+        int i,n=arr.size();
+        for(i=0;i<n;i++) map[arr[i]]++; //to map the frequencies
+        for(auto j:map){
+            if(set.find(j.second)!=set.end()){ //if any frequency is already in the set, we return false
+                return false;
+            }
+            set.insert(j.second);
+        }
+        return true;
+    }
+};
