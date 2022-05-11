@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void count(int n,vector<int>& a){
+        if(n==0){
+            return;
+        }
+        int s=a.size();
+        for(int j=0;j<s;j++){
+            if(j==0){
+                a[j]=1;
+                continue;
+            }
+            a[j]=a[j]+a[j-1];
+        }
+        count(--n,a);
+    }
+    int countVowelStrings(int n) {
+        vector<int> a={1,1,1,1,1};
+        count(n,a);
+        return a[4];
+    }
+};
