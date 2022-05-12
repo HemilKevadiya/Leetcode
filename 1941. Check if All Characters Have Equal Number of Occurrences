@@ -1,0 +1,11 @@
+class Solution {
+public:
+    bool areOccurrencesEqual(string s) {
+        unordered_map<char,int> freqMap;
+        unordered_set<int> freqs;
+        int n = s.length();
+        for(int i=0;i<n;i++) freqMap[s[i]]++; //to store every character's frequency
+        for(auto j:freqMap) freqs.insert(j.second); 
+        return freqs.size()==1; //if every character has occured the same number of time then the set will have only one element
+    }
+};
