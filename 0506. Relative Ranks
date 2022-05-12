@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> findRelativeRanks(vector<int>& score) {
+        unordered_map<int,int> indMap;
+        int n = score.size();
+        vector<string> ranks(n);
+        for(int i=0;i<n;i++) indMap[score[i]]=i; //mapping the values based on their indexes
+        sort(score.begin(),score.end(),greater<int>());
+        for(int i=0;i<n;i++){
+            int idx = indMap[score[i]]; //will return the index of a score[i] from the map
+            if(i==0){
+                ranks[idx] = "Gold Medal";
+                continue;
+            }
+            if(i==1){
+                ranks[idx] = "Silver Medal";
+                continue;
+            }
+            if(i==2){
+                ranks[idx] = "Bronze Medal";
+                continue;
+            }
+            ranks[idx] = to_string(i+1);
+        }
+        return ranks;
+    }
+};
