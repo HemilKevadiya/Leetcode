@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int pairSum(ListNode* head) {
+        int max = INT_MIN;
+        ListNode* ptr1 = head;
+        ListNode* ptr2 = head;
+        ListNode* temp = head;
+        stack<ListNode*> nodes;
+        while(ptr2->next!=NULL){
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next->next;
+            if(ptr2==NULL){
+                break;
+            }
+        }
+        while(ptr1!=NULL){
+            nodes.push(ptr1);
+            ptr1 = ptr1->next;
+        }
+        while(!nodes.empty()){
+            int sum = nodes.top()->val + temp->val;
+            if(max<sum) {
+                max=sum;
+            }
+            nodes.pop();
+            temp = temp->next;
+        }
+        return max;
+    }
+};
