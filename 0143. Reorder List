@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        stack<ListNode*> nodes;
+        ListNode* ptr1 = head;
+        ListNode* ptr2 = head;
+        ListNode* temp = head;
+        while(ptr2->next!=NULL){//we need to get to the middle pointer as every node after that is getting swapped
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next->next;
+            if(ptr2==NULL){
+                break;
+            }
+        }
+        while(ptr1!=NULL){ //push every node after middle node(including middle node) to the stack
+            nodes.push(ptr1);
+            ptr1 = ptr1->next;
+        }
+        while(!nodes.empty()){
+            ListNode* newNode = nodes.top(); //the node to be inserted in between
+            nodes.pop(); //pop the node to get reference to the previous node
+            if(nodes.empty()) break; //if stack gets empty after popping, it means that the middle node was popped
+            ListNode* prev = nodes.top();
+            prev->next = NULL; //to delete the last node every time
+            newNode->next = temp->next;
+            temp->next = newNode;
+            temp = temp->next->next; //we need a double jump because the next node is to be attached after the current list's second node
+        }
+    }
+};
