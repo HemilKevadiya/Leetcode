@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int countGoodSubstrings(string s) {
+        unordered_map<char,int> freqMap;
+        int n = s.length(),count=0;;
+        for(int i=0;i<=n-3;i++){
+            string a = s.substr(i,3); //to get a substring of length 3 starting from index i
+            int flag=0;
+            for(int j=0;j<a.length();j++) freqMap[a[j]]++; //to note down the frequencies of the charcters in the substr
+            for(auto j:freqMap){
+                if(j.second>1){//if any of the character has occured more than 1 times, we break the loop and give the value of flag as 1
+                    flag=1;
+                    break;
+                }
+            }
+            if(!flag) count++;
+            freqMap.clear();
+        }
+        return count;
+    }
+};
