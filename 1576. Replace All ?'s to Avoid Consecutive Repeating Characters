@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string modifyString(string s) {
+        int n = s.length();
+        srand(time(NULL));
+        for(int i=0;i<n;i++){
+            int r = rand()%26;
+            char c = 'a' + r;
+            if(s[i]=='?' && i==0){
+                while(c==s[i+1]) c = 'a' + rand()%26;
+                s[i] = c;
+            }else if(s[i]=='?' && i==n-1){
+                while(c==s[n-2]) c = 'a' + rand()%26;
+                s[i] = c;
+            }else if(s[i]=='?'){
+                while(c==s[i+1] || c==s[i-1]) c='a' + rand()%26;
+                s[i] = c;
+            }
+        }
+        return s;
+    }
+};
