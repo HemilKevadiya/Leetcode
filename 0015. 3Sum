@@ -1,17 +1,18 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
+        //basic 2-sum approach
         vector<vector<int>> sol;
         int i,n=nums.size();
         sort(nums.begin(),nums.end());
         for(i=0;i<n;i++){
             if(i!=0 && nums[i]==nums[i-1]) continue;
-            int sum = -nums[i];
-            int low=i+1,high=n-1;
+            int sum = -nums[i]; //we need to add 2 numbers so that they add up to the minus of current nums[i]
+            int low=i+1,high=n-1; //2 pointers 
             int j,k;
-            while(low<high){
+            while(low<high){ //if low and high cross each other we need to stop the iteration
                 // cout<<low<<" "<<high<<endl;
-                if(nums[low]==j && nums[high]==k){
+                if(nums[low]==j && nums[high]==k){ //if the values at the new low and new high both are the same as previous then we move the pointers
                     low++;
                     high--;
                     continue;
@@ -24,20 +25,20 @@ public:
                     high--;
                     continue;
                 }
-                if(nums[low]+nums[high]==sum){
-                    j = nums[low];
-                    k =nums[high];
+                if(nums[low]+nums[high]==sum){ //if a pair is found
+                    j = nums[low]; //to keep track of the previous low pointer value
+                    k =nums[high]; //to keep track of the previous high pointer value
                     sol.push_back({nums[i],nums[low],nums[high]});
-                    low++; high--;
-                }else if(nums[low]+nums[high]<sum){
+                    low++; high--; //move the pointers
+                }else if(nums[low]+nums[high]<sum){ //as the array is sorted, if the sum of current low and high is lesser than the desired sum, we only move the low pointer, as we need to increase the sum
                     j = nums[low];
                     low++;
-                }else if(nums[low]+nums[high]>sum){
+                }else if(nums[low]+nums[high]>sum){ //sum is greater than the desired sum, so we move only high pointer to descrease the sum
                     k = nums[high];
                     high--;
                 }
             }
-            j=INT_MIN,k=INT_MIN;
+            j=INT_MIN,k=INT_MIN; //reinitialize to avoid collisions with the next iteration
         }
         return sol;
     }
