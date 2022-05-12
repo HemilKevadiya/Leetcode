@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> sol;
+        int i,n=nums.size();
+        sort(nums.begin(),nums.end());
+        for(i=0;i<n;i++){
+            if(i!=0 && nums[i]==nums[i-1]) continue;
+            int sum = -nums[i];
+            int low=i+1,high=n-1;
+            int j,k;
+            while(low<high){
+                // cout<<low<<" "<<high<<endl;
+                if(nums[low]==j && nums[high]==k){
+                    low++;
+                    high--;
+                    continue;
+                }
+                if(nums[low]==j){
+                    low++;
+                    continue;
+                }
+                if(nums[high]==k){
+                    high--;
+                    continue;
+                }
+                if(nums[low]+nums[high]==sum){
+                    j = nums[low];
+                    k =nums[high];
+                    sol.push_back({nums[i],nums[low],nums[high]});
+                    low++; high--;
+                }else if(nums[low]+nums[high]<sum){
+                    j = nums[low];
+                    low++;
+                }else if(nums[low]+nums[high]>sum){
+                    k = nums[high];
+                    high--;
+                }
+            }
+            j=INT_MIN,k=INT_MIN;
+        }
+        return sol;
+    }
+};
