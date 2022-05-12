@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> ans; //stores all the strings 
+    vector<string> letter_combo; //answer string
+    void letters(string digits,int n){
+        for(int i=0;i<n;i++){ //to push the strings corresponding to the given numbers
+            if(digits[i]=='2') ans.push_back("abc");
+            else if(digits[i]=='3') ans.push_back("def");
+            else if(digits[i]=='4') ans.push_back("ghi");
+            else if(digits[i]=='5') ans.push_back("jkl");
+            else if(digits[i]=='6') ans.push_back("mno");
+            else if(digits[i]=='7') ans.push_back("pqrs");
+            else if(digits[i]=='8') ans.push_back("tuv");
+            else if(digits[i]=='9') ans.push_back("wxyz");
+        }
+    }
+    void combos(int idx,int n,string& a){
+        if(a.size()==n){ //if a combination of size n is generated we store it into our answer
+            letter_combo.push_back(a);
+            return;
+        }
+        for(int i=0;i<ans[idx].size();i++){
+            a.push_back(ans[idx][i]); //we push a character from the current string
+            combos(idx+1,n,a); //then we call with the next index string
+            a.pop_back(); //every combination containing this character is taken, so we delete it
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        if(digits.length()==0){
+            return letter_combo;
+        }
+        letters(digits,digits.length());
+        string a;
+        combos(0,digits.length(),a);
+        return letter_combo;
+    }
+};
