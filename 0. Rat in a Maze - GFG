@@ -1,0 +1,52 @@
+class Solution{
+    public:
+    void path(int i,int j,vector<vector<int>> &m,vector<vector<int>>& visited,int n,string& ans, vector<string>& maze){
+        if(i==n-1 && j==n-1){//if we have reached the last square, we store the string into the final result
+            maze.push_back(ans);
+            return;
+        }
+        //we need to check if there exists a path on each and every side, we also need to check if that box is already visited or not
+        //if path exists, we store the direction in our string and mark the current box as visited and move to the next box via calling the function using the box's row and col value
+        if(i+1<n && m[i+1][j]==1 && visited[i+1][j]!=1){
+            ans.push_back('D');
+            visited[i][j]=1;
+            path(i+1,j,m,visited,n,ans,maze);
+            ans.pop_back();
+            visited[i][j]=0;
+        }
+        if(j-1>=0 && m[i][j-1]==1 && visited[i][j-1]!=1){
+            ans.push_back('L');
+            visited[i][j]=1;
+            path(i,j-1,m,visited,n,ans,maze);
+            ans.pop_back();
+            visited[i][j]=0;
+        }
+        if(j+1<n && m[i][j+1]==1 && visited[i][j+1]!=1){
+            ans.push_back('R');
+            visited[i][j]=1;
+            path(i,j+1,m,visited,n,ans,maze);
+            ans.pop_back();
+            visited[i][j]=0;
+        }
+        if(i-1>=0 && m[i-1][j]==1 && visited[i-1][j]!=1){
+            ans.push_back('U');
+            visited[i][j]=1;
+            path(i-1,j,m,visited,n,ans,maze);
+            ans.pop_back();
+            visited[i][j]=0;
+        }
+    }
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        vector<vector<int>> visited;
+        vector<string> maze;
+        for(int i=0;i<n;i++){
+            vector<int> temp(n);
+            visited.push_back(temp);
+        }
+        string ans;
+        if(m[0][0]==1){
+            path(0 ,0, m, visited, n, ans ,maze);
+        }
+        return maze;
+    }
+};
