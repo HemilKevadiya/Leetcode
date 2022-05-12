@@ -1,0 +1,27 @@
+bool possibleToColor(bool graph[101][101],int node,vector<int>& color,int i,int n){ //we need to check if it is possible to color a node with the color
+    for(int j=0;j<n;j++){
+        if(graph[node][j]==1 && color[j]==i){ //if there is an edge between the node we want to color and any other node and if it is colored with the color we want to choose then it is not possible
+            return false;
+        }
+    }
+    return true; //there is no edge of node which has our chosen color,so we return true
+}
+
+bool toColor(int node,vector<int>& color,bool graph[101][101],int m,int n){
+    if(node==n){ //if we reach to the last node then we can say that every node was succesfully colored and we return true
+        return true;
+    }
+    for(int i=1;i<=m;i++){ //a for loop over colors
+        if(possibleToColor(graph,node,color,i,n)){ 
+            color[node] = i; //it possible to color the node with color i 
+            if(toColor(node+1,color,graph,m,n)==true) return true; //we try to color the next node using this call
+            color[node] = 0; //every possibility taking the color of node as i was considered, so we backtrack
+        }
+    }
+    return false;
+}
+bool graphColoring(bool graph[101][101], int m, int n)
+{
+    vector<int> color(n);
+    return toColor(0,color,graph,m,n);
+}
