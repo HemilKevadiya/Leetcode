@@ -1,21 +1,19 @@
 class Solution {
-    public int uniquePaths(int m, int n) {
-        if(m==1||n==1){
-            return 1;
-        }
-        if(n==2){
-            return m;
-        }
-        int arr[]=new int[n];
-        Arrays.fill(arr,1);
-        int sum=0;
-        m--;
-        while(m!=0){
-            for(int i=1;i<arr.length;i++){
-                arr[i]+=arr[i-1];
-            }
-            m--;
-        }
-        return arr[arr.length-1];
+public:
+    //Recursive Approach
+    int allPaths(int m,int n){
+        if(m==1 && n==1) return 1;
+        if(m==0 || n==0) return 0;
+        int down = allPaths(m-1,n); //you can either go down or right
+        int right = allPaths(m,n-1);
+        return down+right; //count all the results possible
     }
-}
+    int uniquePaths(int m, int n) {
+        //Converted to DP approach
+        vector<vector<int>> dp(m,vector<int>(n,1));
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++) dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+        return dp[m-1][n-1];
+    }
+};
