@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        unordered_map<int,int> freqMap;
+        int i,n=nums.size(),repeat;
+        for(i=0;i<n;i++) freqMap[nums[i]]++;
+        for(auto j:freqMap){
+            if(j.second==n/2) repeat = j.first;
+        }
+        return repeat;
+    }
+};
