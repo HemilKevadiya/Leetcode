@@ -1,0 +1,54 @@
+//Recursion
+
+#include<bits/stdc++.h>
+
+int jumps(int i,vector<int> &heights){
+	if(i==0) return 0;
+	int left = jumps(i-1,heights) + abs(heights[i]-heights[i-1]);
+	int right = INT_MAX;
+	if(i>1) right = jumps(i-2,heights) + abs(heights[i]-heights[i-2]);
+	return min(left,right);
+}
+
+int frogJump(int n, vector<int> &heights)
+{
+	return jumps(n-1,heights);
+}
+
+//DP (Memoization)
+
+#include<bits/stdc++.h>
+
+int jumps(int i,vector<int> &heights,vector<int>& DP){
+	if(i==0) return 0;
+	if(DP[i]!=-1) return DP[i];
+	int left = jumps(i-1,heights,DP) + abs(heights[i]-heights[i-1]);
+	int right = INT_MAX;
+	if(i>1) right = jumps(i-2,heights,DP) + abs(heights[i]-heights[i-2]);
+	return DP[i] = min(left,right);
+}
+
+int frogJump(int n, vector<int> &heights)
+{
+	vector<int> DP(n,-1);
+	return jumps(n-1,heights,DP);
+}
+
+//DP (Tabulation)
+
+//as minimum cost to reach a certain index is already calculated via the reccurence relation as it is a bottom up approach
+//tabulation is basically recursion converted to a formula
+
+#include<bits/stdc++.h>
+int frogJump(int n, vector<int> &heights)
+{
+    vector<int> dp(n);
+	  dp[0] = 0; //base case
+	  for(int i=1;i<n;i++){
+		  int singleJump = dp[i-1] + abs(heights[i]-heights[i-1]);
+		  int doubleJump = INT_MAX;
+		  if(i>1) doubleJump = dp[i-2] +abs(heights[i]-heights[i-2]);
+		  dp[i] = min(singleJump,doubleJump);
+	  }
+	  return dp[n-1];
+}
