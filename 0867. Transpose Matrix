@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<vector<int>> transpose(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> tMatrix;
+        vector<int> rows;
+        for(int j=0;j<n;j++){ //traverse the matrix while making the column static and changing the rows
+            for(int i=0;i<m;i++) {
+                rows.push_back(matrix[i][j]);
+            }
+            tMatrix.push_back(rows);
+            rows.clear();
+        }
+        return tMatrix;
+    }
+};
