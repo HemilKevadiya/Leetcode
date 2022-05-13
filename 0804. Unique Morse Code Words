@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+        set<string> unique;
+        map<char,string> morseCodes = {
+            {'a',".-"},
+            {'b',"-..."},
+            {'c',"-.-."},
+            {'d',"-.."},
+            {'e',"."},
+            {'f',"..-."},
+            {'g',"--."},
+            {'h',"...."},
+            {'i',".."},
+            {'j',".---"},
+            {'k',"-.-"},
+            {'l',".-.."},
+            {'m',"--"},
+            {'n',"-."},
+            {'o',"---"},
+            {'p',".--."},
+            {'q',"--.-"},
+            {'r',".-."},
+            {'s',"..."},
+            {'t',"-"},
+            {'u',"..-"},
+            {'v',"...-"},
+            {'w',".--"},
+            {'x',"-..-"},
+            {'y',"-.--"},
+            {'z',"--.."}
+        };
+        int n = words.size();
+        string temp = "";
+        for(int i=0;i<n;i++){
+            for(int j=0;j<words[i].size();j++){
+                temp+=morseCodes[words[i][j]];
+            }
+            cout<<temp<<endl;
+            unique.insert(temp);
+            temp = "";
+        }
+        return unique.size();
+    }
+};
