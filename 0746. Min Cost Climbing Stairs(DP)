@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        //we need to calculate minimum cost to reach each step to get the final output
+        cost.push_back(0);
+        vector<int> dp(cost.size());
+        dp[0]=0; dp[1]=0;
+        int n = dp.size();
+        for(int i=2;i<n;i++){
+            int singleJump = dp[i-1] + cost[i-1]; //as the minimum cost to reach this index will already be calculated we add it to the current cost
+            int doubleJump = dp[i-2] + cost[i-2];
+            dp[i] = min(singleJump,doubleJump); 
+        }
+        return dp[n-1];
+    }
+};
