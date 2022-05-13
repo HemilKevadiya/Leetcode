@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int sum;
+    void range(TreeNode* root,int low,int high){
+        if(root){
+            range(root->left,low,high);
+            if(root->val>=low && root->val<=high) sum+=root->val;
+            range(root->right,low,high);
+        }
+    }
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        range(root,low,high);
+        return sum;
+    }
+};
