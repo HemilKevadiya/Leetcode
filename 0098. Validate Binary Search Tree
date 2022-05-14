@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> a; //to store the inorder traversal
+    unordered_map<int,int> freqMap; //to store the frequencies of all elements to check if any element is repeated
+    void inOrder(TreeNode* root){
+        if(root!=NULL){
+            inOrder(root->left);
+            a.push_back(root->val);
+            freqMap[root->val]++;
+            inOrder(root->right);
+        }
+    }
+    bool isValidBST(TreeNode* root) {
+        inOrder(root);
+        for(auto j:freqMap){
+            if(j.second>1) return false;
+        }
+        return is_sorted(a.begin(),a.end());
+    }
+};
