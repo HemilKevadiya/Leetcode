@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void solve(int idx,vector<vector<int>>& graph,vector<vector<int>>& ans,vector<int>& path,vector<int> row,int n){
+        if(idx==n-1){ //if we reach the last index, we push the last element into the path and the path into the main answer
+            path.push_back(idx);
+            ans.push_back(path);
+            path.pop_back();
+            return;
+        }
+        for(auto j:row){ //we perform basic DFS
+            path.push_back(idx);
+            solve(j,graph,ans,path,graph[j],n);
+            path.pop_back();
+        }
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> path;
+        vector<vector<int>> ans;
+        solve(0,graph,ans,path,graph[0],n);
+        return ans;
+    }
+};
