@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxOperations(vector<int>& nums, int k) {
+        unordered_map<int,int> freqMap; //we need to keep a count of all the elements
+        int n = nums.size(),count=0;
+        for(int i=0;i<n;i++){
+            if(freqMap[k-nums[i]]>0){ //basic twoSum
+                count++;
+                freqMap[k-nums[i]]--; //as two elements will be used we need to subtract the frequencies of both the elements that are used
+                freqMap[nums[i]]--;
+            }
+            freqMap[nums[i]]++;
+        }
+        return count;
+    }
+};
