@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int divisorSubstrings(int num, int k) {
+        string str = to_string(num); //we need to convert the number to string to take all substrings
+        int n = str.length(),count=0;
+        for(int i=0;i<=n-k;i++){
+            int div = stoi(str.substr(i,k)); //the substring is converted to number to check if it is a divisor of the number
+            if(div==0) continue;
+            if(num%div==0) count++;
+        }
+        return count;
+    }
+};
