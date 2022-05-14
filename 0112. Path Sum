@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool findPath(TreeNode* root,int targetSum,int sum){
+        //if the sum is equal to target and the node is not root, we don't return true
+        if(sum==targetSum && root->left==NULL && root->right==NULL) return true;
+        if(root==NULL) return false;
+        if(root->left!=NULL){
+            if(findPath(root->left,targetSum,sum + root->left->val)==true) return true;
+        }
+        if(root->right!=NULL){
+            if(findPath(root->right,targetSum,sum + root->right->val)==true) return true;
+        }
+        return false;
+    }
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(root==NULL) return false;
+        return findPath(root,targetSum,root->val);
+    }
+};
