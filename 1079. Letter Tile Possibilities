@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void countPossibilities(unordered_set<string>& tileSeq,vector<int>& included,string ans,int n,string tiles){
+        for(int i=0;i<n;i++){
+            if(!included[i]){ //if the character is already in the combination, no need to include it again
+                included[i]=1; 
+                ans.push_back(tiles[i]);
+                tileSeq.insert(ans); //as we have to give every possible combination, we push the answer every time a new character is added
+                countPossibilities(tileSeq,included,ans,n,tiles); //we need to call using the exact same parameters because every possibility is to be explored
+                included[i]=0; //as every possibilty including this character has been explored, we backtrack
+                ans.pop_back();
+            }
+        }
+    }
+    int numTilePossibilities(string tiles) {
+        int n = tiles.length();
+        unordered_set<string> tileSeq; //to keep only unique solution in the answer
+        string ans; //keep track of the combination
+        vector<int> included(n,0); 
+        countPossibilities(tileSeq,included,ans,n,tiles);
+        return tileSeq.size();
+    }
+};
