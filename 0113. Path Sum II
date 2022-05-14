@@ -1,0 +1,31 @@
+class Solution {
+public:
+    void findPath(TreeNode* root,int targetSum,int sum,vector<vector<int>>& paths,vector<int>& ans){
+        //if the current node we are on is a leaf and the value of current pathSum plus the value of current node's is equal to the target then it is added to the target
+        if(sum+root->val==targetSum && root->left==NULL && root->right==NULL){
+            ans.push_back(root->val);
+            paths.push_back(ans);
+            ans.pop_back();
+        }
+        //if we can go to either the left or right of the current node, we add the current node's value to the answer
+        //the current pathSum gets added by current node's value in every call
+        //then if every path consisting of the current node is explored,we backtrack and try other paths
+        if(root->left!=NULL){
+            ans.push_back(root->val);
+            findPath(root->left,targetSum,sum+root->val,paths,ans); 
+            ans.pop_back();
+        }
+        if(root->right!=NULL){
+            ans.push_back(root->val);
+            findPath(root->right,targetSum,sum+root->val,paths,ans);
+            ans.pop_back();
+        }
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> paths;
+        if(root==NULL) return paths;
+        vector<int> ans;
+        findPath(root,targetSum,0,paths,ans);
+        return paths;
+    }
+};
