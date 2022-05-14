@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool dest(vector<int>& arr,int idx,vector<int>& visited,int n){
+        if(arr[idx]==0) return true;
+        if(idx+arr[idx]<n && visited[idx+arr[idx]]!=1){ //if the forward jump is not out of bounds and if the index is not visited then we jump to it
+            visited[idx]=1;
+            if(dest(arr,idx+arr[idx],visited,n)==true) return true; //if a 0 is encountered we return true to all the future calls
+            visited[idx]=0; //backtrack
+        }
+        if(idx-arr[idx]>=0 && visited[idx-arr[idx]]!=1){
+            visited[idx]=1;
+            if(dest(arr,idx-arr[idx],visited,n)==true) return true;
+            visited[idx]=0;
+        }
+        return false;
+    }
+    bool canReach(vector<int>& arr, int start) {
+        int n = arr.size(),flag=0;
+        for(int i=0;i<n;i++){ //if there is no 0 in the array no need to make any jumps
+            if(arr[i]==0){
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0) return false;
+        vector<int> visited(n,-1); //we need to maintain a visited array to not form a loop of infinite recursive calls
+        return dest(arr,start,visited,n);
+    }
+};
