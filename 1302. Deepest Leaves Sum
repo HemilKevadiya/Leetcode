@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int deepestLeavesSum(TreeNode* root) {
+        queue<TreeNode*> nodes;
+        int sum;
+        nodes.push(root); //as the nodes will always be greater than or equal to 1
+        while(!nodes.empty()){ //if we are on a level where there are no nodes
+            sum = 0; //there is a level next to the level we just explored, so the deepest leaves would be considered on that level
+            int size = nodes.size(); //the size of the queue will be the total nodes that are to be explored on this level
+            while(size--){
+                TreeNode* current = nodes.front(); //current node to be explored
+                nodes.pop();
+                sum+=current->val; //to get the sum of every node on the current level
+                if(current->left) nodes.push(current->left); //to avoid nulls in the queue
+                if(current->right) nodes.push(current->right);
+            }
+        }
+        return sum;
+    }
+};
