@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        if(root==NULL) return {};
+        queue<TreeNode*> nodes;
+        vector<int> levels; //to keep track of all levels
+        vector<vector<int>> levelOrder;
+        nodes.push(root);
+        while(!nodes.empty()){ //if we are ahead of the last level
+            int size = nodes.size(); //size of the queue indicates the number of nodes to be explored in this level
+            while(size--){
+                TreeNode* current = nodes.front(); //the current node to be explored
+                nodes.pop();
+                levels.push_back(current->val);
+                if(current->left) nodes.push(current->left);
+                if(current->right) nodes.push(current->right);
+            }
+            levelOrder.push_back(levels); //as every node on the level is explored, we push the current level nodes to the answer
+            levels.clear();
+        }
+        reverse(levelOrder.begin(),levelOrder.end());
+        return levelOrder;
+    }
+};
