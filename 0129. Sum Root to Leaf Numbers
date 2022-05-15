@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<string> paths;
+    void allPaths(TreeNode* root,string& ans){
+        if(root==NULL) return;
+        if(root->left==NULL && root->right==NULL){ //if the node is a leaf node, it means we are at the end of a path
+            ans.push_back(root->val + '0');
+            paths.push_back(ans);
+            ans.pop_back();
+            return;
+        }
+        if(root->left){
+            ans.push_back(root->val + '0'); //we need to push the numbers as characters
+            allPaths(root->left,ans);
+            ans.pop_back(); //as every path including the current root is explored, we backtrack
+        }
+        if(root->right){
+            ans.push_back(root->val + '0');
+            allPaths(root->right,ans);
+            ans.pop_back();
+        }
+    }
+    int sumNumbers(TreeNode* root) {
+        string ans;
+        allPaths(root,ans);
+        int sum=0;
+        for(int i=0;i<paths.size();i++) sum+=stoi(paths[i]); //convert every string to integer and sum them up
+        return sum;
+    }
+};
