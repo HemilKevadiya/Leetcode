@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        //we just perform standard level order traversal and after the end of exploring a certain level, we push the average of all nodes to the answer
+        queue<TreeNode*> nodes;
+        vector<double> averageLevels;
+        long long sum;
+        double avg;
+        nodes.push(root);
+        while(!nodes.empty()){
+            int size = nodes.size();
+            sum = 0;
+            int tempSize = size;
+            while(size--){
+                TreeNode* current = nodes.front();
+                nodes.pop();
+                sum+=current->val;
+                if(current->left) nodes.push(current->left);
+                if(current->right) nodes.push(current->right);
+            }
+            avg = (double)sum/tempSize;
+            averageLevels.push_back(avg);
+        }
+        return averageLevels;
+    }
+};
