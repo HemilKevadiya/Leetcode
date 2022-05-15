@@ -1,0 +1,26 @@
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL) return NULL;
+        vector<ListNode*> nodes;
+        ListNode* temp = head;
+        int size=0;
+        while(temp!=NULL){
+            nodes.push_back(temp);
+            temp = temp->next;
+            size++;
+        }
+        //as nodes size is 500,we don't have to perform rotations more than the size of the nodes
+        k%=size; //to avoid TLE
+        while(k--){
+            ListNode* curr = nodes[size-1]; //the node that is to be attached at the front
+            nodes.pop_back();
+            ListNode* prev = nodes[size-2]; //the node previous to the node we are performing the rotation on
+            prev->next = NULL;
+            curr->next = head;
+            head = curr;
+            nodes.insert(nodes.begin(),curr); //it should be inserted back to the nodes vector, as the structure of this vector is the same as LL
+        }
+        return head;
+    }
+};
