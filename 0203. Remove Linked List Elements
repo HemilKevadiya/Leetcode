@@ -1,0 +1,20 @@
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        while(head!=NULL && head->val==val){
+            head = head->next;
+        }
+        if(head==NULL) return NULL;
+        ListNode* temp = head;
+        while(temp->next!=NULL){
+            if(temp->next->val==val){ //if there are consecutive nodes which are equal to val next to the current prev reference node, we keep the prev as it is
+                temp->next = temp->next->next;
+            }else{
+                temp = temp->next; //else we update the prev node
+            }
+            
+        }
+        return head;
+            
+    }
+};
