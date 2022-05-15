@@ -1,0 +1,20 @@
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(head==NULL || head->next==NULL) return head;
+        ListNode* ptr1 = NULL; //to keep track of the last swapped node
+        ListNode* ptr2 = head; 
+        ListNode* ptr3 = head->next;
+        while(ptr3!=NULL){
+            ptr2->next = ptr3->next;
+            ptr3->next = ptr2;
+            if(ptr1==NULL) head = ptr3; //if ptr1 is NULL, it means that we are doing the first swap
+            if(ptr1!=NULL) ptr1->next = ptr3; //as ptr1 is storing the previous node of ptr2, we keep its next as the current swapped node
+            if(ptr3->next->next==NULL) break;
+            ptr3 = ptr3->next->next->next;
+            ptr1 = ptr2;
+            ptr2 = ptr2->next;
+        }
+        return head;
+    }
+};
