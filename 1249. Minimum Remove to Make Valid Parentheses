@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string minRemoveToMakeValid(string s) {
+        stack<pair<char,int>> para; //to keep track of indices where parantheses are invalid
+        int n = s.length();
+        for(int i=0;i<n;i++){
+            if(s[i]>='a' && s[i]<='z') continue;
+            if(para.empty()){
+                para.push({s[i],i});
+                continue;
+            }
+            if(para.top().first=='(' && s[i]==')') para.pop();
+            else para.push({s[i],i});
+        }
+        //the stack will only hold the indices of invalid parantheses
+        while(!para.empty()){
+            s.erase(s.begin() + para.top().second);
+            para.pop();
+        }
+        return s;
+    }
+};
