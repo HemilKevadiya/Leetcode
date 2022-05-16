@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int largestCombination(vector<int>& candidates) {
+        //for any bitwise operations, we need to think in bits
+        //if any of the bit is set in the numbers we are performing AND operation on, the output will be greater than 1
+        //we traverse through all the elements of the array, computing the binary representation of the number and if any bit is set in the number, the bitPos array at that position is incremented by 1(meaning that there is another number in the combination which will have AND operation greater than 0), then the max set bits(which are the common bits set in the numbers)eg., if the max in bitPos is 8 then it means that a bit at a certain position is set in 8 numbers, then that is the maximum possible combination of numbers we can get
+        vector<int> bitPos(32); //as the max number will have max 32 bits in its binary rep.
+        int n = candidates.size();
+        for(int i=0;i<n;i++){
+            int pos = 0;
+            int temp = candidates[i];
+            while(temp){ 
+                bitPos[pos] += temp%2;
+                temp/=2;
+                pos++;
+            }
+        }
+        sort(bitPos.begin(),bitPos.end());
+        return bitPos[31];
+    }
+};
