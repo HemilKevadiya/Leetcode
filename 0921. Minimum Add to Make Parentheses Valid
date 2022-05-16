@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        stack<char> para;
+        int n = s.length();
+        for(int i=0;i<n;i++){
+            if(para.empty()){
+                para.push(s[i]);
+                continue;
+            }
+            if(para.top()=='(' && s[i]==')') para.pop();
+            else para.push(s[i]); 
+        }
+        return para.size(); //the number of parantheses left in the stack will need to be balanced that's why we return the size
+    }
+};
