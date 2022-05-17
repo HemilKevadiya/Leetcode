@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int n = strs.size();
+        unordered_map<string,vector<string>> anagrams; //to store a common sorted key of all the anagrams possible from the key present in the strs vector and group all the anagrams together in the map
+        //ex. aet -> ate,eat,tea
+        vector<vector<string>> ans;
+        vector<string> groups;
+        for(int i=0;i<n;i++){
+            string temp = strs[i]; //to not lose the original string as it will be needed in the answer
+            sort(strs[i].begin(),strs[i].end()); // sort whatever the string is
+            anagrams[strs[i]].push_back(temp); //then based on the sorted key, the anagram possible from that key is pushed back
+        }
+        for(auto j:anagrams){
+            for(auto i:j.second){ //as j.second is a vector,we need to traverse it using for each loop
+                groups.push_back(i);
+            }
+            ans.push_back(groups);
+            groups.clear();
+        }
+        return ans;
+    }
+};
