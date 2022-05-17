@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        //(Fact about Palindromes) 
+        //only one odd occurence of any character is allowed in palindrome
+        //So, for this question, all the odd occurences have to be made even except for one of them,count the total number of odd occurences in the string and as one odd occurence is allowed, the total odd occurences is subtracted by 1 and then the number of odd occureneces is subracted from the total length 
+        int n = s.length();
+        unordered_map<char,int> freqMap;
+        int odds = 0;
+        for(int i=0;i<n;i++) freqMap[s[i]]++;
+        for(auto j:freqMap){
+            if(j.second%2!=0) odds++;
+        }
+        odds-=1;
+        if(odds<=0) return n;
+        return (n-odds);
+    }
+};
