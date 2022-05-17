@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minDeletions(string s) {
+        map<char,int> freqMap;
+        unordered_set<int> freq;
+        int n = s.length(),del=0;
+        for(int i=0;i<n;i++) freqMap[s[i]]++;
+        for(auto j:freqMap){
+            while(j.second!=0 && freq.find(j.second)!=freq.end()){ //while the character frequency is not unique we keep deleting the character
+                del++;
+                j.second--;
+            }
+            freq.insert(j.second);
+        }
+        return del;
+    }
+};
