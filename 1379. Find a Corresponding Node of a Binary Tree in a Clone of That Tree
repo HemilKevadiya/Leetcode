@@ -1,0 +1,24 @@
+class Solution {
+public:
+    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) {
+        stack<TreeNode*> nodes;
+        unordered_set<TreeNode*> visited;
+        while(cloned->val!=target->val){
+            if(cloned->left && visited.find(cloned->left)==visited.end()){
+                nodes.push(cloned);
+                visited.insert(cloned->left);
+                cloned = cloned->left;
+                continue;
+            }
+            if(cloned->right && visited.find(cloned->right)==visited.end()){
+                nodes.push(cloned);
+                visited.insert(cloned->right);
+                cloned = cloned->right;
+                continue;
+            }
+            cloned = nodes.top();
+            nodes.pop();
+        }
+        return cloned;
+    }
+};
