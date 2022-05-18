@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        long long AND = left;
+        if(left==right) return left; //if there is no range then no need to calculate anything
+        
+        else if(left==0 || right==0 || left==1) return 0; //any number's AND with 1 is always 0 and AND operation with 0 will always return in 0
+        
+        else if((right&(right-1))==0) return 0; //there is a pattern in this which says that, if there is any number which is a power of 2 between range left+1 and right, the answer is 0 because in that number only 1 bit will be set which will not be set in any of the previous numbers
+        
+        //Ex. left=15 right=31 //16 will have a bit set that will not be set in any of the previous numbers
+        
+        else if((1<<(int)log2(right))>left && (1<<(int)log2(right))<right) return 0; //if the number we are looking for is not directly the right range but it is in between our range
+        
+        else if((left&(left-1))==1) return left; //another pattern is that, if left is a power of 2 then the whole answer will be the left range because all of the numbers after that will share the same common bit(which will be the MSB of 4)
+        
+        else if((right-left)>=(1<<(int)log2(right))/2) return (1<<(int)log2(right)); //pattern fails here if the difference of right and left is not greater than or equal to the 
+        
+        else{
+            for(long long i=left;i<=right;i++) AND&=i;
+        }
+        return AND;
+    }
+};
