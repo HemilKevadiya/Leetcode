@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int i;
+    void BSTfromPre(TreeNode* root,int ele){
+        TreeNode* prev = root; //to reference on what node's right or left the newNode is to be attached
+        int flag=0;
+        if(i++==0){ //if the call is begin made for the first time, it means that root hasn.t been assigned a value yet
+            root->val=ele;
+            return;
+        }
+        while(root!=NULL){ //while there is no NULL pointer where the node can be attached, we find the node's right place using this loop
+            if(root->val<ele){
+                prev = root;
+                root=root->right;
+                flag=1;
+            }else{
+                prev = root;
+                root=root->left;
+                flag=0;
+            }
+        }
+        root = prev; //prev will hold the node where we have to attach the newNode
+        TreeNode * newNode = new TreeNode(ele);
+        if(flag==1) root->right = newNode;
+        else root->left = newNode;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        TreeNode* root = new TreeNode();
+        int n = preorder.size();
+        for(int i=0;i<n;i++) BSTfromPre(root,preorder[i]);
+        return root;
+    }
+};
