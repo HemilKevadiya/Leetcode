@@ -1,0 +1,13 @@
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t newNum = 0;
+        if(n==0) return newNum;
+        int bits = log2(n); //count the total number of bits to traverse on
+        for(int i=0;i<=bits;i++){
+            long long bitmask = 1<<i; //bitmask to extract the bit at ith place
+            if(n&bitmask) newNum+=(1<<(31-i)); //as the answer should be reversed,we need to add the bit to the 31-ith place
+        }
+        return newNum;
+    }
+};
