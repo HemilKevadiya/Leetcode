@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int countWays(vector<int>& nums,int target,int sum,int idx,int n){
+        if(sum==target && idx==n) return 1;
+        if(idx==n) return 0;
+        int pos = countWays(nums,target,sum-nums[idx],idx+1,n); //we call the function by first subtracting the number
+        int neg = countWays(nums,target,sum+nums[idx],idx+1,n); //then we call by adding the number
+        return pos + neg;
+    }
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return countWays(nums,target,0,0,nums.size());
+    }
+};
