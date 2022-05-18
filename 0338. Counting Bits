@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        //DP approach
+        //the number of set bits in an even number is equal to the number of set bits of the number divided by 2
+        //the number of set bits in an odd number is equal to the number of set bits of the number divided by 2 plus 1 because in an odd number if division is performed last bit will be lost(which is always set in case of odd numbers)
+        vector<int> bits(n+1);
+        bits[0] = 0;
+        for(int i=1;i<=n;i++){
+            if(i&1==1) bits[i] = 1 + bits[i>>1];
+            else bits[i] = bits[i>>1];
+        }
+        return bits;
+    }
+};
