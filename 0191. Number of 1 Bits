@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        //the concept of bit mask
+        //we check if a particular bit is set or not using the bit mask, which is created with the value of bit we are checking then it is raised to the power 2, then we do an AND with the number and the bit mask, if it is not equal to 0,it means the bit is set
+        //ex. if the bit we are checking for is 7 the a bitmask with value (2^7) is created
+        int count=0;
+        for(int i=0;i<=log2(n);i++){
+            if((n&(long long)pow(2,i))!=0) count++;
+        }
+        return count;
+    }
+};
