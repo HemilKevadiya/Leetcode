@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int binaryGap(int n) {
+        int flag=0,distance;
+        int maxDistance = INT_MIN;
+        for(int i=0;i<=log2(n);i++){
+            if((n&(1<<i)) && flag!=1){ //the first set bit is encountered
+                flag=1;
+                distance=0;
+                continue;
+            }
+            if((n&(1<<i)) && flag==1){ //if another set bit encountered then we need to reset the distance by assigning the current distance to maxDistance
+                distance++;
+                maxDistance = max(distance,maxDistance);
+                distance = 0;
+                continue;
+            }
+            if((n&(1<<i))==0 && flag==1) distance++; //if a zero is encountered, the distance is incremented
+        }
+        return max(maxDistance,distance);
+    }
+};
