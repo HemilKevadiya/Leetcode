@@ -1,0 +1,37 @@
+class Solution {
+public:
+    TreeNode* root = new TreeNode();
+    int pre;
+    void divide(TreeNode* temp,vector<int>& preOrder, vector<int>& inOrder,int low,int high,vector<int>& visited,int flag){
+        //Divide and Conquer Strategy
+        //the inorder array is divided into two parts after finding the roots of each subtree
+        if(pre==preOrder.size()) return;
+        if(flag!=2){ //if the flag is 2, it means that the current node is root itself, so no need to change it
+            if(flag==0){ //if flag is 0, it means that the newNode is to be attached to the left of the current subtree's root
+                TreeNode* newNode = new TreeNode(preOrder[++pre]);
+                temp->left = newNode;
+                temp = temp->left;
+            }else{
+                TreeNode* newNode = new TreeNode(preOrder[++pre]);
+                temp->right = newNode;
+                temp = temp->right;
+            }
+        }
+        int idx = find(inOrder.begin(),inOrder.end(),preOrder[pre]) - inOrder.begin(); //find the index of the current root in the inOrder array and then divide it into two parts
+        if(idx-1>=low && visited[idx-1]!=1){ //if we are not going out of bounds and if the node is not already visited then we divide the inOrder array
+            visited[idx] = 1;
+            divide(temp,preOrder,inOrder,low,idx-1,visited,0);
+        }
+        if(idx+1<=high && visited[idx+1]!=1){
+            visited[idx] = 1;
+            divide(temp,preOrder,inOrder,idx+1,high,visited,1);
+        }
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        root->val = preorder[0]; //the root is pre defined here
+        TreeNode* temp = root; //to not lose the tree
+        vector<int> visited(preorder.size());
+        divide(temp,preorder,inorder,0,preorder.size()-1,visited,2);
+        return root;
+    }
+};
