@@ -1,0 +1,7 @@
+class Solution {
+public:
+    vector<long long> sumOfThree(long long num) {
+        if(num%3!=0) return {}; //if it is not divisible by 3, there is no way to get the number by 3 consecutive numbers
+        return {(num/3)-1,(num/3),(num/3)+1}; //for numbers that are divisible by 3, this is the trick!!
+    }
+};
