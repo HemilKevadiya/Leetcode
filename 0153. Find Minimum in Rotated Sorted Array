@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int res = INT_MAX; //assign a running minimum
+        int low = 0, high = nums.size()-1;
+        while(low<=high){
+            if(nums[low]<nums[high]){ //if the array/subarray we are checking for is already sorted then the minimum will be the left most element in the subarray and the final min will be the minimum of running minimum and current minimum
+                res = min(res,nums[low]);
+                break;
+            }
+            int mid = (low+high)>>1;
+            res = min(res,nums[mid]); //we arbitrarily decide that the current mid location will hold the minimum value
+            if(nums[low]<=nums[mid]) low = mid+1; //if the left subarray is sorted then it means that the minimum will exist in the right subpart of the array because in a rotated sorted array, all the minimum elements are on the right most side
+            //ex. test case 2: 4,5,6,7,0,1,2;
+            //if in any case, the subarray 4 to 7 was considered then we can eliminate that whole subpart and search for the min element in the right side
+            else high = mid-1;
+        }
+        return res;
+    }
+};
