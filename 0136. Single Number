@@ -1,5 +1,7 @@
 class Solution {
 public:
+    //Map Approach
+    
     int singleNumber(vector<int>& nums) {
         unordered_map<int,int> map;
         int i,n=nums.size();
@@ -14,5 +16,30 @@ public:
             }
         }
         return celeb;
+    }
+    
+    //Bit Manipulation Approach
+    
+    int singleNumber(vector<int>& nums){
+        int n = nums.size();
+        int ans = 0;
+        //Based on the idea that XOR of two numbers is 0, so the final XOR will be the single number we are looking for
+        for(auto j:nums) ans^=j;
+        return ans;
+    }
+    
+    //Binary Search Approach
+    
+    int singleNumber(vector<int>& nums){
+        int n = nums.size(),i;
+        sort(nums.begin(),nums.end());
+        for(i=0;i<n;i++){
+            int idx = upper_bound(nums.begin(),nums.end(),nums[i])-nums.begin() - 1;
+            //if idx has the current i value, it means that the number's frequency is only one, that's the element we are looking for!!
+            if(idx==i) break;
+            //as a pair was found, we need to double jump
+            else i++;
+        }
+        return nums[i];
     }
 };
