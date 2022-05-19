@@ -1,0 +1,36 @@
+class CombinationIterator {
+    void combos(string characters,int combinationLength,int n,int idx,string& ans,vector<string>& mainAns,vector<int>& included){
+        if(ans.size()==combinationLength){
+            mainAns.push_back(ans);
+            return;
+        }
+        if(idx==n) return;
+        for(int i=idx;i<n;i++){
+            if(included[i]==1) continue;
+            included[i]=1;
+            ans.push_back(characters[i]);
+            combos(characters,combinationLength,n,i+1,ans,mainAns,included);
+            ans.pop_back();
+            included[i]=0;
+        }
+    }
+public:
+    vector<string> mainAns;
+    vector<string>::iterator it;
+    CombinationIterator(string characters, int combinationLength) {
+        string ans;
+        vector<int> included(characters.length());
+        combos(characters,combinationLength,characters.length(),0,ans,mainAns,included);
+        it = mainAns.begin(); //iterator to the combination container
+    }
+    
+    string next() {
+        string temp = *it; //as we have to advance the iterator by 1 index, we have to assign the current value to some temp string
+        advance(it,1);
+        return temp;
+    }
+    
+    bool hasNext() {
+        return it!=mainAns.end();
+    }
+};
