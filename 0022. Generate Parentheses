@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void para(int n,int c1,int c2,string ans,vector<string>& f){
+        if(ans.size()==2*n){
+            f.push_back(ans);
+            return;
+        }
+        if(c1!=0){ //counter for opening parantheses, if it is 0, then no other openings can be put into the answer
+            ans.push_back('(');
+            para(n,c1-1,c2,ans,f);
+            ans.pop_back(); //backtracking
+        }
+        if(c2!=0 && c1!=c2){ //counter for closing paranthses and if we try to put in a closing para when there is no other opening para ahead of it, then it's not valid, so if the counter for c1 and c2 are same, it means for each opening, an closing has been put, so cannot put another closing
+            ans.push_back(')');
+            para(n,c1,c2-1,ans,f);
+            ans.pop_back();
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        string ans;
+        vector<string> f;
+        para(n,n,n,ans,f);
+        return f;
+    }
+};
