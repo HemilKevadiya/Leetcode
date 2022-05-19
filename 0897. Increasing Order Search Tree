@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void inOrder(TreeNode* root,vector<int>& Tree){
+        if(root!=NULL){
+            inOrder(root->left,Tree);
+            Tree.push_back(root->val);
+            inOrder(root->right,Tree);
+        }
+    }
+    
+    void finalTree(TreeNode* root,int key){
+        TreeNode* newNode = new TreeNode(key);
+        TreeNode* temp = root;
+        while(temp->right!=NULL) temp = temp->right;
+        temp->right = newNode;
+    }
+    
+    TreeNode* increasingBST(TreeNode* root) {
+        vector<int> Tree;
+        inOrder(root,Tree);
+        TreeNode* finalTreeRoot = new TreeNode(Tree[0]);
+        Tree.erase(Tree.begin());
+        for(auto j:Tree) finalTree(finalTreeRoot,j);
+        return finalTreeRoot;
+    }
+};
