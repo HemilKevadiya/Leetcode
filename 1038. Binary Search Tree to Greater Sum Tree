@@ -1,0 +1,18 @@
+class Solution {
+public:
+    //we just need to keep summing up all the nodes from right side
+    //so a converse inOrder is performed,as there will be only nodes from right side first
+    int sum;
+    void inOrder(TreeNode* root){
+        if(root!=NULL){
+            inOrder(root->right);
+            sum+=root->val;
+            root->val = sum;
+            inOrder(root->left);
+        }
+    }
+    TreeNode* bstToGst(TreeNode* root) {
+        inOrder(root);
+        return root;
+    }
+};
