@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int low = 0, high = nums.size()-1;
+        while(low<=high){
+            int mid = (low+high)>>1;
+            if(nums[mid]==target) return mid;
+            if(nums[low]<=nums[mid]){ //if the left part is sorted
+                if(target>=nums[low] && target<=nums[mid]){ //if the target exists in the left subpart then the array is divided into the left subpart
+                    high = mid-1;
+                }else{ //the target doesn't exist in the left subpart then the array is eliminated to only right subpart
+                    low = mid+1;
+                }
+            }else{ 
+                if(target>=nums[mid+1] && target<=nums[high]){ //if the left subpart is not sorted and the array exists in right subpart
+                    low = mid+1;
+                }else{ //the left subpart was not sorted but the element still lies in the left subpart
+                    high = mid-1;
+                }
+            }
+        }
+        return -1;
+    }
+};
