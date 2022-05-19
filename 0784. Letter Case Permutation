@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void letterCase(int idx,string s,string& ans,set<string>& allCases){
+        if(ans.size()==s.size()){
+            allCases.insert(ans);
+            return;
+        }
+        if(s[idx]>='0' && s[idx]<='9'){ //if it is a number, we directly have to push it and then return the function because there is no other combination for a number
+            ans.push_back(s[idx]);
+            letterCase(idx+1,s,ans,allCases);
+            ans.pop_back();
+            return;
+        }
+        ans.push_back(s[idx]);
+        letterCase(idx+1,s,ans,allCases); //the character is directly pushed into the current answer
+        ans.pop_back();
+        if(s[idx]>='a' && s[idx]<='z') ans.push_back((char)(s[idx] - 32)); //to convert characters from lower case to upper case and vice-versa
+        else ans.push_back((char)(s[idx] + 32));
+        letterCase(idx+1,s,ans,allCases);
+        ans.pop_back();
+    }
+    vector<string> letterCasePermutation(string s) {
+        string ans;
+        set<string> allCases;
+        letterCase(0,s,ans,allCases);
+        vector<string> finalAns;
+        for(auto j:allCases) finalAns.push_back(j);
+        return finalAns;
+    }
+};
