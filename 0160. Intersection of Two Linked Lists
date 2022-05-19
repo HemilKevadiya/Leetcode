@@ -1,0 +1,53 @@
+class Solution {
+public:
+    //Brute Force
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        while(headA!=NULL){
+            ListNode* temp = headB;
+            while(temp!=NULL){
+                if(headA==temp){
+                    return temp;
+                }
+                temp = temp->next;
+            }
+            headA = headA->next;
+        }
+        return NULL;
+    }
+    
+    //Two Pointers Solution
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB){
+        ListNode* ptr1 = headA;
+        ListNode* ptr2 = headB;
+        //Basically a circular traversal on both the linked lists is happening, Ex: if a pointer has become NULL then the pointers are basically swapped(ptr1 starts pointing to headB and ptr2 starts pointing to headA), this is repeated till we don't get an intersection point
+        while(ptr1!=ptr2){
+            if(ptr1==NULL) ptr1 = headB;
+            else ptr1 = ptr1->next;
+            
+            if(ptr2==NULL) ptr2 = headA;
+            else ptr2 = ptr2->next;
+        }
+        return ptr1;
+    }
+    
+    //Hash Set Solution
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB){
+        unordered_multiset<ListNode*> nodesSet;
+        ListNode* temp = headA;
+        while(temp!=NULL){ //all the nodes from first LL is inserted into the set
+            nodesSet.insert(temp);
+            temp = temp->next;
+        }
+        temp = headB;
+        while(temp!=NULL){
+            if(nodesSet.find(temp)!=nodesSet.end()){ //if we find any node of second LL in the set, it is our intersection point
+                return temp;
+            }
+            temp = temp->next;
+        }
+        return NULL;
+    }
+};
