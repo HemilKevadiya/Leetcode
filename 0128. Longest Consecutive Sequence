@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size()==0) return 0; 
+        set<int> cons(nums.begin(),nums.end()); //we convert the vector to a set to get it sorted and with only distinct elements
+        nums.clear();
+        copy(cons.begin(),cons.end(),back_inserter(nums)); //then we copy thw whole set to our vector
+        int n = nums.size();
+        int totalMax = INT_MIN,currSum=1; //there will be at least one element which will be consecutive
+        for(int i=1;i<n;i++){
+            if(abs(nums[i]-nums[i-1])!=1){ //if the elements are not consecutive, we reset the current sum of consecutive sequence
+                totalMax = max(totalMax,currSum);
+                currSum = 1;
+            }else{
+                currSum++;
+            }
+        }
+        return max(totalMax,currSum);
+    }
+};
