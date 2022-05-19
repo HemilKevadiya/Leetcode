@@ -1,5 +1,7 @@
 class Solution {
 public:
+    //Map Approach
+    
     int singleNumber(vector<int>& nums) {
         unordered_map<int,int> map;
         int i,n=nums.size();
@@ -10,9 +12,21 @@ public:
         for(auto j:map){
             if(j.second==1){
                 celeb=j.first;
-                break;
             }
         }
         return celeb;
+    }
+    
+    //Binary Search
+    
+    int singleNumber(vector<int>& nums){
+        sort(nums.begin(),nums.end());
+        int n = nums.size(),i;
+        for(i=0;i<n;i++){
+            int idx = upper_bound(nums.begin(),nums.end(),nums[i]) - nums.begin() - 1;
+            if(idx==i) break;
+            else i+=2; //triple jump because every element appears thrice
+        }
+        return nums[i];
     }
 };
