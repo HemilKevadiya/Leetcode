@@ -1,0 +1,64 @@
+class Solution {
+public:
+    void nextSmallerToLeft(vector<int>& nums,vector<int>& ans){
+        stack<pair<int,int>> s;
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            if(s.empty()){
+                ans.push_back(-1);
+            }else if(s.size()>0 && s.top().second<nums[i]){
+                ans.push_back(s.top().first);
+            }else{
+                while(s.size()>0 && s.top().second>=nums[i]){
+                    s.pop();
+                }
+                if(s.empty()){
+                    ans.push_back(-1);
+                }else if(s.size()>0 && s.top().second<nums[i]){
+                    ans.push_back(s.top().first);
+                }
+            }
+            s.push({i,nums[i]});
+        }
+    }
+    
+    void nextSmallerToRight(vector<int>& nums,vector<int>& ans){
+        stack<pair<int,int>> s;
+        int n = nums.size();
+        for(int i=n-1;i>=0;i--){
+            if(s.empty()){
+                ans.push_back(n); //if there is no element that is smaller to the current on the right, we push an imaginary building number equal to n
+            }else if(s.size()>0 && s.top().second<nums[i]){
+                ans.push_back(s.top().first);
+            }else{
+                while(s.size()>0 && s.top().second>=nums[i]){
+                    s.pop();
+                }
+                if(s.empty()){
+                    ans.push_back(n);
+                }else if(s.size()>0 && s.top().second<nums[i]){
+                    ans.push_back(s.top().first);
+                }
+            }
+            s.push({i,nums[i]});
+        }
+    }
+    
+    //Find a Rectangle which is smaller to the current on the left and on the right
+    //If any rectangle smaller than the current one cannot be found on the right side, then an imaginary rectangle is imagined to be smaller than the current
+    //Then for area, we need to find width, we can find that using the next smallest element to the right and left's indices, the width can be found using the formula on 59th line
+    int largestRectangleArea(vector<int>& heights) {
+        vector<int> NSL;
+        vector<int> NSR;
+        int maxArea = INT_MIN;
+        nextSmallerToLeft(heights,NSL);
+        nextSmallerToRight(heights,NSR);
+        reverse(NSR.begin(),NSR.end());
+        int n = heights.size();
+        for(int i=0;i<n;i++){
+            maxArea = max(maxArea,(NSR[i]-NSL[i]-1)*heights[i]);
+        }
+        return maxArea;
+        return 0;
+    }
+};
