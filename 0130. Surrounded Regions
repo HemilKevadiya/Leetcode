@@ -1,0 +1,57 @@
+class Solution {
+public:
+    void findZeros(vector<vector<char>>& grid,int m,int n,vector<vector<int>>& visited){
+        //First we make a call for only boundary zeros, then if a zero is found on the boundary then we convert the whole zero region that is connected to it to '1' by calling a DFS from that cell
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 || i==m-1 || j==0 || j==n-1){
+                    if(grid[i][j]=='O'){
+                        visited[i][j] = 1;
+                        grid[i][j] = '1';
+                        DFS(grid,m,n,i,j,visited);
+                    }
+                }
+            }
+        }
+        //Then we traverse the whole board, if there is a 1, it means it is connected to a boundary 'O', which means it can't be converted to 'X', so it is converted back to 'O' and if there is a 'O' it means it's not connected to a boundary O
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]=='1') grid[i][j] = 'O';
+                else if(grid[i][j]=='O') grid[i][j] = 'X';
+            }
+        }
+    }
+    void DFS(vector<vector<char>>& grid,int m,int n,int i,int j, vector<vector<int>>& visited){
+        
+        if(i-1>=0 && grid[i-1][j]=='O' && !visited[i-1][j]){
+            visited[i-1][j] = 1;
+            grid[i-1][j] = '1';
+            DFS(grid,m,n,i-1,j,visited);
+        }
+        
+        if(i+1<m && grid[i+1][j]=='O' && !visited[i+1][j]){
+            visited[i+1][j] = 1;
+            grid[i+1][j] = '1';
+            DFS(grid,m,n,i+1,j,visited);
+        }
+        
+        if(j-1>=0 && grid[i][j-1]=='O' && !visited[i][j-1]){
+            visited[i][j-1] = 1;
+            grid[i][j-1] = '1';
+            DFS(grid,m,n,i,j-1,visited);
+        }
+        
+        if(j+1<n && grid[i][j+1]=='O' && !visited[i][j+1]){
+            visited[i][j+1] = 1;
+            grid[i][j+1] = '1';
+            DFS(grid,m,n,i,j+1,visited);
+        }
+    }
+    
+    void solve(vector<vector<char>>& board) {
+        int m = board.size();
+        int n = board[0].size();
+        vector<vector<int>> visited(m,vector<int> (n));
+        findZeros(board,m,n,visited);
+    }
+};
