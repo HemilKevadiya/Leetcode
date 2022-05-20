@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int maxLevelSum(TreeNode* root) {
+        //Level Order Traversal is Performed
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        int level;
+        int currLevel = 0;
+        int maxSum = INT_MIN;
+        while(!nodes.empty()){
+            //If queue is not empty, it means there are still some other levels
+            currLevel++;
+            int size = nodes.size();
+            int sum = 0;
+            //To explore the current level(all nodes of the level will be stored inside the queue)
+            while(size--){
+                TreeNode* current = nodes.front(); //The current node to be explored
+                nodes.pop();
+                sum+=current->val;
+                if(current->left) nodes.push(current->left);
+                if(current->right) nodes.push(current->right);
+            }
+            //After the end of this loop, the whole current level has been explored and we can go to the next leve(if there is any)
+            if(sum>maxSum){
+                level = currLevel;
+                maxSum = sum;
+            }
+        }
+        return level;
+    }
+};
