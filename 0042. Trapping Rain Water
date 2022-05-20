@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size();
+        vector<int> maxAtLeft(n);
+        vector<int> maxAtRight(n);
+        int currMax = height[0];
+        for(int i=0;i<n;i++){
+            if(currMax<height[i]){
+                currMax = height[i];
+            }
+            maxAtLeft[i] = currMax;
+        }
+        currMax = height[n-1];
+        for(int i=n-1;i>=0;i--){
+            if(currMax<height[i]){
+                currMax = height[i];
+            }
+            maxAtRight[i] = currMax;
+        }
+        int sum = 0;
+        for(int i=0;i<n;i++){
+            sum+=min(maxAtLeft[i],maxAtRight[i]) - height[i];
+        }
+        return sum;
+    }
+};
