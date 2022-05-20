@@ -1,0 +1,41 @@
+class Solution {
+public:
+    //We first find all the root to leaf paths and then add them to a vector of strings then evaluate all the binary strings and then sum it up3
+    int BinaryEvaluation(string s){
+        int n = s.length();
+        int j = 0;
+        int sum = 0;
+        for(int i=n-1;i>=0;i--){
+            if(s[i]=='1') sum+=(1<<j);
+            j++;
+        }
+        return sum;
+    }
+    
+    void allPaths(TreeNode* root,string& ans,vector<string>& BTpaths){
+        if(root->left==NULL && root->right==NULL){
+            BTpaths.push_back(ans);
+            return;
+        }
+        if(root->left){
+            ans.push_back(root->left->val + '0');
+            allPaths(root->left,ans,BTpaths);
+            ans.pop_back(); 
+        }
+        if(root->right){
+            ans.push_back(root->right->val + '0');
+            allPaths(root->right,ans,BTpaths);
+            ans.pop_back();
+        }
+    }
+    
+    int sumRootToLeaf(TreeNode* root) {
+        vector<string> BTpaths;
+        string ans;
+        ans.push_back(root->val + '0'); //as the root is gonna be in the path every time, we explicitly include it
+        allPaths(root,ans,BTpaths);
+        int pathSum = 0;
+        for(auto j:BTpaths) pathSum+=BinaryEvaluation(j);
+        return pathSum;
+    }
+};
