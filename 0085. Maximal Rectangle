@@ -1,0 +1,81 @@
+class Solution {
+public:
+    void nextSmallerToLeft(vector<int>& nums,vector<int>& ans){
+        stack<pair<int,int>> s;
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            if(s.empty()){
+                ans.push_back(-1);
+            }else if(s.size()>0 && s.top().second<nums[i]){
+                ans.push_back(s.top().first);
+            }else{
+                while(s.size()>0 && s.top().second>=nums[i]){
+                    s.pop();
+                }
+                if(s.empty()){
+                    ans.push_back(-1);
+                }else if(s.size()>0 && s.top().second<nums[i]){
+                    ans.push_back(s.top().first);
+                }
+            }
+            s.push({i,nums[i]});
+        }
+    }
+    
+    void nextSmallerToRight(vector<int>& nums,vector<int>& ans){
+        stack<pair<int,int>> s;
+        int n = nums.size();
+        for(int i=n-1;i>=0;i--){
+            if(s.empty()){
+                ans.push_back(n); 
+            }else if(s.size()>0 && s.top().second<nums[i]){
+                ans.push_back(s.top().first);
+            }else{
+                while(s.size()>0 && s.top().second>=nums[i]){
+                    s.pop();
+                }
+                if(s.empty()){
+                    ans.push_back(n);
+                }else if(s.size()>0 && s.top().second<nums[i]){
+                    ans.push_back(s.top().first);
+                }
+            }
+            s.push({i,nums[i]});
+        }
+    }
+    
+    int largestRectangleArea(vector<int>& heights) {
+        vector<int> NSL;
+        vector<int> NSR;
+        int maxArea = INT_MIN;
+        nextSmallerToLeft(heights,NSL);
+        nextSmallerToRight(heights,NSR);
+        reverse(NSR.begin(),NSR.end());
+        int n = heights.size();
+        for(int i=0;i<n;i++){
+            maxArea = max(maxArea,(NSR[i]-NSL[i]-1)*heights[i]);
+        }
+        return maxArea;
+    }
+    
+    //The problem can be broken down to Largest Rectangle in Histogram Problem
+    //Each Row of the 2D matrix is converted into a 1D histogram and passed to the function of largest area histogram
+    
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int maxRect = INT_MIN;
+        vector<int> histogram(n);
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0) histogram[j] = (matrix[i][j] - '0');
+                else{
+                    if(matrix[i][j]=='0') histogram[j] = 0;
+                    else histogram[j] +=(matrix[i][j] - '0');
+                }
+            }
+            maxRect = max(maxRect,largestRectangleArea(histogram));
+        }
+        return maxRect;
+    }
+};
