@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int count;
+    void totalIslands(vector<vector<char>>& grid,int m,int n){
+        //We perform DFS on the whole matrix
+        //If a 1 is encountered here, we try to look for any land surrounding that 1 and mark the whole land as 2(meaning it is visited), then try to look for other unvisited lands and perform the same thing
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]=='1'){
+                    count++;
+                    grid[i][j] = '2'; 
+                    island(grid,m,n,i,j);
+                }
+            }
+        }
+    }
+    //to mark the whole island as 2(visited)
+    //every surrounding 1 to the initial 1 will marked as visited(so as to not process that land again)
+    void island(vector<vector<char>>& grid,int m,int n,int i,int j){
+        if(i-1>=0 && grid[i-1][j]=='1'){
+            grid[i-1][j] = '2';
+            island(grid,m,n,i-1,j);
+        }
+        if(i+1<m && grid[i+1][j]=='1'){
+            grid[i+1][j] = '2';
+            island(grid,m,n,i+1,j);
+        }
+        if(j-1>=0 && grid[i][j-1]=='1'){
+            grid[i][j-1] = '2';
+            island(grid,m,n,i,j-1);
+        }
+        if(j+1<n && grid[i][j+1]=='1'){
+            grid[i][j+1] = '2';
+            island(grid,m,n,i,j+1);
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        totalIslands(grid,m,n);
+        return count;
+    }
+};
