@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void deleteNodes(TreeNode* prev,TreeNode* root,int target,int flag){
+        if(root->left==NULL && root->right==NULL && root->val==target){
+            if(flag==1) prev->left = NULL;
+            else prev->right = NULL;
+        }
+        if(root->left==NULL && root->right==NULL){
+            return;
+        }
+        if(root->left) {
+            deleteNodes(root,root->left,target,1);
+            //We need to check after every call if the current root has become a leaf and it's value is equal to the target
+            if(root->left==NULL && root->right==NULL && root->val==target){
+                if(flag==1) prev->left = NULL;
+                else prev->right = NULL;
+            }
+        }
+        if(root->right) {
+            deleteNodes(root,root->right,target,0);
+            if(root->left==NULL && root->right==NULL && root->val==target){
+                if(flag==1) prev->left = NULL;
+                else prev->right = NULL;
+            }
+        }
+    }
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        int delNodes = 0;
+        deleteNodes(root,root,target,0);
+        if(root->val==target && root->left==NULL && root->right==NULL) root = NULL;
+        return root;
+    }
+};
