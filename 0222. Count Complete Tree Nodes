@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int count;
+    void inOrder(TreeNode* root){
+        if(root!=NULL){
+            inOrder(root->left);
+            count++;
+            inOrder(root->right);
+        }
+    }
+    int countNodes(TreeNode* root) {
+        //We just take the Level Order because if there are no nodes on a certain level after a few nodes on the left most side, it means it won't be explored, so TLE can be avoided and it also runs in less than O(n) complexity
+        if(root==NULL) return 0;
+        queue<TreeNode*> levelOrder;
+        levelOrder.push(root);
+        int count = 0;
+        while(!levelOrder.empty()){
+            int size = levelOrder.size();
+            while(size--){
+                TreeNode* curr = levelOrder.front();
+                levelOrder.pop();
+                count++;
+                if(curr->left) levelOrder.push(curr->left);
+                if(curr->right) levelOrder.push(curr->right);
+            }
+        }
+        // inOrder(root);
+        return count;
+    }
+};
