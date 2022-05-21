@@ -1,0 +1,26 @@
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        int n = s.length();
+        int i = 0;
+        int j = k-1;
+        if(k>n){
+            reverse(s.begin(),s.end());
+            return s;
+        }
+        while(i<n){
+            if(j>=n) { //if there are fewer than k characters left
+                reverse(s.begin()+i,s.end());
+                break;
+            }
+            int temp = i;
+            while(i<j){
+                swap(s[i],s[j]);
+                i++; j--;
+            }
+            i = temp + (2*k);
+            j = i+(k-1);
+        }
+        return s;
+    }
+};
