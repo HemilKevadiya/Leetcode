@@ -1,0 +1,48 @@
+class Solution {
+public:
+    void findZeros(vector<vector<int>>& matrix,int m,int n,vector<vector<int>>& visited){
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0 && !visited[i][j]){
+                    visited[i][j] = 1;
+                    changeMatrix(matrix,m,n,i,j,visited);
+                }
+            }
+        }
+    }
+    
+    void changeMatrix(vector<vector<int>>& matrix,int m,int n,int i,int j, vector<vector<int>>& visited){
+        for(int k=0;k<i;k++){
+            if(matrix[k][j]!=0){
+                matrix[k][j] = 0;
+                visited[k][j] = 1;
+            }
+        }
+        for(int k=i;k<m;k++){
+            if(matrix[k][j]!=0){
+                matrix[k][j] = 0;
+                visited[k][j] = 1;
+            }
+        }
+        for(int k=0;k<j;k++){
+            if(matrix[i][k]!=0){
+                matrix[i][k] = 0;
+                visited[i][k] = 1;
+            }
+        }
+        for(int k=j;k<n;k++){
+            if(matrix[i][k]!=0){
+                matrix[i][k] = 0;
+                visited[i][k] = 1;
+            }
+        }
+    }
+    void setZeroes(vector<vector<int>>& matrix) {
+        //Basic DFS Approach
+        //First we find zeros and then turn it's whole column and row into zeros while excuding already existing zeros
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<vector<int>> visited(m,vector<int> (n));
+        findZeros(matrix,m,n,visited);
+    }
+};
