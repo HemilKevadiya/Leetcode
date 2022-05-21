@@ -1,0 +1,24 @@
+class Solution{
+public:
+    void generateBinary(int n,vector<string>& allNums,int ones,int zeros,string& ans){
+        if(ones>=zeros && ans.size()==n){
+            allNums.push_back(ans);
+            return;
+        }
+        if(ans.size()==n) return;
+        if(zeros>ones) return; //As there cannot be leading Zeros in the string, we need to return
+        ans.push_back('1');
+        generateBinary(n,allNums,ones+1,zeros,ans);
+        ans.pop_back();
+        ans.push_back('0');
+        generateBinary(n,allNums,ones,zeros+1,ans);
+        ans.pop_back();
+    }
+	vector<string> NBitBinary(int N)
+	{
+	    vector<string> allNums;
+	    string ans;
+	    generateBinary(N,allNums,0,0,ans);
+	    return allNums;
+	}
+};
