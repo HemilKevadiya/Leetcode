@@ -1,0 +1,55 @@
+class Solution {
+public:
+    void topologicalSort(int node, vector<vector<int>>& adjList, vector<int>& visited, stack<int>& sort){
+        visited[node] = 1;
+        for(auto j:adjList[node]){
+            if(!visited[j]){
+                topologicalSort(j,adjList,visited,sort);
+            }
+        }
+        sort.push(node);
+    }
+    
+    bool detectCycle(int node,vector<int>& visited, vector<int>& DFS, vector<vector<int>>& adjList){
+        visited[node] = 1;
+        DFS[node] = 1;
+        for(auto j:adjList[node]){
+            if(!visited[j]){
+                if(detectCycle(j,visited,DFS,adjList)) return true;
+            }else if(DFS[j]){
+                return true;
+            }
+        }
+        DFS[node] = 0;
+        return false;
+    }
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& a) {
+        vector<vector<int>> adjList(numCourses);
+        int n = a.size();
+        vector<int> visited1(numCourses);
+        vector<int> visited2(numCourses);
+        vector<int> DFS(numCourses);
+        stack<int> sort;
+        for(int i=0;i<n;i++) adjList[a[i][1]].push_back(a[i][0]);
+        //As there can be cycles, we first need to detect any cycle
+        //If there is a cycle, we return an empty vector
+        for(int i=0;i<numCourses;i++){
+            if(!visited1[i]){
+                if(detectCycle(i,visited1,DFS,adjList)) return {};
+            }
+        }
+        //Topological Sort using DFS
+        for(int i=0;i<numCourses;i++){
+            if(!visited2[i]){
+                topologicalSort(i,adjList,visited2,sort);
+            }
+        }
+        vector<int> ans;
+        while(!sort.empty()){
+            ans.push_back(sort.top());
+            sort.pop();
+        }
+        return ans;
+    }
+};
