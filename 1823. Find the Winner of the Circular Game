@@ -1,0 +1,20 @@
+class Solution {
+public:
+    //Josephus Problem
+    int ans;
+    void circle(vector<int>& friends,int k,int idx){
+        if(friends.size()==1){
+            ans = friends[0];
+            return;
+        }
+        idx = (idx+k)%friends.size();
+        friends.erase(friends.begin() + idx);
+        circle(friends,k,idx);
+    }
+    int findTheWinner(int n, int k) {
+        vector<int> friends;
+        for(int i=1;i<=n;i++) friends.push_back(i);
+        circle(friends,--k,0);
+        return ans;
+    }
+};
