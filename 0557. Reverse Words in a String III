@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.length();
+        int i = 0;
+        int j = 0;
+        for(int k=0;k<n;k++){
+            while(k!=n && s[k]!=' ') k++; //to find an occurence of a word
+            j = k-1; //as k will be pointing to a space, j will get pointed to the character before j, as it will form a word from i to j then
+            int lb = j+1; //to keep track of previous j, as we need to assign i to the next word's first character
+            while(i<j){
+                swap(s[i],s[j]);
+                i++; j--;
+            }
+            i = lb+1;
+        }
+        return s;
+    }
+};
