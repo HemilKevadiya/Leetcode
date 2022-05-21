@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> totalPossible;
+    void coinsPath(vector<int>& coins,int amount,int idx,int total,int n){
+        if(amount==0){
+            totalPossible.push_back(total);
+            return;
+        }
+        if(idx==n || amount<0) return;
+        coinsPath(coins,amount-coins[idx],idx,total+1,n);
+        coinsPath(coins,amount,idx+1,total,n);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        int dp[n+1][amount+1];
+        for(int i=0;i<=n;i++){
+            for(int j=0;j<=amount;j++){
+                if(j==0) dp[i][j] = 0;
+                else if(i==0) dp[i][j] = 1e5;
+                else if(coins[i-1]>j) dp[i][j] = dp[i-1][j];
+                else dp[i][j] = min(dp[i-1][j],1+dp[i][j-coins[i-1]]);
+            }
+        }
+        if(dp[n][amount]==1e5) return -1;
+        else return dp[n][amount];
+        
+    }
+};
