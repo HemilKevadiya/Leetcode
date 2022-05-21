@@ -1,0 +1,13 @@
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        if(k>n) k%=n;
+        reverse(nums.begin(),nums.end());
+        //We reverse the whole array to get what will be in the array after k rotations
+        reverse(nums.begin(),nums.begin()+k);
+        //The first k elements will be reversed again
+        reverse(nums.begin()+k,nums.end());
+        //and then the remaining elements will be reversed
+    }
+};
