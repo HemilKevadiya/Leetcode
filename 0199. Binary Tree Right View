@@ -1,0 +1,21 @@
+//We just have to print the rightmost nodes at every level
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        if(root==NULL) return {};
+        vector<int> ans;
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        while(!nodes.empty()){
+            int size = nodes.size();
+            while(size--){
+                TreeNode* current = nodes.front();
+                nodes.pop();
+                if(size==0) ans.push_back(current->val);
+                if(current->left) nodes.push(current->left);
+                if(current->right) nodes.push(current->right);
+            }
+        }
+        return ans;
+    }
+};
