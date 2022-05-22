@@ -1,0 +1,20 @@
+class Solution {
+public:
+    TreeNode* prev;
+    int minDiff = INT_MAX;
+    void inOrder(TreeNode* root){
+        if(root!=NULL){
+            inOrder(root->left);
+            if(prev!=NULL){ //To get the Reference of last visited node
+                //and get the absolute diff of current root value and previously visited node's value
+                minDiff = min(minDiff,abs(prev->val - root->val));
+            }
+            prev = root;
+            inOrder(root->right);
+        }
+    }
+    int getMinimumDifference(TreeNode* root) {
+        inOrder(root);
+        return minDiff;
+    }
+};
