@@ -1,0 +1,38 @@
+class Solution {
+public:
+    //The same idea as 647. Palindromic Substrings
+    string longestPalindrome(string s) {
+        int n = s.length();
+        if(n==1) return s;
+        string ans;
+        int ansLen = 0;
+        //For odd sized Substrings
+        for(int i=0;i<n;i++){
+            int left = i;
+            int right = i;
+            if(left==right && ansLen<1) ans=s[left]; //A substring with length is also a palindrome, an edge case where the longest substring is of length 1 could exist
+            left--; right++;
+            while(left>=0 && right<n && s[left]==s[right]){
+                //if the Current Palindromic Substring's length is greater than the current max length Palindrome Substring only then the ans string should be changed
+                if(right-left+1 > ansLen){
+                    ans.assign(s.begin()+left,s.begin()+(right+1));
+                    ansLen = right - left + 1;
+                }
+                left--; right++;
+            }
+        }
+        //For Even Sized Substrings
+        for(int i=0;i<n;i++){
+            int left = i;
+            int right = i+1;
+            while(left>=0 && right<n && s[left]==s[right]){
+                if((right-left+1) > ansLen){
+                    ans.assign(s.begin()+left,s.begin()+(right+1));
+                    ansLen = right - left + 1;
+                }
+                left--; right++;
+            }
+        }
+        return ans;
+    }
+};
