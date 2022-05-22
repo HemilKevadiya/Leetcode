@@ -1,0 +1,43 @@
+class Solution {
+public:
+    //First we generate all the Subsequences then check if it sorted and then insert it to a set to avoid duplicates
+    
+    //Subsets using backtracking Approach
+    void generateSubs(set<vector<int>>& ansSet,vector<int>& currSub,vector<int>& nums,int n,int idx){
+        ansSet.insert(currSub);
+        for(int i=idx;i<n;i++){
+            currSub.push_back(nums[i]);
+            generateSubs(ansSet,currSub,nums,n,i+1);
+            currSub.pop_back();
+        }
+    }
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        set<vector<int>> ansSet;
+        vector<int> currSub;
+        vector<vector<int>> ans;
+        int n = nums.size();
+        generateSubs(ansSet,currSub,nums,n,0);
+        
+        //Generated Subsets using power set approach
+        
+        // for(int i=0;i<(1<<n);i++){
+        //     for(int j=0;j<n;j++){
+        //         if(i&(1<<j)) currSub.push_back(nums[j]);
+        //     }
+        //     allSubsequences.push_back(currSub);
+        //     currSub.clear();
+        // }
+        // for(int i = 0;i<allSubsequences.size();i++){
+        //     vector<int> temp = allSubsequences[i];
+        //     if(temp.size()>1 && is_sorted(temp.begin(),temp.end())){
+        //         ansSet.insert(temp);
+        //     }
+        // }
+        for(auto j:ansSet){
+            if(j.size()>1 && is_sorted(j.begin(),j.end())){
+                ans.push_back(j);
+            }
+        }
+        return ans;
+    }
+};
