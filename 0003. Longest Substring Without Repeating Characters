@@ -1,0 +1,25 @@
+class Solution {
+public:
+    //A Hashmap which will contain the character and it's last occurence will be used
+    //if at any point there is a character which is already there in the map arrives then we move the left to it's last occurence index plus 1
+    //If at any point the last occurence index of any element is not in the range of our current left to right then we just ignore it, as it's not a repeating character in our current substring
+    int lengthOfLongestSubstring(string s) {
+        if(s.size()==0) return 0;
+        unordered_map<char,int> chars;  
+        int maxLen = 1;
+        int n = s.length();
+        int left = 0;
+        int right = 0;
+        int currLen = 1;
+        for(int i=0;i<n;i++){
+            if(s[i]==' ') continue;
+            if(chars.find(s[right])!=chars.end()){
+                left = max(chars[s[right]]+1,left);
+            }
+            chars[s[right]]=right;
+            maxLen = max(maxLen, right - left + 1);
+            right++;
+        }
+        return max(maxLen,currLen);
+    }
+};
