@@ -1,0 +1,24 @@
+class Solution {
+public:
+    //Same idea as the previous version of this
+    Node* connect(Node* root) {
+        if(root==NULL) return NULL;
+        queue<Node*> nodes;
+        nodes.push(root);
+        while(!nodes.empty()){
+            int size = nodes.size();
+            while(size--){
+                Node* current = nodes.front();
+                nodes.pop();
+                if(size==0) current->next = NULL;
+                else{
+                    Node* tempNode = nodes.front();
+                    current->next = tempNode;
+                }
+                if(current->left) nodes.push(current->left);
+                if(current->right) nodes.push(current->right);
+            }
+        }
+        return root;
+    }
+};
