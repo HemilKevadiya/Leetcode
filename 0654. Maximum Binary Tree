@@ -1,0 +1,42 @@
+//It is created like constructing a tree from inOrder and postOrder
+class Solution {
+public:
+    TreeNode* root = new TreeNode();
+    void constructTree(TreeNode* temp, int low, int high, int flag, vector<int>& nums, vector<int>& visited){
+        int idx = low, max = nums[low];
+        //First, we need to find the maximum element index for every subpart of the array to make it as a root to that subtree
+        for(int i=low;i<=high;i++){
+            if(nums[i]>max){
+                max = nums[i];
+                idx = i;
+            }
+        }
+        if(flag!=2){
+            TreeNode* newNode = new TreeNode(nums[idx]);
+            if(flag==1){
+                temp->left = newNode;
+                temp = temp->left;//We do this because, for the next call this is going to be the root
+            }else{
+                temp->right = newNode;
+                temp = temp->right;
+            }
+        }
+        
+        if(idx-1>=low && !visited[idx-1]){ //if we are not going out of bounds of the current subarray and the index we are jumping to is not already included in the tree
+            visited[idx] = 1;
+            constructTree(temp,low,idx-1,1,nums,visited);
+        }
+        if(idx+1<=high && !visited[idx+1]){
+            visited[idx] = 1;
+            constructTree(temp,idx+1,high,0,nums,visited);
+        }
+    }
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        int idx = max_element(nums.begin(),nums.end()) - nums.begin();
+        root->val = nums[idx];
+        TreeNode* temp = root;
+        vector<int> visited(nums.size());
+        constructTree(temp,0,nums.size()-1,2,nums,visited);
+        return root;
+    }
+};
