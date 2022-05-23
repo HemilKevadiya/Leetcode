@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int numWaterBottles(int numBottles, int numExchange) {
+        int drankBottles = 0;
+        while(numBottles!=0){
+            drankBottles++;
+            numBottles--;
+            if(drankBottles%numExchange==0) numBottles++;
+        }
+        return drankBottles;
+    }
+};
