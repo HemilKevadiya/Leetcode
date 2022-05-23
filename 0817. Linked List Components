@@ -1,5 +1,8 @@
 class Solution {
 public:
+    
+    //HashSet Approach for O(n) TC and O(n) SC
+    
     int numComponents(ListNode* head, vector<int>& nums) {
         unordered_set<int> nodeVals;
         for(int i=0;i<nums.size();i++) nodeVals.insert(nums[i]);
@@ -12,6 +15,26 @@ public:
                 flag = 1;
                 count++;
             }else if(nodeVals.find(temp->val)==nodeVals.end()){
+                flag = 0;
+            }
+            temp = temp->next;
+        }
+        return count;
+    }
+    
+    //Binary Search Approach for O(1) space complexity
+    
+    int numComponents(ListNode* head, vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        ListNode* temp = head;
+        int count = 0, flag = 0;
+        while(temp!=NULL){
+            int idx = lower_bound(nums.begin(),nums.end(),temp->val) - nums.begin();
+            if(idx!=n && nums[idx]==temp->val && flag!=1){
+                flag = 1;
+                count++;
+            }else if(idx==n || nums[idx]!=temp->val){
                 flag = 0;
             }
             temp = temp->next;
