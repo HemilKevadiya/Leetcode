@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maximumTop(vector<int>& nums, int k) {
+        vector<pair<int,int>> idx_diff;
+        int n = nums.size();
+        if(n==1 && (k&1==1)) return -1;
+        //We sort the array while preserving the original indices
+        for(int i=0;i<n;i++){
+            idx_diff.push_back({nums[i],i});
+        }
+        sort(idx_diff.rbegin(),idx_diff.rend());
+        int ans = -1;
+        //If at any point any element is found which is the maximum and can be obtained in k operations while doing anything, it is the answer
+        for(auto j:idx_diff){
+            //if the difference is 1 for any particular max element then it can't be obtained with any number operations, so we take the next immediate max that's on the index criteria
+            if((k-j.second)!=1 &&(k-j.second)>=0){
+                ans = j.first;
+                break;
+            }
+        }
+        return ans;
+    }
+};
