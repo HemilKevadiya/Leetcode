@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool ans(ListNode* head,TreeNode* root){
+        if(!head) return true;
+        if(!root) return false;
+        return head->val==root->val && (ans(head->next,root->left) || ans(head->next,root->right));
+    }
+    bool isSubPath(ListNode* head, TreeNode* root) {
+        if(!root) return false;
+        //We search for the whole linked list with these calls, if any of them has returned false(it means one or more elements weren't present in the path we had taken previously), now the first node of the path will be changed and we will again check if the whole linked list is present in a path or not
+        return ans(head,root) || isSubPath(head,root->left) || isSubPath(head,root->right);
+    }
+};
