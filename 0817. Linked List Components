@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numComponents(ListNode* head, vector<int>& nums) {
+        unordered_set<int> nodeVals;
+        for(int i=0;i<nums.size();i++) nodeVals.insert(nums[i]);
+        ListNode* temp = head;
+        int count = 0, flag = 0;
+        while(temp!=NULL){
+            //If any node has started forming a component then we keep track of it by using flag
+            //If the component is broken at any point, then flag is reset to 0
+            if(nodeVals.find(temp->val)!=nodeVals.end() && flag!=1){
+                flag = 1;
+                count++;
+            }else if(nodeVals.find(temp->val)==nodeVals.end()){
+                flag = 0;
+            }
+            temp = temp->next;
+        }
+        return count;
+    }
+};
