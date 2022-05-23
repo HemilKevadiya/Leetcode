@@ -1,0 +1,20 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        string ans = "";
+        int increment = (numRows-1)*2; //For every row, the jump is the same
+        //Except for the middle ones, where some characters are left out
+        //So there will be another jump whose value will depend on the row number
+        if(numRows==1) return s;
+        for(int row=0;row<numRows;row++){
+            for(int i=row;i<s.length();i+=increment){
+                ans+=s[i];
+                //The formula for handling middle rows
+                if(row>0 && row<(numRows-1) && (i + increment - (2*row))<s.length()){
+                    ans+=s[i+increment-(2*row)];
+                }
+            }
+        }
+        return ans;
+    }
+};
