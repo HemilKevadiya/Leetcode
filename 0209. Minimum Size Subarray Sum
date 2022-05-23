@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n = nums.size();
+        int minLen = INT_MAX;
+        int currSum = 0;
+        int currLen = 0;
+        int i = 0, j = 0;
+        while(j<n){
+            currSum+=nums[j];
+            if(currSum>=target){ //if for any subarray the sum has become greater than or equal to target then we first note it's length
+                minLen = min(minLen,j-i+1);
+            }
+            //Then, if after removing some numbers from the beginning of the array, if the sum still stays greater than or equal to the target then we note that length
+            while(i<j && currSum>target){
+                currSum-=nums[i];
+                if(currSum<target){
+                    //if after exluding any element the current subarray sum is less than target than the range will not exclude the starting element, as it is required in the sum
+                    minLen = min(minLen,j-i+1);
+                    i++;
+                    //if the sum is still as per our requirements, then we exclude that element and then note the length
+                }else{
+                    i++;
+                    minLen = min(minLen,j-i+1);
+                }
+            }
+            j++;
+        }
+        if(minLen==INT_MAX) return 0;
+        return minLen;
+    }
+};
