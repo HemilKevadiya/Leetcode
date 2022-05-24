@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int> mainAns;
+    bool checkValidity(vector<int>& ans){
+        for(int i=2;i<ans.size();i++){
+            //if the sum of 2 numbers is exceeding the limit then it is considered as false
+            long long temp1 = ans[i-1], temp2 = ans[i-2];
+            if((temp1+temp2)>pow(2,31)-1) return false;
+            if(ans[i]!=(ans[i-1]+ans[i-2])) return false;
+        }
+        return true;
+    }
+    bool solve(vector<int>& ans, int idx, int n, string num){
+        // if(num[idx]=='0') return false;
+        if(ans.size()>2){
+            if(!checkValidity(ans)) return false;
+            if(idx==n) {
+                mainAns = ans;
+                return true;
+            }
+        }
+        if(idx==n) return false;
+        for(int i=idx;i<n;i++){
+            //For handling stoi out of range exception(If indexto characters is going out of bounds)
+            if((i-idx+1)-idx>=n) return false;
+            //For handling large integer overflow, the maximum number in our answer cannot exceed 2^31 - 1
+            if(stol(num.substr(idx,i-idx+1))>(pow(2,31)-1)) return false;
+            string temp = num.substr(idx,i-idx+1);
+            //For handling leading 0s, if there is only 1 character and it is 0 then it is valid
+            if(temp.length()>1 && temp[0]=='0') return false;
+            ans.push_back(stoi(num.substr(idx,i-idx+1)));
+            if(solve(ans, i+1, n, num)) return true;
+            ans.pop_back();
+        }
+        return false;
+    }
+    vector<int> splitIntoFibonacci(string num) {
+        vector<int> ans;
+        solve(ans, 0, num.length(), num);
+        return mainAns;
+    }
+};
