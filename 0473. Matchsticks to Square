@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool solve(int idx, vector<int>& sides, vector<int>& matchsticks, int n, int target){
+        if(idx==n) return true; //If we reached the last index it means we put every matchstick correctly, so the function returns true
+        //We iterate over the all the side lengths to try putting the stick on every side and then calling the function again for putting the next stick and trying out every possibility
+        for(int i=0;i<4;i++){
+            if(sides[i] + matchsticks[idx] <= target){
+                sides[i] += matchsticks[idx];
+                if(solve(idx+1,sides,matchsticks,n,target)) return true;
+                sides[i] -= matchsticks[idx];
+            }
+        }
+        return false;
+    }
+    bool makesquare(vector<int>& matchsticks) {
+        int sum = 0;
+        //To keep track of the sides we are putting the sticks on
+        vector<int> sides(4,0);
+        for(auto j:matchsticks) sum+=j;
+        //if the total sum of all matchsticks' length cannot make a square we return false
+        if(sum%4!=0) return false;
+        int target = sum/4; //Here, target is the required side length for the square
+        sort(matchsticks.rbegin(), matchsticks.rend());
+        //If, the largest matchstick's size is greater than the side length that is required
+        if(matchsticks[0]>target) return false;
+        return solve(0,sides,matchsticks,matchsticks.size(),target);
+    }
+};
