@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool solve(int n, int k){
+        if(n==1) return false;
+        //As the middle char of every string will be 1 and the string is getting partitioned at that point, we need to keep track of it
+        int mid = ((1<<n)-1)/2 + 1;
+        //if the k is equal to the mid, then it is going to be '1', so we just return 1
+        if(k==mid) return true;
+        //if k falls in the first half of the string, it means the char at that position in the previous string will be the same
+        else if(k<mid) return solve(n-1, k);
+        //if k falls in the second half, the second half is the reversed version of it's previous string with every bit inverted, we need to find the corresponding position of the k in the previous string and then invert whatever is returned
+        else return !solve(n-1, (1<<n-1) - (k-mid));
+    }
+    char findKthBit(int n, int k) {
+        if(solve(n, k)) return '1';
+        else return '0';
+    }
+};
