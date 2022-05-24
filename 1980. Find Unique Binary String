@@ -1,0 +1,36 @@
+class Solution {
+public:
+    //NOT A BACKTRACKING SOLUTION
+    //We first convert all the binary inputs to integers and insert them into a set and then iterate through every number which will have n digits in it's binary representation, for any number which is not in the set, we return it's binary
+    string to_binary(string ans, int binaryLen, int num){
+        while(num!=0){
+            ans+=to_string(num%2);
+            num/=2;
+        }
+        while(ans.length()!=binaryLen) ans.push_back('0');
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+    string findDifferentBinaryString(vector<string>& nums) {
+        int binaryLen = nums[0].size();
+        cout<<binaryLen;
+        int n = nums.size();
+        set<int> numbers;
+        for(int i=0;i<n;i++){
+            int offset = binaryLen - 1;
+            int num = 0;
+            for(int j=0; j<binaryLen; j++){
+                if(nums[i][j]=='1') num+=(1<<offset);
+                offset--;
+            }
+            numbers.insert(num);
+        }
+        int i;
+        for(i=0;i<(1<<binaryLen);i++){
+            if(numbers.find(i)==numbers.end()) break;
+        }
+        string ans;
+        ans = to_binary(ans, binaryLen, i);
+        return ans;
+    }
+};
