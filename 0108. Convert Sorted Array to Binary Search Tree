@@ -1,0 +1,18 @@
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        if(nums.size()==0) return NULL; //If there is no element in the current array then return NULL
+        if(nums.size()==1) return new TreeNode(nums[0]); //as the nums array will only have one element whatever is inside there will be returned
+        
+        int mid = nums.size()/2;
+        TreeNode* root = new TreeNode(nums[mid]);
+        //Divide and Conquer Step
+        vector<int> leftSubtree(nums.begin(),nums.begin()+mid);
+        vector<int> rightSubtree(nums.begin()+(mid+1),nums.end());
+        
+        //Assigned Two different vectors for left subtree and right subtree
+        root->left = sortedArrayToBST(leftSubtree);
+        root->right = sortedArrayToBST(rightSubtree);
+        return root;
+    }
+};
