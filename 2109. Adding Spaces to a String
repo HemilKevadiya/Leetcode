@@ -1,0 +1,16 @@
+class Solution {
+public:
+    string addSpaces(string s, vector<int>& spaces) {
+        int j = 0;
+        string ans;
+        //We just build a new String from scratch while including the spaces
+        for(int i=0;i<s.length();i++){
+            if(j<spaces.size() && i==spaces[j]){
+                ans.push_back(' ');
+                j++;
+            }
+            ans.push_back(s[i]);
+        }
+        return ans;
+    }
+};
