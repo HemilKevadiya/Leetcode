@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool isValid(string s){
+        if(s[0]=='0') return false;
+        int temp = stoi(s);
+        return temp<=255;
+    }
+    
+    void generate(string s, int i, int par,string ans, vector<string>& mainAns){
+        //If we have reached the end of the string and the partitions are 4, it means the string is completely valid, so it is included
+        if(i==s.length() && par==4){
+            ans.pop_back();
+            mainAns.push_back(ans);
+            return;
+        }
+        if(par==4) return; //If only the partitions are 4 then the string is not valid, so the call is returned
+        generate(s, i+1, par+1, ans+s[i]+".", mainAns); //First call is made by doing partition at 1 character only, then for 2 characters and then for 3 characters(after checking the validity of the characters being included)
+        if(i+2<=s.length() && isValid(s.substr(i,2))){
+            generate(s, i+2, par+1, ans+s.substr(i,2)+".", mainAns);
+        }
+        if(i+3<=s.length() && isValid(s.substr(i,3))){
+            generate(s, i+3, par+1, ans+s.substr(i,3)+".", mainAns);
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> mainAns;
+        string ans;
+        generate(s,0,0,ans,mainAns);
+        return mainAns;
+    }
+};
