@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int secondHighest(string s) {
+        int n = s.length();
+        set<int> chars;
+        for(int i=0;i<n;i++){
+            if(s[i]>='0' && s[i]<='9'){
+                chars.insert(s[i] - '0');
+            }
+        }
+        if(chars.size()<=1) return -1;
+        set<int>::reverse_iterator it;
+        chars.erase(std::prev(chars.end()));
+        return *chars.rbegin();
+    }
+};
