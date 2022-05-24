@@ -2,6 +2,10 @@ class Solution {
 public:
     //NOT A BACKTRACKING SOLUTION
     //We first convert all the binary inputs to integers and insert them into a set and then iterate through every number which will have n digits in it's binary representation, for any number which is not in the set, we return it's binary
+    
+    //The Backtracking Way would be to first insert all the input strings to an unordered set for efficient searching
+    //Now, start generating the permutations of 1's and 0's of required length and then check if is in the set or not, if it is not then we have got our answer
+    
     string to_binary(string ans, int binaryLen, int num){
         while(num!=0){
             ans+=to_string(num%2);
