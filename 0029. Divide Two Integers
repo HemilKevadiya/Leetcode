@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        //Edge Case
+        if(dividend == INT_MIN && divisor==-1) return INT_MAX;
+        long long tempDividend = abs(dividend), tempDivisor = abs(divisor);
+        //If both of them are negative then the quotient will be positive
+        int sign = divisor>0 ^ dividend>0 ? -1 : 1;
+        long long ans = 0;
+        //Bit Manipulation Approach
+        //Keep on left shifting the divisor till it doesn't get greater than the dividend then update the answer with total shifts to the power 2
+        //Keep doing this till dividend doesn't become smaller than the divisor
+        while(tempDividend >= tempDivisor){
+            long long temp = tempDivisor;
+            int shift = 1;
+            while(temp<<1 <= tempDividend){
+                temp <<= 1;
+                shift <<= 1;
+            }
+            ans += shift;
+            tempDividend -= temp;
+        }
+        return sign*ans;
+    }
+};
