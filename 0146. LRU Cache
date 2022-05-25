@@ -1,0 +1,80 @@
+class LRUCache {
+    struct ListNode{
+        int key;
+        int value;
+        ListNode* prev;
+        ListNode* next;
+        
+        ListNode(){
+            key = 0;
+            value = 0;
+            prev = NULL;
+            next = NULL;
+        }
+        
+        ListNode(int key, int value){
+            this->key = key;
+            this->value = value;
+            prev = NULL;
+            next = NULL;
+        }
+};
+
+public:
+    ListNode* head = new ListNode();
+    ListNode* tail = new ListNode;
+    int size;
+    map<int,ListNode*> LRU_map;
+    LRUCache(int capacity) {
+        size = capacity;
+        head -> next = tail;
+        tail -> prev = head;
+    }
+    
+    //Simple DLL insertion and deletion functions
+    void addnode(ListNode* newNode){
+        ListNode* temp = head -> next;
+        newNode -> next = temp;
+        newNode -> prev = head;
+        temp -> prev = newNode;
+        head -> next = newNode;
+    }
+    
+    void deletenode(ListNode* node){
+        ListNode* delprev = node -> prev;
+        ListNode* delnext = node -> next;
+        delprev -> next = delnext;
+        delnext -> prev = delprev;
+    }
+    
+    int get(int key) {
+        //If a get a function is called for any key then we need to make it the most recently used node, so we first delete it then insert it back,
+        //Whatever new node is inserted is always inserted after the head, as it is the most recently used node
+        if(LRU_map.find(key)!=LRU_map.end()){
+            ListNode* node = LRU_map[key];
+            int val = node->value;
+            LRU_map.erase(key);
+            deletenode(node);
+            addnode(node);
+            LRU_map[key] = head -> next;
+            return val;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        //If the key already exists in the cache then we need to update it and also make it the most recently used key
+        if(LRU_map.find(key)!=LRU_map.end()){
+            ListNode* node = LRU_map[key];
+            LRU_map.erase(key);
+            deletenode(node);
+        }
+        //If the cache is full then we need to delete the least recently used key which will be present at the previous of next, so we delete it and then insert the new key
+        if(LRU_map.size()==size){
+            LRU_map.erase(tail->prev->key);
+            deletenode(tail->prev);
+        }
+        addnode(new ListNode(key,value));
+        LRU_map[key] = head->next;
+    }
+};
