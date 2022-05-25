@@ -1,0 +1,46 @@
+class Solution {
+public:
+    //Merge Sort Approach
+    void merge(vector<int>& sort, int low, int mid, int high){
+        //We need to make a temporary array to keep track of all the values
+        vector<int> temp;
+        int i = low, j = mid+1;
+        //i will traverse on the first array and j will traverse on the second array
+        while(i<=mid && j<=high){
+            if(sort[i]>sort[j]){
+                temp.push_back(sort[j]);
+                j++;
+            }else{
+                temp.push_back(sort[i]);
+                i++;
+            }
+        }
+        //If there are any elements still left in any array then we need to include it
+        //In cases where every element of the left/right array is greater than the latter
+        for(;i<=mid;i++){
+            temp.push_back(sort[i]);
+        }
+        for(;j<=high;j++){
+            temp.push_back(sort[j]);
+        }
+        i = low;
+        auto it = temp.begin();
+        while(i<=high){
+            sort[i] = *it;
+            it++; i++;
+        }
+    }
+    void mergeSort(vector<int>& sort,int low, int high){
+        //Keep dividing the array till there is only one element left and then merge the two subarrays 
+        if(low<high){
+            int mid = (low+high)/2;
+            mergeSort(sort,low,mid);
+            mergeSort(sort,mid+1,high);
+            merge(sort,low,mid,high);
+        }
+    }
+    vector<int> sortArray(vector<int>& sort) {
+        mergeSort(sort,0,sort.size()-1);
+        return sort;
+    }
+};
