@@ -1,0 +1,16 @@
+class Solution {
+public:
+    //For every rectangle, do a ratio count in a map
+    //Then just apply couting pairs math
+    long long interchangeableRectangles(vector<vector<int>>& rectangles) {
+        long long count = 0;
+        unordered_map<double,long long> freqMap;
+        for(int i = 0; i< rectangles.size(); i++){
+            freqMap[(double)rectangles[i][0]/rectangles[i][1]]++;
+        }
+        for(auto j:freqMap){
+            count += (j.second*(j.second-1))/2;
+        }
+        return count;
+    }
+};
