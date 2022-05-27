@@ -1,0 +1,49 @@
+class Solution {
+public:
+    //Just Apply merge sort but in descending order
+    //Because if we are comparing an element with the another array's first element and it is lesser than the first array's element then we can just increment the count by number of elements in the second array as it is sorted in descending order, it means every element will be lesser than the current one
+    //If it is not lesser than the first element, then we move the pointer of first array
+    //As, we need to keep the count index-wise, we have to maintain the indices of every element, it can be done using vector of pairs
+    void merge(int low, int mid, int high, vector<int>& ans, vector<pair<int,int>>& idx){
+        int i = low, j = mid + 1, k = 0;
+        vector<pair<int,int>> temp(high - low + 1);
+        while(i <= mid && j <= high){
+            if(idx[i].second <= idx[j].second){
+                temp[k++] = idx[j++];
+            }else{
+                ans[idx[i].first] += (high - j + 1);
+                temp[k++] = idx[i++];
+            }
+        }
+        
+        while(i <= mid){
+            temp[k++] = idx[i++];
+        }
+        
+        while(j <= high){
+            temp[k++] = idx[j++];
+        }
+        
+        for(int i = low; i <= high; i++){
+            idx[i] = temp[i - low];
+        }
+    }
+    void mergeSort(int low, int high, vector<int>& ans, vector<pair<int,int>>& idx){
+        if(low < high){
+            int mid = (low + high)/2;
+            mergeSort(low, mid, ans, idx);
+            mergeSort(mid + 1, high, ans, idx);
+            merge(low, mid, high, ans, idx);
+        }
+    }
+    vector<int> countSmaller(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n);
+        vector<pair<int,int>> idx;
+        for(int i=0;i<n;i++){
+            idx.push_back({i,nums[i]});
+        }
+        mergeSort(0, n-1, ans, idx);
+        return ans;
+    }
+};
