@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int countWords(vector<string>& words1, vector<string>& words2) {
+        unordered_map<string,int> freqMap1;
+        unordered_map<string,int> freqMap2;
+        int count = 0;
+        for(int i = 0; i< words1.size(); i++) freqMap1[words1[i]]++;
+        for(int i = 0; i< words2.size(); i++) freqMap2[words2[i]]++;
+        for(auto j:freqMap1){
+            if(freqMap1[j.first] == 1 && freqMap2[j.first] == 1) count++;
+        }
+        return count;
+    }
+};
