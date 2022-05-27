@@ -1,0 +1,24 @@
+class Solution {
+public:
+    //There is a simple math
+    //For those numbers where the difference between itself and it's reverse is the same, they make a pair
+    //Count that and then just count all the pairs
+    void reverse(int val, unordered_map<int,int>& freqDiff,long long& count){
+        int rev = 0;
+        int temp = val;
+        while(temp != 0){
+            rev = (rev * 10) + (temp % 10);
+            temp /= 10;
+        }
+        count += freqDiff[(rev - val)];
+        freqDiff[rev - val]++;
+    }
+    int countNicePairs(vector<int>& nums) {
+        unordered_map<int,int> freqDiff;
+        long long count = 0;
+        for(int i = 0; i< nums.size(); i++){
+            reverse(nums[i], freqDiff, count);
+        }
+        return count % (int)(1e9 + 7);
+    }
+};
