@@ -1,0 +1,35 @@
+class Solution {
+public:
+    //We make a completely new Linked List using insertion sort
+    ListNode* insertionSortList(ListNode* head) {
+        ListNode* newList = head;
+        head = head -> next;
+        newList -> next = NULL;
+        ListNode* temp = newList;
+        while(head != NULL){
+            temp = newList;
+            ListNode* newNode = new ListNode(head -> val);
+            //Case where the node we want to insert comes before head
+            if(temp -> val > newNode -> val){
+                newNode -> next = newList;
+                newList = newNode;
+                head = head -> next;
+                continue;
+            }
+            while(temp -> next != NULL){
+                if(temp -> next -> val > newNode -> val){
+                    newNode -> next = temp -> next;
+                    temp -> next = newNode;
+                    break;
+                } 
+                temp = temp -> next;
+            }
+            //Case where the node to be inserted comes at last
+            if(temp -> next == NULL){
+                temp -> next = newNode;
+            }
+            head = head -> next;
+        }
+        return newList;
+    }
+};
