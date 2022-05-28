@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> findOriginalArray(vector<int>& changed) {
+        if(changed.size() & 1 == 1) return {};
+        map<int,int> freqMap;
+        vector<int> ans;
+        for(auto j:changed) freqMap[j]++;
+        for(auto j:freqMap){
+            while(freqMap[j.first] > 0){
+                int val = INT_MIN;
+                if(j.first%2 == 0) val = j.first/2;
+                if(freqMap[val] == 0 && freqMap[(j.first) * 2] == 0){
+                    return {};
+                }
+                if(freqMap[val] > 0){
+                    freqMap[val]--;
+                    ans.emplace_back(val);
+                    freqMap[j.first]--;
+                }else if(freqMap[(j.first) * 2] > 0){
+                    freqMap[(j.first) * 2]--;
+                    ans.emplace_back(j.first);
+                    freqMap[j.first]--;
+                }
+            }
+        }
+        return ans;
+    }
+};
