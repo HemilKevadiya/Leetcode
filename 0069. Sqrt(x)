@@ -1,16 +1,21 @@
 class Solution {
 public:
+    //We define a search space for every element and then perform binary search
+    //If mid ele's square is exactly x then the answer is mid
+    //If mid ele's square is greater than x then the whole right side is discarded
+    //If mid ele's square is lesser than x then mid could be a possible answer(as x won't be a perfect square every time), the remanining left side of the array is discared
     int mySqrt(int x) {
-        int ans=0;
-        if(x==1){
-            return 1;
-        }
-        for(int i=1;i<=x;i++){
-            if(((long)i*i)<=x){
-                continue;
-            }else{
-                ans=i-1;
+        int low = 0, high = x, mid = 0, ans = 0;
+        while(low <= high){
+            mid = (low+high)/2;
+            if(pow(mid,2) == x) {
+                ans = mid;
                 break;
+            }else if(pow(mid,2) > x){
+                high = mid - 1;
+            }else{
+                ans = mid;
+                low = mid + 1;
             }
         }
         return ans;
