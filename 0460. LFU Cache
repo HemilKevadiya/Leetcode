@@ -1,0 +1,126 @@
+class LFUCache {
+    //We need to keep the count of how frequently a node is accessed, that's why we need to keep a count in every node
+    struct ListNode{
+        int key, value, count;
+        ListNode* next;
+        ListNode* prev;
+        
+        ListNode(int key, int value){
+            this -> key = key;
+            this -> value = value;
+            this -> count = 1;
+            next = NULL;
+            prev = NULL;
+        }
+    };
+    
+    //There is a seperate List for every frequency in the HashMap
+    //Every List will work like LRU cache List did
+    struct List{
+        ListNode* head;
+        ListNode* tail;
+        int size;
+        
+        List(){
+            head = new ListNode(0,0);
+            tail = new ListNode(0,0);
+            size = 0;
+            head -> next = tail;
+            tail -> prev = head;
+        }
+        
+        void addNode(ListNode* newNode){
+            ListNode* temp = head -> next;
+            newNode -> next = temp;
+            newNode -> prev = head;
+            head -> next = newNode;
+            temp -> prev = newNode;
+            size++;
+        }
+        
+        void delNode(ListNode* node){
+            ListNode* delPrev = node -> prev;
+            ListNode* delNext = node -> next;
+            delPrev -> next = delNext;
+            delNext -> prev = delPrev;
+            size--;
+        }
+    };
+    
+public:
+    unordered_map<int,ListNode*> keyNode;
+    unordered_map<int,List*> freqListMap;
+    int maxSize;
+    int minFreq;
+    int currSize;
+    
+    LFUCache(int capacity) {
+        maxSize = capacity;
+        minFreq = 0;
+        currSize = 0;
+    }
+    
+    //This is needed to update the frequency of node accessed
+    void updateFreq(ListNode* node){
+        //First we need to delete the node from the node Map
+        keyNode.erase(node -> key);
+        //Then, we need to delete that node from the List where it was previously residing
+        freqListMap[node -> count] -> delNode(node);
+        //If after erasing the node from the List, the List has become empty then the minFreq needs to be updated, as there are no nodes with that frequency in the cache 
+        if(node -> count == minFreq && freqListMap[node -> count] -> size == 0){
+            minFreq++;
+        }
+        
+        //Then we assign another List with the new Frequency count of that node
+        List* nextHigherFreqList = new List();
+        if(freqListMap.find(node -> count + 1) != freqListMap.end()){
+            nextHigherFreqList = freqListMap[node -> count + 1];
+        }
+        
+        //That node's count is increased and then it is inserted to it's frequency List
+        node -> count += 1;
+        nextHigherFreqList -> addNode(node);
+        freqListMap[node -> count] = nextHigherFreqList;
+        keyNode[node -> key] = node;
+    }
+    
+    int get(int key) {
+        //If it is there in the list, it means we need to update the node's frequency,too
+        if(keyNode.find(key)!=keyNode.end()){
+            ListNode* node = keyNode[key];
+            int val = node -> value;
+            updateFreq(node);
+            return val;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        if(maxSize==0) return;
+        //If the key is already there in the cache, it means we need to update it's frequency along with it's value
+        if(keyNode.find(key) != keyNode.end()){
+            ListNode* node = keyNode[key];
+            node -> value = value;
+            updateFreq(node);
+        }else{
+            //If the cache is full it means we need to delete the least frequently accessed node and if there are multiple nodes, then the least recently used one
+            if(currSize == maxSize){
+                List* list = freqListMap[minFreq];
+                keyNode.erase(list -> tail -> prev -> key);
+                freqListMap[minFreq] -> delNode(list -> tail -> prev);
+                currSize--;
+            }
+            currSize++;
+            minFreq = 1;
+            //Then just insert the new Node to Freq = 1 List, as it is just insrted in the cache
+            List* listFreq = new List();
+            if(freqListMap.find(minFreq) != freqListMap.end()){
+                listFreq = freqListMap[minFreq];
+            }
+            ListNode* newNode = new ListNode(key, value);
+            listFreq -> addNode(newNode);
+            freqListMap[minFreq] = listFreq;
+            keyNode[newNode -> key] = newNode;
+        }
+    }
+};
