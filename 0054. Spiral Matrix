@@ -1,0 +1,54 @@
+class Solution {
+public:
+    //We basically go into the following directions in this order till we can:
+    //Right, Down, Left, Up
+    bool DFS(vector<vector<int>>& matrix, int i, int j, int m, int n, vector<vector<int>>& visited, vector<int>& ans, char dir, int& count){
+        if(count == (m*n)) return false;
+        visited[i][j] = 1;
+        count++;
+        ans.emplace_back(matrix[i][j]);
+        if(dir == 'R'){
+            while(j+1 < n && !visited[i][j+1]){
+                visited[i][j+1] = 1;
+                count++;
+                ans.emplace_back(matrix[i][j+1]);
+                j++;
+            }
+            if(!DFS(matrix, i+1, j, m, n, visited, ans, 'D', count)) return false;
+        }else if(dir == 'D'){
+            while(i+1 < m && !visited[i+1][j]){
+                visited[i+1][j] = 1;
+                count++;
+                ans.emplace_back(matrix[i+1][j]);
+                i++;
+            }
+            if(!DFS(matrix, i, j-1, m, n, visited, ans, 'L', count)) return false;
+        }else if(dir == 'L'){
+            while(j-1 >= 0 && !visited[i][j-1]){
+                visited[i][j-1] = 1;
+                count++;
+                ans.emplace_back(matrix[i][j-1]);
+                j--;
+            }
+            if(!DFS(matrix, i-1, j, m, n, visited, ans, 'U', count)) return false;
+        }else if(dir == 'U'){
+            while(i-1 >= 0 && !visited[i-1][j]){
+                visited[i-1][j] = 1;
+                count++;
+                ans.emplace_back(matrix[i-1][j]);
+                i--;
+            }
+            if(!DFS(matrix, i, j+1, m, n, visited, ans, 'R', count)) return false;
+        }
+        return true;
+    }
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<vector<int>> visited(m, vector<int> (n));
+        vector<int> ans;
+        int count = 0;
+        DFS(matrix,0,0,m,n,visited,ans,'R',count);
+        return ans;
+    }
+};
