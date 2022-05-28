@@ -1,0 +1,32 @@
+class Solution {
+public:
+    //Divide and Conquer Approach
+    //We need to keep a previous pointer to break the links while passing the halves of LLs
+    ListNode* findMid(ListNode* head){
+        ListNode* prev = head;
+        ListNode* ptr1 = head;
+        ListNode* ptr2 = head;
+        while(ptr2 != NULL && ptr2 -> next != NULL){
+            prev = ptr1;
+            ptr1 = ptr1 -> next;
+            ptr2 = ptr2 -> next -> next;
+        }
+        if(prev != NULL) prev -> next = NULL;
+        return ptr1;
+    }
+    
+    TreeNode* sortedListToBST(ListNode* head) {
+        if(head == NULL) return NULL;
+        
+        ListNode* mid = findMid(head);
+        TreeNode* root = new TreeNode(mid -> val);
+        
+        if(head == mid) return root; //if there is only one node in the linked list return the root itself to the callee
+        
+        //The whole Left and right Subtrees will be attached to the root after each of the following calls, as in every call a completely new tree is made
+        root -> left = sortedListToBST(head); 
+        root -> right = sortedListToBST(mid -> next);
+        
+        return root;
+    }
+};
