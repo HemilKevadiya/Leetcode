@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int countWords(string s){
+        int count = 0;
+        for(int i = 0;i< s.length();i++){
+            if(s[i] == ' '){
+                count++;
+            }
+        }
+        return count + 1;
+    }
+    string largestWordCount(vector<string>& messages, vector<string>& senders) {
+        map<string,int> wordCount;
+        string ans;
+        int n = messages.size();
+        for(int i = 0;i< n; i++){
+            wordCount[senders[i]] += countWords(messages[i]);
+        }
+        int maxWords = INT_MIN;
+        for(auto j:wordCount){
+            maxWords = max(maxWords, j.second);
+        }
+        auto it = wordCount.rbegin();
+        while(it != wordCount.rend()){
+            if(it -> second == maxWords){
+                ans = it -> first;
+                break;
+            }
+            it++;
+        }
+        return ans;
+    }
+};
