@@ -1,0 +1,36 @@
+class Solution {
+public:
+    //3 phase Algorithm
+    //First, we get to the left position node
+    //Second, we start reversing the linked list from that position till the right
+    //Third, we update the left and right node's pointers to their correct locations
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        //Phase-1
+        ListNode* dummy = new ListNode(0); //To handle edge cases
+        dummy -> next = head;
+        ListNode* current = dummy -> next;
+        ListNode* leftPrev = dummy;
+        for(int i = 0; i < left - 1; i++){
+            leftPrev = current;
+            current = current -> next;
+        }
+        //After this current will be at the given left position and leftPrev will be needed to point to the reversed Linked List
+        
+        //Phase-2
+        //Basic LL Reverse Algo
+        ListNode* prev = NULL;
+        for(int i = 0; i < (right - left + 1); i++){
+            ListNode* temp = current -> next;
+            current -> next = prev;
+            prev = current;
+            current = temp;
+        }
+        //Phase-3
+        //After Reversing, current will be at the right node's next pointer, so we need to assign the left's next to right's next
+        //And prev will be at the rightmost node which needs to be attached to left's previous node's next pointer
+        leftPrev -> next -> next = current;
+        leftPrev -> next = prev;
+        dummy = dummy -> next;
+        return dummy;
+    }
+};
