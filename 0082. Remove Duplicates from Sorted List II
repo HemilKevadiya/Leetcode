@@ -1,0 +1,28 @@
+class Solution {
+public:
+    //Keep a previous pointer, while building a new list without duplicates using that pointer
+    //If at any point two nodes are duplicate, stop the prev pointer to the node where the last distinct node was, while there are duplicate nodes keep it there and then point it to the current head's next
+    ListNode* deleteDuplicates(ListNode* head) {
+        if(head == NULL || head -> next == NULL) return head;
+        ListNode* dummy = new ListNode(INT_MIN);
+        dummy -> next = head;
+        ListNode* prev = dummy;
+        int flag = 0;
+        while(head != NULL){
+            //Case where the last node is also a duplicate
+            if(head -> next == NULL && flag == 1){
+                prev -> next = head -> next;
+            }
+            if(head -> next && head -> val != head -> next -> val && flag == 1){
+                flag = 0;
+                prev -> next = head -> next;
+            }else if(head -> next && head -> val != head -> next -> val && flag == 0){
+                prev = head;
+            }
+            if(head -> next && head -> val == head -> next -> val) flag = 1;
+            head = head -> next;
+        }
+        dummy = dummy -> next;
+        return dummy;
+    }
+};
