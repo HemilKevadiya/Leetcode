@@ -1,0 +1,14 @@
+class Solution {
+public:
+    //Memoization Approach
+    //An observation here is that, we can reduce the number to a previously reduced number, we keep calling the function till we reach 1(base case), if it is odd, we can either go down with n-1 or n+1, everytime we increase the steps by 1(as it will take 1 step to reach a previously reduced number)
+    unordered_map<int,int> memo;
+    int integerReplacement(int n) {
+        if(n == 1) return 0;
+        if(n == INT_MAX) return 32;
+        if(memo.find(n) != memo.end()) return memo[n];
+        if(n & 1) memo[n] = min(integerReplacement(n-1), integerReplacement(n+1)) + 1;
+        else memo[n] = integerReplacement(n/2) + 1;
+        return memo[n];
+    }
+};
