@@ -1,0 +1,28 @@
+class Solution {
+public:
+    //There is a pattern in every permutation sequence
+    //Every permutation is divided in a number of blocks(the number of blocks are n)
+    //In each block the permutations will start from the same number one by one
+    //The block size is = (n-1)!
+    //Eg. for n = 9, every block will contain 40320 perms
+    //According to this logic, we keep deciding the next element of the desired permutation
+    string getPermutation(int n, int k) {
+        vector<int> nums;
+        string ans;
+        int fact = 1;
+        for(int i = 1; i < n; i++){
+            fact *= i;
+            nums.emplace_back(i);
+        }
+        nums.emplace_back(n);
+        --k; //We will do a 0-based indexing
+        while(true){
+            ans += to_string(nums[k/fact]);
+            nums.erase(nums.begin() + k/fact);
+            if(nums.size() == 0) break;
+            k %= fact;
+            fact /= nums.size();
+        }
+        return ans;
+    }
+};
