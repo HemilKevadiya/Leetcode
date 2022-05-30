@@ -29,6 +29,8 @@ public:
             ListNode* next = current -> next;
             for(int i = 0; i < k - 1; i++){
                 //Logic of reversing a particular group of the Linked List
+                //Basically the nodes are getting in their place one by one in the next of prev pointer(it will be intact)
+                //3 links are to be updated
                 current -> next = next -> next;
                 next -> next = prev -> next;
                 prev -> next = next;
