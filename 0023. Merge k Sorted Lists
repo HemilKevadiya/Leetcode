@@ -1,0 +1,77 @@
+class Solution {
+public:
+    ListNode* merge(vector<ListNode*>& lists, int low, int high){
+        if(low == high) return lists[low]; //If there is only 1 list in this part then we just return it
+        int k = high - low + 1; //current number of lists
+        ListNode *head,*h1,*h2,*ptr;
+        h1 = h2 = ptr = NULL;
+        h1 = merge(lists, low, low + k/2 - 1);
+        h2 = merge(lists, low + k/2, high);
+        
+        //Merging 2 sorted Linked Lists
+        if(!h1 && !h2) 
+            return NULL;
+        else if(!h1) 
+            return h2;
+        else if(!h2) 
+            return h1;
+        //This is done to avoid head node conflicts
+        if(!h1 || (h1 && h1 -> val > h2 -> val)){
+            head = h2; h2 = h2 -> next;
+        }else{
+            head = h1; h1 = h1 -> next;
+        }
+        ptr = head;
+        while(h1 || h2){
+            if(!h1){
+                ptr -> next = h2; h2 = h2 -> next;
+            }else if(!h2){
+                ptr -> next = h1; h1 = h1 -> next;
+            }else if(h1 -> val > h2 -> val){
+                ptr -> next = h2; h2 = h2 -> next;
+            }else{
+                ptr -> next = h1; h1 = h1 -> next;
+            }
+            ptr = ptr -> next;
+        }
+        return head;
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode *head,*h1,*h2,*ptr;
+        h1 = h2 = ptr = NULL;
+        int k = lists.size();
+        if(k == 0) return NULL;
+        if(k == 1) return lists[0];
+        //Initial dividing step is done here
+        h1 = merge(lists,0,k/2);
+        if(k/2 + 1 <= (k-1)){ //We need to check if there are even some lists to be divided or not
+            h2 = merge(lists,k/2 + 1,k-1);
+        }
+        //At last there will be two merged linked lists left to be merged into one whole sorted linked list
+        if(!h1 && !h2) 
+            return NULL;
+        else if(!h1) 
+            return h2;
+        else if(!h2) 
+            return h1;
+        if(!h1 || (h1 && h1 -> val > h2 -> val)){
+            head = h2; h2 = h2 -> next;
+        }else{
+            head = h1; h1 = h1 -> next;
+        }
+        ptr = head;
+        while(h1 || h2){
+            if(!h1){
+                ptr -> next = h2; h2 = h2 -> next;
+            }else if(!h2){
+                ptr -> next = h1; h1 = h1 -> next;
+            }else if(h1 -> val > h2 -> val){
+                ptr -> next = h2; h2 = h2 -> next;
+            }else{
+                ptr -> next = h1; h1 = h1 -> next;
+            }
+            ptr = ptr -> next;
+        }
+        return head;
+    }
+};
