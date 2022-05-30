@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isSame(vector<int>& p1, vector<int>& p2){
+        return (p1[0] == p2[0] && p1[1] == p2[1]);
+    }
+    int dist(vector<int>& p1, vector<int>& p2){
+        return (pow((p1[0] - p2[0]), 2) + pow((p1[1] - p2[1]), 2));
+    }
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        //Store the distances from each point to the other points,
+        //If there is a diagonal relation between 2 points then the distance will be different
+        //So include every distance in a set and check if it's size is 2 or not(1 for the side length and 2 for the diagonal length)
+        if(isSame(p1, p2) || isSame(p1, p3) || isSame(p1, p4) || isSame(p2, p3) || isSame(p2, p4) || isSame(p3, p4)) return false;
+        unordered_set<int> s;
+        s.insert(dist(p1,p2));
+        s.insert(dist(p1,p3));
+        s.insert(dist(p1,p4));
+        s.insert(dist(p2,p3));
+        s.insert(dist(p2,p4));
+        s.insert(dist(p3,p4));
+        
+        return s.size() == 2;
+    }
+};
