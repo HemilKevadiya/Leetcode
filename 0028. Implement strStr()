@@ -1,0 +1,39 @@
+class Solution {
+public:
+    //Reallyyy Complicated
+    //For revision, see NeetCode's video on KMP
+    vector<int> prefix_function(string s){
+        vector<int> pi(s.length(),0);
+        int i = 1, prevLPS = 0;
+        while(i < s.length()){
+            if(s[prevLPS] == s[i]){
+                pi[i] = prevLPS + 1;
+                i += 1;
+                prevLPS +=1;
+            }else if(prevLPS == 0){
+                pi[i] = 0;
+                i += 1;
+            }else{
+                prevLPS = pi[prevLPS - 1];
+            }
+        }
+        return pi;
+    }
+    int strStr(string a, string b) {
+        vector<int> res = prefix_function(b);
+        int i = 0, j = 0;
+        while(i < a.length()){
+            if(a[i] == b[j]){
+                i += 1; j += 1;
+            }else{
+                if(j == 0){
+                    i += 1;
+                }else{
+                    j = res[j-1];
+                }
+            }
+            if(j == b.length()) return (i - b.length());
+        }
+        return -1;
+    }
+};
