@@ -1,0 +1,65 @@
+struct Node{
+    Node* links[10];
+    
+    bool containsKey(int ch){
+        return links[ch] != NULL;
+    }
+    
+    void put(int ch, Node* node){
+        links[ch] = node;
+    }
+    
+    Node* get(int ch){
+        return links[ch];
+    }
+};
+
+class Trie{
+    public:
+    Node* root;
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(int key){
+        string s = to_string(key);
+        Node* node = root;
+        for(int i = 0; i < s.length(); i++){
+            if(!node -> containsKey(s[i] - '0')){
+                node -> put(s[i] - '0', new Node());
+            }
+            node = node -> get(s[i] - '0');
+        }
+    }
+    
+    void explore(Node* node, vector<string>& ans, string& s){
+        for(int i = 0; i < 10; i++){
+            if(node -> links[i]){
+                s += (i + '0');
+                ans.push_back(s);
+                explore(node -> links[i], ans, s);
+                s.pop_back();
+            }
+        }
+    }
+};
+
+//Insert every number from 1 to n like a string and then explore every trie's links till they get NULL and keep storing the current strings into answer
+//The answer will be in lexicographical order
+//DFS is performed on every trie and their reference tries
+class Solution {
+public:
+    vector<int> lexicalOrder(int n) {
+        Trie trie;
+        for(int i = 1; i <= n; i++){
+            trie.insert(i);
+        }
+        string s;
+        vector<string> ans;
+        trie.explore(trie.root, ans, s);
+        vector<int> mainAns;
+        for(auto j:ans) mainAns.push_back(stoi(j));
+        return mainAns;
+    }
+};
