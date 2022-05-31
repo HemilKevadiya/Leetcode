@@ -1,0 +1,95 @@
+struct Node{
+    Node* links[2];
+    
+    bool containsKey(int bit){
+        return links[bit] != NULL;
+    }
+    
+    void put(int bit,Node* node){
+        links[bit] = node;
+    }
+    
+    Node* get(int bit){
+        return links[bit];
+    }
+};
+
+class Trie{
+    private:
+    Node* root;
+    
+    public:
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(int key){
+        Node* node = root;
+        int pow = 31;
+        while(pow >= 0){
+            int bit = (key >> pow) & 1;
+            if(!node -> containsKey(bit)){
+                node -> put(bit, new Node());
+            }
+            node = node -> get(bit);
+            --pow;
+        }
+    }
+    
+    int getXOR(int x){
+        Node* node = root;
+        if(node == NULL) return -1;
+        int pow = 31;
+        int ans = 0;
+        while(pow >= 0){
+            int bit = (x >> pow) & 1;
+            if(node -> containsKey(1 - bit)){
+                ans |= (1 << pow);
+                node = node -> get(1 - bit);
+            }else{
+                node = node -> get(bit);
+            }
+            --pow;
+        }
+        return ans;
+    }
+};
+
+//Comparator to sort with respect to maximum number allowed in each query
+bool comp(const pair<pair<int,int>,int>& p1, const pair<pair<int,int>,int>& p2){
+    return p1.first.second < p2.first.second;
+}
+
+//Same idea as max XOR using Tries
+//But in this one, sort the queries by the maximum number that is allowed in each query
+//keep inserting the elements in trie till each query's maximum allowed number is reached then on that trie apply maximum XOR function and then put that answer on the query's index and then move on to the next query
+class Solution {
+public:
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        Trie trie;
+        vector<pair<pair<int,int>,int>> a;
+        vector<int> ans(queries.size());
+        
+        for(int i = 0; i < queries.size(); i++){
+            a.push_back({{queries[i][0],queries[i][1]},i});
+        }
+        
+        sort(a.begin(), a.end(), comp);
+        sort(nums.begin(),nums.end());
+        
+        int j = 0, i = 0;
+        for(int j = 0; j < queries.size(); j++){
+            while(i < nums.size() && nums[i] <= a[j].first.second){
+                trie.insert(nums[i]);
+                i++;
+            }
+            if(i == 0) ans[a[j].second] = -1;
+            else {
+                int XOR = trie.getXOR(a[j].first.first);
+                ans[a[j].second] = XOR;
+            }
+        }
+        return ans;
+    }
+};
