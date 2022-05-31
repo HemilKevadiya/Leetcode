@@ -1,0 +1,87 @@
+struct Node{
+    Node* links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return links[ch - 'a'] != NULL;
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    bool getEnd(){
+        return flag;
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+};
+
+class Trie{
+    private:
+    Node* root;
+    
+    public:
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> setEnd();
+    }
+    
+    bool checkAllPrefixes(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(node -> containsKey(word[i])){
+                node = node -> get(word[i]);
+                if(node -> getEnd() == false) return false;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+//First, insert all the words into the trie
+//Then, check every word one by one
+//If for any word from input, all the prefixes of the word is available then it qualifies as our answer
+//For checking if every prefix exists, we basically traverse on the whole string while checking if the flag is true(which means there is a word which ends with that word)
+//If for every possible prefix, the flags are true then that string will qualify as an answer
+class Solution {
+public:
+    string longestWord(vector<string>& words) {
+        Trie trie;
+        
+        for(auto& j:words){
+            trie.insert(j);
+        }
+        
+        string longest = "";
+        for(auto& j:words){
+            if(trie.checkAllPrefixes(j)){
+                if(longest.length() < j.length()){
+                    longest = j;
+                }else if(longest.length() == j.length() && j < longest){
+                    longest = j;
+                }
+            }
+        }
+        return longest;
+    }
+};
