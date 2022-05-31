@@ -1,0 +1,31 @@
+class Solution {
+public:
+    //Check every k sized substring and get their binary values
+    //for every k, the integer values can be in the range 0 to (2^k) - 1
+    //Keep inserting the values in a set, if the set's size is 2^k at the end of the traversal then we return true 
+    int binary(string s){
+        int ans = 0, pow = 0;
+        for(int i = s.length() - 1; i >= 0; i--){
+            if(s[i] == '1'){
+                ans += (1 << pow);
+            }
+            pow++;
+        }
+        return ans;
+    }
+    bool hasAllCodes(string s, int k) {
+        if(s.size() < k) return false;
+        unordered_set<int> a;
+        unordered_set<string> b;
+        int total = (1 << k);
+        for(int i = 0; i <= s.length() - k; i++){
+            string check = s.substr(i,k);
+            if(b.find(check) != b.end()) continue;
+            b.insert(check);
+            int temp = binary(check);
+            a.insert(temp);
+            if(a.size() == total) break;
+        }
+        return a.size() == total;
+    }
+};
