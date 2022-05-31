@@ -1,0 +1,69 @@
+//Basically, Trie stores the words character by character using links
+//Root will contain every words' starting character and then there will be a reference trie for every character
+//If a word has ended then we need to mark the flag of the last reference trie as true as a sign of the word being complete
+
+struct Node{
+    Node *links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return (links[ch - 'a'] != NULL);
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+    
+    bool end(){
+        return flag;
+    }
+};
+
+class Trie {
+    Node* root;
+public:
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string word) {
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> setEnd();
+    }
+    
+    bool search(string word) {
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                return false;
+            }
+            node = node -> get(word[i]);
+        }
+        return node -> end();
+    }
+    
+    bool startsWith(string prefix) {
+        Node* node = root;
+        for(int i = 0; i < prefix.length(); i++){
+            if(!node -> containsKey(prefix[i])){
+                return false;
+            }
+            node = node -> get(prefix[i]);
+        }
+        return true;
+    }
+};
