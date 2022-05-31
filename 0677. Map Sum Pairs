@@ -1,0 +1,60 @@
+struct Node{
+    Node* links[26];
+    int value = 0;
+    
+    bool containsKey(char ch){
+        return links[ch - 'a'] != NULL;
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+};
+
+//If the key already exists then we need to replace it's value
+//So, first we need to store every key and their values in a map
+//If there is a key which already exists then we replace all the characters' values by the new value(replacing basically means the [new val] - [value of string which already existed], we can't simply replace it because if there existed other values with the same prefix then their values will also be lost)
+class MapSum {
+    Node* root;
+    unordered_map<string,int> map;
+public:
+    MapSum() {
+        root = new Node();
+    }
+    
+    void insert(string key, int val) {
+        int temp = val - map[key];
+        Node* node = root;
+        for(int i = 0; i < key.length(); i++){
+            if(!node -> containsKey(key[i])){
+                node -> put(key[i], new Node());
+            }
+            node = node -> get(key[i]);
+            node -> value += temp;
+        }
+        map[key] = val;
+    }
+    
+    int sum(string prefix) {
+        Node* node = root;
+        for(int i = 0; i < prefix.length(); i++){
+            if(!node -> containsKey(prefix[i])){
+                return 0;
+            }else{
+                node = node -> get(prefix[i]);
+            }
+        }
+        return node -> value;
+    }
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */
