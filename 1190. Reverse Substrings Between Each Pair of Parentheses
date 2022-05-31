@@ -1,0 +1,30 @@
+class Solution {
+public:
+    //If a closing para is encountered, pop the characters out of the stack till an opening para is on the top and insert the characters in a temp string
+    //then push the whole string back to the stack
+    string reverseParentheses(string s) {
+        stack<char> para;
+        for(int i = 0; i < s.length(); i++){
+            if(para.empty()) para.push(s[i]);
+            else if(s[i] >= 'a' && s[i] <= 'z' || s[i] == '(') para.push(s[i]);
+            else if(s[i] == ')'){
+                string temp;
+                while(para.top() != '('){
+                    temp += para.top();
+                    para.pop();
+                }
+                para.pop();
+                for(int i = 0; i < temp.length(); i++){
+                    para.push(temp[i]);
+                }
+            }
+        }
+        s.clear();
+        while(!para.empty()){
+            s += para.top();
+            para.pop();
+        }
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};
