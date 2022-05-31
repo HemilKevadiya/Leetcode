@@ -1,0 +1,77 @@
+struct Node{
+    Node* links[2];
+    
+    bool containsKey(int bit){
+        return links[bit] != NULL;
+    }
+    
+    void put(int bit,Node* node){
+        links[bit] = node;
+    }
+    
+    Node* get(int bit){
+        return links[bit];
+    }
+};
+
+class Trie{
+    private:
+    Node* root;
+    
+    public:
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(int key){
+        Node* node = root;
+        int pow = 31;
+        while(pow >= 0){
+            int bit = (key >> pow) & 1;
+            if(!node -> containsKey(bit)){
+                node -> put(bit, new Node());
+            }
+            node = node -> get(bit);
+            --pow;
+        }
+    }
+    
+    int getXOR(int x){
+        Node* node = root;
+        int pow = 31;
+        int ans = 0;
+        while(pow >= 0){
+            int bit = (x >> pow) & 1;
+            if(node -> containsKey(1 - bit)){
+                ans |= (1 << pow);
+                node = node -> get(1 - bit);
+            }else{
+                node = node -> get(bit);
+            }
+            --pow;
+        }
+        return ans;
+    }
+};
+
+//XOR using trie
+//First, we will insert every number into the trie
+//Then, take every number one by one and get it's maximum XOR with every element in the array using the trie
+//For any number's XOR to be maximum with any number every corresponding bit should be opposite
+//For better understanding, refer striver
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        Trie trie;
+        for(auto j:nums){
+            trie.insert(j);
+        }
+        int ans = INT_MIN;
+        for(auto j:nums){
+            int curr = trie.getXOR(j);
+            ans = max(ans, curr);
+        }
+        return ans;
+    }
+};
