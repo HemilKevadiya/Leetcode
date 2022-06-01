@@ -1,0 +1,95 @@
+struct Node{
+    unordered_map<char,Node*> links;
+    bool end = false;
+    
+    void put(char ch, Node* node){
+        links[ch] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch];
+    }
+    
+};
+
+class Trie{
+    public: 
+    
+    Node* root;
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(node -> links.find(word[i]) == node -> links.end()){
+                cout<<word<<"\n";
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> end = true;
+    }
+};
+
+//Basically, we first insert all the words to be searched in a trie
+
+//Then, instead of searching every word in the board, search in the board for every possible prefix(the words to be searched)
+
+//Eg. In TestCase 1: consider 'o' there is a word with that prefix in the trie, so we will go down that path and if there is not any word starting with that prefix in the trie, we simply move on to the next character
+
+//Tried submitting it using normal Trie implementation(using links array) which gave a TLE
+
+//So, tried implementing it using hashMap which contains the links to every character
+
+//And then, if we reach a character where there is no further character linked then we don't call the dfs from that character(which improves the TC alot)
+
+//The problem with normal links array was that there was no way of knowing if there is no other link from a character, so 4 additional calls were being made which is useless(that's why TLE)
+
+//Using map, we can just check if the current character's map size is 0 or not
+
+//If it is 0, it means it is the last character and there are no other characters linked to it, so we just simply don't call the DFS from that character
+
+class Solution {
+    void dfs(vector<vector<char>>& board, int r, int c, string currWord, vector<vector<int>>& visited, Node* node, int m, int n, unordered_set<string>& ans){
+        if(r < 0 || c < 0 || r == m || c == n || visited[r][c] || node -> links.find(board[r][c]) == node -> links.end()){
+            return;
+        }
+        node = node -> get(board[r][c]);
+        visited[r][c] = 1;
+        currWord.push_back(board[r][c]);
+        bool flag = true;
+        if(node -> end) {
+            ans.insert(currWord);
+            if(node -> links.size() == 0){
+                flag = false;
+            }
+        }
+        if(flag){
+            dfs(board, r + 1, c, currWord, visited, node, m, n, ans);
+            dfs(board, r - 1, c, currWord, visited, node, m, n, ans);
+            dfs(board, r, c + 1, currWord, visited, node, m, n, ans);
+            dfs(board, r, c - 1, currWord, visited, node, m, n, ans);
+        }
+        visited[r][c] = 0;
+    }
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        int m = board.size();
+        int n = board[0].size();
+        Trie trie;
+        for(auto j:words){
+            trie.insert(j);
+        }
+        vector<vector<int>> visited(m, vector<int> (n));
+        unordered_set<string> ans;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                dfs(board, i, j, "", visited, trie.root, m, n, ans);
+            }
+        }
+        return vector<string>(ans.begin(), ans.end());
+    }
+};
