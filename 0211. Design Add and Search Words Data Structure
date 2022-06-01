@@ -1,0 +1,85 @@
+struct Node{
+    Node* links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return links[ch - 'a'] != NULL;
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+    
+    bool getEnd(){
+        return flag;
+    }
+};
+
+//DFS + Trie approach
+//If a '.' is encountered then it can be matched with any character, so explore the current trie's every reference trie and try to find the remaining word, if any match is found then the whole answer will be true, if no match is found then we simply return false
+
+class Trie{
+    public:
+    
+    Node* root;
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> setEnd();
+    }
+    bool dfs(int idx, string word, Node* root){
+        Node* node = root;
+        int i;
+        for(i = idx; i < word.length(); i++){
+            if(word[i] == '.'){
+                for(int j = 0; j < 26; j++){
+                    if(node -> links[j]){
+                        if(dfs(i + 1, word, node -> links[j])) return true;
+                    }
+                }
+                return false;
+            }else if(!node -> containsKey(word[i])){
+                return false;
+            }else{
+                node = node -> get(word[i]);
+            }
+        }
+        return node -> getEnd();
+    }
+    bool search(string word, Node* root){
+        return dfs(0, word, root);
+    }
+};
+
+class WordDictionary {
+    Trie trie;
+public:
+    WordDictionary() {
+        
+    }
+    
+    void addWord(string word) {
+        trie.insert(word);
+    }
+    
+    bool search(string word) {
+        return trie.search(word, trie.root);
+    }
+};
