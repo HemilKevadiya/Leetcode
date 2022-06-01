@@ -1,0 +1,85 @@
+struct Node{
+    Node *links[26];
+    set<string> suggestion;
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return (links[ch - 'a'] != NULL);
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+    
+    bool getEnd(){
+        return flag;
+    }
+};
+
+vector<string> searchWords;
+class Trie {
+    Node* root;
+public:
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string word) {
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+            node -> suggestion.insert(word);
+            if(node -> suggestion.size() > 3){
+                auto it = prev(node -> suggestion.end());
+                node -> suggestion.erase(it);
+            }
+        }
+        node -> setEnd();
+    }
+    
+    vector<vector<string>> search(string word) {
+        Node* node = root;
+        vector<vector<string>> ans;
+        for(int i = 0; i < word.length(); i++){
+            if(node -> containsKey(word[i])){
+                node = node -> get(word[i]);
+            }else{
+                return ans;
+            }
+            ans.push_back(vector<string>(node -> suggestion.begin(), node -> suggestion.end()));
+        }
+        return ans;
+    }
+};
+
+//We keep a set with every trie
+//Basically, any word containing that prefix will have to go through the tries of every letter. so while inserting a word into trie, we also insert that word in every trie node it encounters(in lexicographical order), because we need to output top 3 strings that starts with a given prefix(while traversing letter by letter on searchWord string)
+
+class Solution {
+public:
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+        Trie trie;
+        for(auto j:products){
+            trie.insert(j);
+        }
+        vector<vector<string>> ans =  trie.search(searchWord);
+        if(ans.size() != searchWord.size()){
+            int n = ans.size();
+            for(int i = 0; i < searchWord.size() - n; i++){
+                ans.push_back({});
+            }
+        }
+        return ans;
+    }
+};
