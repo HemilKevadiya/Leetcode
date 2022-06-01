@@ -1,0 +1,31 @@
+//Backtracking Approach
+//We call a dfs on every character and then check for the whole word from that character, if it doesn't provide a result then we start from the next character
+//If from any character, there is a possible solution then we can say that we have found the word and no need to check further into the board and simply return true
+
+class Solution {
+    bool dfs(vector<vector<char>>& board, int m, int n, string word, int i, vector<vector<int>>& visited, int r, int c){
+        if(i == word.length()) return true;
+        if(r < 0 || c < 0 || r >= m || c >= n || board[r][c] != word[i] || visited[r][c]){
+            return false;
+        }
+        visited[r][c] = 1;
+        bool ans = (dfs(board, m, n, word, i + 1, visited, r + 1, c) || 
+                   dfs(board, m, n, word, i + 1, visited, r - 1, c) ||
+                   dfs(board, m, n, word, i + 1, visited, r, c + 1) ||
+                   dfs(board, m, n, word, i + 1, visited, r, c - 1));
+        visited[r][c] = 0;
+        return ans;
+    }
+public:
+     bool exist(vector<vector<char>>& board, string word) {
+         int m = board.size();
+         int n = board[0].size();
+         vector<vector<int>> visited(m, vector<int>(n));
+         for(int i = 0; i < m; i++){
+             for(int j = 0; j < n; j++){
+                 if(dfs(board, m, n, word, 0, visited, i, j)) return true;
+             }
+         }
+         return false;
+    }
+};
