@@ -1,0 +1,91 @@
+struct Node{
+    Node* links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return links[ch - 'a'] != NULL;
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+    
+    bool getEnd(){
+        return flag;
+    }
+};
+
+class Trie{
+    private:
+    Node* root;
+    
+    public:
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> setEnd();
+    }
+    
+    string search(string word){
+        Node* node = root;
+        string ans;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                return word;
+            }else if(node -> containsKey(word[i])){
+                ans += word[i];
+                node = node -> get(word[i]);
+                if(node -> getEnd()) return ans;
+            }
+        }
+        if(!node -> getEnd()) return word;
+        return ans;
+    }
+};
+
+//Trie and Word Searching Approach
+
+//We first insert all the words from the dictionary into the trie
+
+//We just build a new string instead of replacing words in the original one(to avoid compliactions)
+
+//Then we start searching for all the words from the sentence, if a match is found(there is a word shorter than what we are searching for in the trie) then we include that word in our new ans string(replace string stores that)
+
+class Solution {
+public:
+    string replaceWords(vector<string>& dictionary, string sentence) {
+        sentence.push_back(' ');
+        Trie trie;
+        string ans = "";
+        for(auto j:dictionary) trie.insert(j);
+        int s1 = 0;
+        for(int i = 0; i <= sentence.length(); i++){
+            if(sentence[i] == ' '){
+                string replace = trie.search(sentence.substr(s1, i - s1));
+                ans += replace;
+                ans.push_back(' ');
+                s1 = i + 1;
+            }
+        }
+        ans.pop_back();
+        return ans;
+    }
+};
