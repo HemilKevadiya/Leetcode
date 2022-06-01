@@ -1,0 +1,83 @@
+struct Node{
+    Node* links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return links[ch - 'a'] != NULL;
+    }
+    
+    void put(char ch, Node* node){
+        links[ch - 'a'] = node;
+    }
+    
+    Node* get(char ch){
+        return links[ch - 'a'];
+    }
+    
+    void setEnd(){
+        flag = true;
+    }
+    
+    bool getEnd(){
+        return flag;
+    }
+};
+
+class Trie{
+    private:
+    Node* root;
+    
+    public:
+    
+    Trie(){
+        root = new Node();
+    }
+    
+    void insert(string word){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                node -> put(word[i], new Node());
+            }
+            node = node -> get(word[i]);
+        }
+        node -> setEnd();
+    }
+    
+    void search(string word, string ans, vector<string>& mainAns){
+        Node* node = root;
+        for(int i = 0; i < word.length(); i++){
+            if(!node -> containsKey(word[i])){
+                return;
+            }else{
+                node = node -> get(word[i]);
+                ans += word[i];
+                if(i+1 != word.length() && node -> getEnd()){
+                    string temp(word.begin() + (i+1), word.end());
+                    ans += ' ';
+                    search(temp, ans, mainAns);
+                    ans.pop_back();
+                }
+            }
+        }
+        if(node -> getEnd()) mainAns.push_back(ans);
+    }
+};
+
+//Solution using Trie + backTracking
+//We search the string character by character in the trie, if at any point a word is matching with the word in trie, then we call the search function again using the next characters and start from the root again
+//As soon as all the paths are explored using the characters as a word, we backtrack
+
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        Trie trie;
+        for(auto j:wordDict){
+            trie.insert(j);
+        }
+        vector<string> mainAns;
+        string ans;
+        trie.search(s, ans, mainAns);
+        return mainAns;
+    }
+};
