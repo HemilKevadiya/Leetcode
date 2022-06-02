@@ -1,0 +1,28 @@
+//If the total sum of elements is not even then there is no way to partition it into 2 equal sum subsets, so we just return true
+//If the sum is even, then there is a fixed target sum which we need to find
+//Divide the sum by 2 and find an subarray whose sum is equal to that
+//If it is found then it is possible to partition the given array into 2 equal sum subsets
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for(auto& j:nums) sum += j;
+        if(sum & 1) return false;
+        sum /= 2;
+        vector<vector<bool>> dp(nums.size() + 1, vector<bool> (sum + 1));
+        for(int i = 0; i < nums.size() + 1; i++){
+            for(int j = 0; j < sum + 1; j++){
+                if(i == 0 && j > 0){
+                    dp[i][j] = false;
+                }else if(j == 0){
+                    dp[i][j] = true;
+                }else if(nums[i - 1] <= j){
+                    dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
+                }else{
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[nums.size()][sum];
+    }
+};
