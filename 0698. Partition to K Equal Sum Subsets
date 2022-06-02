@@ -1,0 +1,33 @@
+class Solution {
+    //Just a basic backtracking approach
+    //Go through all the elements and keep including them into the sum and maintain a visited array to not use the same elements again
+    //If we get our sum to be the target value then we can say that a subset with the required sum was found and we find the remaining subsets from the start of the array till we have found all the k subsets
+public:
+    bool solve(vector<int>& nums, int k, int idx, int sum, int target, vector<int>& visited, int n){
+        if(k == 0) return true;
+        if(sum == target){
+            return solve(nums, k - 1, 0, 0, target, visited, n);               
+        }
+        for(int i = idx; i < n; i++){
+            //The third condition basically states that, if by exploring an element we haven't found a solution(as it is not marked as visited), then by including the same element on another index, we won't find a solution, so we just ignore that index
+            //(This condition avoided TLE)
+            if(visited[i] || sum + nums[i] > target || (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1])){
+                continue;
+            }
+            visited[i] = 1;
+            if(solve(nums, k, i + 1, sum + nums[i], target, visited, n)) return true;
+            visited[i] = 0;
+        }
+        return false;
+    }
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int sum = 0;
+        for(int i = 0; i < nums.size(); i++) sum += nums[i];
+        if(sum % k != 0) return false;
+        int target = sum / k;
+        int n = nums.size();
+        vector<int> visited(n);
+        sort(nums.rbegin(),nums.rend());
+        return solve(nums, k, 0, 0, target, visited, n);
+    }
+};
