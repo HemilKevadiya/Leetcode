@@ -1,0 +1,20 @@
+class NumArray {
+    vector<int> input;
+    int sum = 0;
+public:
+    NumArray(vector<int>& nums) {
+        input = nums;
+        for(int i = 0; i < input.size(); i++) sum += nums[i];
+    }
+    
+    int sumRange(int left, int right) {
+        int temp = sum;
+        for(int i = 0; i < left; i++){
+            temp -= input[i];
+        }
+        for(int i = right + 1; i < input.size(); i++){
+            temp -= input[i];
+        }
+        return temp;
+    }
+};
