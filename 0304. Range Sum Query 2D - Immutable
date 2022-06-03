@@ -1,0 +1,28 @@
+//the idea of prefix sum
+class NumMatrix {
+    vector<vector<int>> matrix;
+    int m, n;
+public:
+    NumMatrix(vector<vector<int>>& a) {
+        m = a.size();
+        n = a[0].size();
+        
+        matrix = vector<vector<int>> ((m + 1), vector<int> (n + 1));
+        for(int i = 1; i < m + 1; i++){
+            int prefix = 0;
+            for(int j = 1; j < n + 1; j++){
+                prefix += a[i - 1][j - 1];
+                int above = matrix[i - 1][j];
+                matrix[i][j] = prefix + above;
+            }
+        }
+    }
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        int bottomLeft = matrix[row2 + 1][col2 + 1];
+        int above = matrix[row1][col2 + 1];
+        int left = matrix[row2 + 1][col1];
+        int top = matrix[row1][col1];
+        
+        return bottomLeft - above - left + top;
+    }
+};
