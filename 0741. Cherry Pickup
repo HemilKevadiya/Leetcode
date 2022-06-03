@@ -1,0 +1,52 @@
+//Memoization Approach
+//4D DP 
+//Just like cherry pickup 2, we have 2 starting paths in this question
+//Basically, starting from the bottom - right and reaching to the top - left can also be viewed as starting from the top - left and reaching to the bottom - right
+//So, take 2 paths, where both start from the top - left and both of the paths will be different but if one of them reaches the end then we can say there is a path possible 
+//So, just like cherry pickup 2, we keep collecting the cherries on every index(if any) and avoid the obstacle(-1)
+//In memoization, it can go upto a 4D DP matrix
+//But, it can be optimized by the formula
+// r1 + c1 = r2 + c2
+//At any given point, this formula is proven true
+//Because during both of the paths, there will only be 1 move(either one goes right and second goes down, etc.), so both paths have a paramter differing by only 1
+//So, if we take any of the paramter and calculate them at the beginning of the call, we can significantly reduce the space complexity to (n^3) and the time complexity, too
+
+class Solution {
+public:
+    bool flag = false;
+    int count(vector<vector<int>>& grid, int i1, int i2, int j1, int n,
+             vector<vector<vector<int>>>& dp){
+        int j2 = i1 + j1 - i2;
+        if(i1 >= n || i2 >= n || j1 >= n || j2 >= n || grid[i1][j1] == -1 || grid[i2][j2] == -1) return INT_MIN;
+        
+        if(i1 == n - 1 && j1 == n - 1){
+            flag = true;
+            return grid[i1][j1];
+        }
+        
+        if(dp[i1][i2][j1] != -1) return dp[i1][i2][j1];
+        int cherries = 0;
+        
+        if(j1 == j2 && i1 == i2){
+            cherries += grid[i1][j1];
+        }else{
+            cherries += grid[i1][j1] + grid[i2][j2];
+        }
+        
+        int a1 = count(grid, i1, i2, j1 + 1, n, dp);
+        int a2 = count(grid, i1 + 1, i2 + 1, j1, n, dp);
+        int a3 = count(grid, i1 + 1, i2, j1, n, dp);
+        int a4 = count(grid, i1, i2 + 1, j1 + 1, n, dp);
+        
+        
+        cherries += max(max(a1, a2), max(a3, a4));
+        return dp[i1][i2][j1] = cherries;
+    }
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<vector<vector<int>>> dp((n), vector<vector<int>> ((n), vector<int> (n, -1)));
+        int ans = count(grid, 0, 0, 0, n, dp);
+        if(!flag) return 0;
+        else return ans;
+    }
+};
