@@ -1,0 +1,55 @@
+//Almost similar to minimum path sum, but here the starting point and ending points are varying and from every index we have 3 options
+//So, just basically apply minimum path sum algo by taking every index of the first row as a starting point and then from every starting point, try taking every index of the last row as the last index and take the minimum of it
+//And then, at last in the answer row, the answers will signify the min path sum from that starting point 
+//Take the minimum of all of them and that is the answer
+//Basically applying (120. triangle) like algorithm on every starting point but the only difference being the 3 possibilities in this question
+
+class Solution {
+    //Recursion + Memoization
+    int solve(vector<vector<int>>& matrix, int row, int col, vector<vector<int>>& dp){
+        
+        if(row == 0) return matrix[row][col];
+        
+        if(dp[row][col] != -1) return dp[row][col];
+        
+        int top = matrix[row][col] + solve(matrix, row - 1, col, dp);
+        int topLeft = INT_MAX, topRight = INT_MAX;
+        if(col - 1 >= 0)
+            topLeft = matrix[row][col] + solve(matrix, row - 1, col - 1, dp);
+        if(col + 1 < matrix.size())
+            topRight = matrix[row][col] + solve(matrix, row - 1, col + 1, dp);
+        
+        return dp[row][col] = min(min(top, topLeft), topRight);
+    }
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int ans = INT_MAX;
+        int n = matrix.size();
+        vector<vector<int>> dp(n, vector<int> (n, -1));
+        // for(int i = 0; i < n; i++){
+        //     ans = min(ans, solve(matrix, n - 1, i, dp));
+        // }
+        
+        //Tabulation
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(i == 0)
+                    dp[i][j] = matrix[i][j];
+                else{
+                    int bottom = INT_MAX, bottomLeft = INT_MAX, bottomRight = INT_MAX;
+                    bottom = matrix[i][j] + dp[i - 1][j];
+                    if(j - 1 >= 0)
+                        bottomLeft = matrix[i][j] + dp[i - 1][j - 1];
+                    if(j + 1 < n)
+                        bottomRight = matrix[i][j] + dp[i - 1][j + 1];
+                    
+                    dp[i][j] = min(min(bottom, bottomLeft), bottomRight);
+                }
+            }
+        }
+        for(int j = 0; j < n; j++){
+            ans = min(ans, dp[n - 1][j]);
+        }
+        return ans;
+    }
+};
