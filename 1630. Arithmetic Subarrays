@@ -1,0 +1,30 @@
+//We take every subarray and then sort it and check if it forms a arithmetic sequence or not
+
+class Solution {
+public:
+    vector<bool> checkArithmeticSubarrays(vector<int>& nums, vector<int>& l, vector<int>& r) {
+        int m = l.size();
+        vector<bool> ans(m);
+        for(int i = 0; i < m; i++){
+            int left = l[i];
+            int right = r[i];
+            if(left == right){
+                ans[i] = false;
+                continue;
+            }
+            int flag = 0;
+            vector<int> temp(nums.begin() + left, nums.begin() + (right + 1));
+            sort(temp.begin(), temp.end());
+            int diff = temp[1] - temp[0];
+            for(int j = 2; j < temp.size(); j++){
+                if(temp[j] - temp[j - 1] != diff){
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag) ans[i] = false;
+            else ans[i] = true;
+        }
+        return ans;
+    }
+};
