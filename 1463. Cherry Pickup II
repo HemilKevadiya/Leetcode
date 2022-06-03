@@ -1,3 +1,11 @@
+//Memoization Approach
+//3D DP
+//For both the robots, start the recursion simultaneously
+//If they are moving at the same time, it means both of them will end up at the same row at the same time, so no need to include another parameter for row like cherry pickup 1
+//If at any point, the robots are at the same cell, then it means the cherries can only be picked by one of the robots
+//Then, for every robot there can be 9 possible move combinations
+//Then, at every point take the maximum of every 9 calls being done from each indexes of both the robots
+
 class Solution {
     int solve(int i, int j1, int j2, int m, int n, vector<vector<int>>& grid, 
              vector<vector<vector<int>>>& dp){
@@ -12,6 +20,7 @@ class Solution {
         }
         if(dp[i][j1][j2] != -1) return dp[i][j1][j2];
         int ans = -1e8;
+        //All the 9 possible move combinations can be explored in these loops
         for(int diff1 = -1; diff1 <= 1; ++diff1){
             for(int diff2 = -1; diff2 <= 1; ++diff2){
                 int value = 0;
