@@ -1,0 +1,29 @@
+//Recursion + Memoization
+//Ninja's Training like Approach(Code Studio Problem)
+class Solution {
+    int solve(vector<vector<int>>& grid, int row, int x, int n, 
+              vector<vector<int>>& dp){
+        if(row == 0){
+            int ans = INT_MAX;
+            for(int i = 0; i < n; i++){
+                if(i == x) continue;
+                ans = min(ans, grid[row][i]);
+            }
+            return dp[row][x] = ans;
+        }
+        
+        if(dp[row][x] != -1) return dp[row][x];
+        
+        int ans = INT_MAX;
+        for(int i = 0; i < n; i++){
+            if(i == x) continue;
+            ans = min(ans, grid[row][i] + solve(grid, row - 1, i, n, dp));
+        }
+        return dp[row][x] = ans;
+    }
+public:
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        vector<vector<int>> dp((grid.size()), vector<int> (grid.size() + 1, -1));
+        return solve(grid, grid.size() - 1, grid.size(), grid.size(), dp);
+    }
+};
