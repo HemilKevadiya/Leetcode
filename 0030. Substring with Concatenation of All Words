@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        int total = words.size() * words[0].length();
+        int wordLen = words[0].length();
+        unordered_map<string,int> freqMap;
+        for(auto& j:words){
+            freqMap[j]++;
+        }
+        vector<int> ans;
+        int i = 0, j = total - 1;
+        while(j < s.length()){
+            int flag = 1;
+            unordered_map<string, int> temp = freqMap;
+            for(int k = i; k <= j; k += wordLen){
+                string check = s.substr(k,wordLen);
+                if(temp[check] == 0 || temp.find(check) == temp.end()){
+                    flag = 0;
+                    break;
+                }
+                temp[check]--;
+            }
+            if(flag) ans.push_back(i);
+            i += 1; j += 1;
+        }
+        return ans;
+    }
+};
