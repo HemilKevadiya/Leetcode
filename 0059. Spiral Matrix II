@@ -1,0 +1,48 @@
+//Almost the same approach as spiral Matrix I but in this one, we use the values of the previous columns/ rows to assign a value in a certain cell
+
+class Solution {
+    void createMatrix(int n, vector<vector<int>>& matrix, int i, int j, char direction, set<pair<int,int>>& visited){
+        if(visited.size() == (n * n)) return;
+        if(direction == 'R'){
+            while(j < n && visited.find({i, j}) == visited.end()){
+                if(i == 0 && j == 0){
+                    visited.insert({i, j});
+                    matrix[i][j] = 1;
+                }else{
+                    visited.insert({i, j});
+                    matrix[i][j] = matrix[i][j - 1] + 1;
+                }
+                ++j;
+            }
+            createMatrix(n, matrix, i + 1, j - 1, 'D', visited);
+        }else if(direction == 'D'){
+            while(i < n && visited.find({i, j}) == visited.end()){
+                visited.insert({i, j});
+                matrix[i][j] = matrix[i - 1][j] + 1;
+                ++i;
+            }
+            createMatrix(n, matrix, i - 1, j - 1, 'L', visited);
+        }else if(direction == 'L'){
+            while(j >= 0 && visited.find({i, j}) == visited.end()){
+                visited.insert({i, j});
+                matrix[i][j] = matrix[i][j + 1] + 1;
+                --j;
+            }
+            createMatrix(n, matrix, i - 1, j + 1, 'U', visited);
+        }else if(direction == 'U'){
+            while(i >= 0 && visited.find({i, j}) == visited.end()){
+                visited.insert({i, j});
+                matrix[i][j] = matrix[i + 1][j] + 1;
+                --i;
+            }
+            createMatrix(n, matrix, i + 1, j + 1, 'R', visited);
+        }
+    }
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> matrix(n, vector<int> (n));
+        set<pair<int,int>> visited;
+        createMatrix(n, matrix, 0, 0, 'R', visited);
+        return matrix;
+    }
+};
