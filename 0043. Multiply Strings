@@ -1,0 +1,58 @@
+//We just multiply the numbers like we did in school
+class Solution {
+public:
+    string add(string s1, string s2){
+        int size1 = s1.length();
+        int size2 = s2.length();
+        if(size1 > size2){
+            s2.insert(0, (size1 - size2), '0');
+        }else if(size2 > size1){
+            s1.insert(0, (size2 - size1), '0');
+        }
+        int carry = 0;
+        for(int i = size1 - 1; i >= 0; i--){
+            int sum = (s1[i] - '0') + (s2[i] - '0');
+            sum += carry;
+            if(sum >= 10){
+                sum -= 10;
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            s2[i] = sum + '0';
+        }
+        if(carry == 1){
+            s2.insert(s2.begin(), '1');
+        }
+        return s2;
+    }
+    string multiply(string num1, string num2) {
+        vector<string> mainAns;
+        if((num1.size() == 1 && num1[0] == '0') || (num2.size() == 1 && num2[0] == '0')){
+            return "0";
+        }
+        for(int i = 0; i < num2.length(); i++){
+            int digit = num2[i] - '0', carry = 0;
+            string calc;
+            calc.insert(0, (num2.length() - i - 1), '0');
+            for(int j = num1.length() - 1; j >= 0; j--){
+                int ans = digit * (num1[j] - '0') + carry;
+                if(ans >= 10){
+                    carry = ans / 10;
+                    ans -= carry*10;                    
+                }else{
+                    carry = 0;
+                }
+                calc.insert(calc.begin(), ans + '0');
+            }
+            if(carry != 0){
+                calc.insert(calc.begin(), (carry + '0'));
+            }
+            mainAns.push_back(calc);
+        }
+        for(int i = 1; i < mainAns.size(); i++){
+            mainAns[i] = add(mainAns[i - 1], mainAns[i]);
+        }
+        return mainAns[mainAns.size() - 1];
+    }
+};
