@@ -1,0 +1,26 @@
+//We try to find any element that is at the exact difference from the current element
+//We use upper_bound to do that, because even if the element we are trying to look for is found, the count of total partitions will be incremented by 1 and by using upper bound, we can avoid duplicate elements(when there are 2 or more of the exact diff elements) edge case
+
+class Solution {
+public:
+    int partitionArray(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_set<int> set;
+        for(int i = 0; i < n; i++){
+            set.insert(nums[i]);
+        }
+        if(k == 0) return set.size();
+        sort(nums.begin(), nums.end());
+        int count = 0, i = 0;
+        while(i < n){
+            int idx = upper_bound(nums.begin() + (i + 1), nums.end(), (nums[i] + k)) - nums.begin();
+            if(idx == n) {
+                count++;
+                break;
+            }
+            i = idx;
+            count++;
+        }
+        return count;
+    }
+};
