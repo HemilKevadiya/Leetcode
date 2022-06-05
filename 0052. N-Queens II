@@ -1,50 +1,49 @@
 class Solution {
 public:
-    int count;
-    bool safe(int row,int col,vector<string> board,int n){
+    bool safe(int row, int col, vector<string> board, int n){
         //we only need to check upper diagonal,left side and lower diagonal as there will be no queen on the right side of the row or in the same column
         int duprow = row;
         int dupcol = col;
-        while(row>=0 && col>=0){//check the upper diagonal from the row we want to put the queen on
-            if(board[row][col]=='Q') return false;
+        while(row >= 0 && col >= 0){//check the upper diagonal from the row we want to put the queen on
+            if(board[row][col] == 'Q') return false;
             row--;
             col--;
         }
         row = duprow;
         col = dupcol;
-        while(col>=0){ //check the left side from the row we want to put the queen on
-            if(board[row][col]=='Q') return false;
+        while(col >= 0){ //check the left side from the row we want to put the queen on
+            if(board[row][col] == 'Q') return false;
             col--;
         }
         col = dupcol;
-        while(row<n && col>=0){ //check the lower diagonal from the row we want to put the queen on
-            if(board[row][col]=='Q') return false;
+        while(row < n && col >= 0){ //check the lower diagonal from the row we want to put the queen on
+            if(board[row][col] == 'Q') return false;
             row++;
             col--;
         }
         //as there are no queens that can attack the queen if put on the row we return true
         return true;
     }
-    void solve(int col,vector<string> board,int n){
-        if(col==n){
-            count++;
-            return;
+    int solve(int col,vector<string> board,int n){
+        if(col == n){
+            return 1;
         }
-        for(int row=0;row<n;row++){
+        int ans = 0;
+        for(int row = 0; row < n; row++){
             if(safe(row,col,board,n)){//we need to check if it is safe to put the queen on the number of row
                 board[row][col] = 'Q'; //if it is safe we mark the location as Q
-                solve(col+1,board,n); //as we have put a queen on the column, we call the same function for the next column
+                ans += solve(col + 1,board,n); //as we have put a queen on the column, we call the same function for the next column
                 board[row][col] = '.'; //as all the solutions where there was a queen on this particular location are explored, we remove the queen that was put here and try to check for other possibilities from the next row
             }
         }
+        return ans;
     }
     int totalNQueens(int n) {
         vector<string> board(n);
-        string s(n,'.');
-        for(int i=0;i<n;i++){
-            board[i]=s;
+        string s(n, '.');
+        for(int i = 0; i < n; i++){
+            board[i] = s;
         }
-        solve(0,board,n);
-        return count;
+        return solve(0, board, n);
     }
 };
