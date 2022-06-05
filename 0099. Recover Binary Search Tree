@@ -1,0 +1,32 @@
+//InOrder traversal of a BST should be sorted, wherever the elements aren't sorted, we assign them to first and second respectively and then sort them
+class Solution {
+    TreeNode* first = NULL;
+    TreeNode* second = NULL;
+    TreeNode* prev = new TreeNode(INT_MIN);
+    
+    void inOrder(TreeNode* root){
+        if(root != NULL){
+            inOrder(root -> left);
+            
+            if(first == NULL && prev -> val > root -> val){
+                first = prev;
+            }
+            
+            if(first != NULL && prev -> val > root -> val){
+                second = root;
+            }
+            
+            prev = root;
+            
+            inOrder(root -> right);
+        }
+    }
+public:
+    void recoverTree(TreeNode* root) {
+        inOrder(root);
+        
+        int temp = first -> val;
+        first -> val = second -> val;
+        second -> val = temp;
+    }
+};
