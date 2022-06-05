@@ -1,0 +1,25 @@
+//We need two maps, first which maps elements with their indices and second which maps indices with their elements
+//Then, for every operation, change the element with the new number in the second map and for the first map insert that number with it's index
+
+class Solution {
+public:
+    vector<int> arrayChange(vector<int>& nums, vector<vector<int>>& operations) {
+        int n = nums.size();
+        unordered_map<int,int> idxMap;
+        unordered_map<int,int> numMap;
+        for(int i = 0; i < n; i++){
+            idxMap[nums[i]] = i;
+            numMap[i] = nums[i];
+        }
+        for(int i = 0; i < operations.size(); i++){
+            int temp = idxMap[operations[i][0]];
+            idxMap.erase(idxMap.find(operations[i][0]));
+            numMap[temp] = operations[i][1];
+            idxMap[operations[i][1]] = temp;
+        }
+        for(auto j:numMap){
+            nums[j.first] = j.second;
+        }
+        return nums;
+    }
+};
