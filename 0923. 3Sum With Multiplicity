@@ -1,0 +1,64 @@
+struct triplet{
+    int first, second, third;
+};
+
+class Solution {
+public:
+    int threeSumMulti(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<triplet> ans;
+        sort(nums.begin(), nums.end());
+        long long count = 0;
+        int mod = 1e9 + 7;
+        for(int i = 0; i <= n - 3; i++){
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+            int j = i + 1, k = n - 1;
+            while(j < k){
+                if(j > i + 1 && nums[j] == nums[j - 1]) {
+                    ++j;
+                    continue;
+                }
+                if(k > n - 1 && nums[k] == nums[k + 1]) {
+                    --k;
+                    continue;
+                }
+                int currSum = nums[i] + nums[j] + nums[k];
+                triplet current = {nums[i], nums[j], nums[k]};
+                if(currSum == target){
+                    ans.push_back(current);
+                    ++j; --k;
+                }else if(currSum < target){
+                    ++j;
+                }else{
+                    --k;
+                }
+            }
+        }
+        unordered_map<int, int> freqMap;
+        for(int i = 0; i < n; i++){
+            freqMap[nums[i]]++;
+        }
+        for(auto j:ans){
+            int val1 = j.first, val2 = j.second, val3 = j.third;
+            long long fq1 = freqMap[val1], fq2 = freqMap[val2], fq3 = freqMap[val3];
+            
+            if(val1 == val2 && val2 == val3){
+                count += (fq1 * (fq1 - 1) * (fq1 - 2)) / 6;
+                continue;
+            }
+            if(val1 == val2){
+                count += ((fq1 * (fq1 - 1) / 2) * fq3);
+            }
+            else if(val2 == val3){
+                count += ((fq2 * (fq2 - 1) / 2) * fq1);
+            }
+            else if(val1 == val3){
+                count += ((fq3 * (fq3 - 1) / 2) * fq2);
+            }
+            else{
+                count += (fq1 * fq2 * fq3);
+            }
+        }
+        return count % mod;
+    }
+};
