@@ -1,0 +1,69 @@
+class MyHashSet {
+public:
+    vector<ListNode*> HashTable;
+    
+    MyHashSet(){
+        for(int i = 0; i < 1000; i++){
+            ListNode* head = new ListNode(-50);
+            HashTable.push_back(head);
+        }
+    }
+    
+    int getHash(int key){
+        return key % 1000;
+    }
+    
+    void insert(int hashVal, int key){
+        ListNode* newNode = new ListNode(key);
+        ListNode* list = HashTable[hashVal];
+        ListNode* temp = list;
+        while(temp != NULL){
+            if(temp -> val == key){
+                HashTable[hashVal] = list;
+                return;
+            }
+            temp = temp -> next;
+        }
+        temp = list;
+        while(temp -> next != NULL){
+            temp = temp -> next;
+        }
+        temp -> next = newNode;
+        HashTable[hashVal] = list;
+    }
+    
+    void deleteFromLL(int hashVal, int key){
+        ListNode* list = HashTable[hashVal];
+        ListNode* temp = list;
+        while(temp -> next != NULL && temp -> next -> val != key){
+            temp = temp -> next;
+        }
+        if(temp -> next == NULL) return;
+        temp -> next = temp -> next -> next;
+        HashTable[hashVal] = list;
+        temp = list;
+    }
+    
+    void add(int key) {
+        int hashVal = getHash(key);
+        insert(hashVal, key);
+    }
+    
+    void remove(int key) {
+        int hashVal = getHash(key);
+        deleteFromLL(hashVal, key);
+    }
+    
+    bool contains(int key) {
+        int hashVal = getHash(key);
+        ListNode* list = HashTable[hashVal];
+        ListNode* temp = list;
+        while(temp != NULL){
+            if(temp -> val == key){
+                return true;
+            }
+            temp = temp -> next;
+        }
+        return false;
+    }
+};
