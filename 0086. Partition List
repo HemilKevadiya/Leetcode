@@ -1,0 +1,36 @@
+//Basically, traverse on the LL and partition it into two separate lists
+//Nodes with value less than x goes to the left LL and the rest goes to right LL
+//Then, merge them together and return it
+
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(head == NULL || head -> next == NULL) return head;
+        ListNode* left = new ListNode(0);
+        ListNode* tempL = left;
+        ListNode* right = new ListNode(0);
+        ListNode* tempR = right;
+        ListNode* temp = head;
+        while(temp != NULL){
+            ListNode* newNode = new ListNode(temp -> val);
+            if(newNode -> val < x){
+                tempL -> next = newNode;
+                tempL = tempL -> next;
+            }else{
+                tempR -> next = newNode;
+                tempR = tempR -> next;
+            }
+            temp = temp -> next;
+        }
+        right = right -> next;
+        left = left -> next;
+        if(left == NULL) return right;
+        if(right == NULL) return left;
+        tempL = left;
+        while(tempL -> next != NULL){
+            tempL = tempL -> next;
+        }
+        tempL -> next = right;
+        return left;
+    }
+};
