@@ -1,0 +1,47 @@
+class Solution {
+public:
+//First, we calculate the size of the LL to determine how many nodes will be there in each partition
+//Then, we have to find out that how many parts will have an extra node
+//If the size of the LL is greater than k then there won't be any extra node in any part
+//Then, we start iterating over the head creating new Linked List parts
+//And, at the end if the size of the answer vector is not equal to k(meaning there weren less than k nodes in the LL), empty lists will be pushed back till we reach k
+
+    vector<ListNode*> splitListToParts(ListNode* head, int k) {
+        ListNode* sizeCal = head;
+        int size = 0;
+        while(sizeCal != NULL){
+            size++;
+            sizeCal = sizeCal -> next;
+        }
+        vector<ListNode*> ans;
+        int extra = 0;
+        if(size > k){
+            extra = size % k;
+        }
+        int total = size / k;
+        if(total == 0) total = 1;
+        while(head != NULL){
+            ListNode* splitLL = new ListNode(0);
+            ListNode* temp = splitLL;
+            for(int i = 0; i < total; i++){
+                ListNode* newNode = new ListNode(head -> val);
+                temp -> next = newNode;
+                temp = temp -> next;
+                head = head -> next;
+            }
+            if(extra > 0){
+                extra--;
+                ListNode* newNode = new ListNode(head -> val);
+                temp -> next = newNode;
+                head = head -> next;
+            }
+            splitLL = splitLL -> next;
+            ans.push_back(splitLL);
+        }
+        int currSize = ans.size();
+        for(int i = 0; i < (k - currSize); i++){
+            ans.push_back({});
+        }
+        return ans;
+    }
+};
