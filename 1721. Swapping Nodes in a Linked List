@@ -1,0 +1,99 @@
+class Solution {
+public:
+    ListNode* prevToEnd;
+    bool lastKthPrev(ListNode* head, int& k){
+        if(head == NULL){
+            return false;
+        }
+        if(lastKthPrev(head -> next, k)) return true;
+        if(k == -1){
+            prevToEnd = head;
+            return true;
+        }
+        k--;
+        return false;
+    }
+    
+    ListNode* trim(ListNode* head){
+        head = head -> next;
+        ListNode* temp = head;
+        ListNode* prev = head;
+        while(temp -> next != NULL){
+            prev = temp;
+            temp = temp -> next;
+        }
+        prev -> next = NULL;
+        return head;
+    }
+    
+    ListNode* swapNodes(ListNode* head, int k) {
+        //If k is 1 and number of nodes is also 1 then nothing is changed and just the head is returned
+        if(k == 1 && head -> next == NULL){
+            return head;            
+        }
+        //If the k is 1 then we need to change the head and the last node, so we pass dummy nodes in the beginning and the end
+        ListNode* newNode1 = new ListNode(-5);
+        ListNode* newNode2 = new ListNode(-5);
+        
+        newNode1 -> next = head;
+        head = newNode1;
+        
+        ListNode* dummyHead = head;
+        while(dummyHead -> next != NULL){
+            dummyHead = dummyHead -> next;
+        }
+        
+        dummyHead -> next = newNode2;
+        
+        ListNode* begin = head;
+        ListNode* prevToBegin = head;
+        int tempK = k;
+        
+        while(tempK--){
+            prevToBegin = begin;
+            begin = begin -> next;
+        }
+        
+        lastKthPrev(head, k);
+        ListNode* end = prevToEnd -> next;
+        
+        //In the scenario, where k is equal to the half of size of the linked list, the nodes to be swapped are right after each other, to handle that
+        if(begin -> next == end){
+            ListNode* temp = end -> next;
+            prevToBegin -> next = end;
+            end -> next = begin;
+            begin -> next = temp;
+            
+            head = trim(head);
+            return head;
+        }
+        
+        if(end -> next == begin){
+            ListNode* temp = begin -> next;
+            prevToEnd -> next = begin;
+            begin -> next = end;
+            end -> next = temp;
+            
+            head = trim(head);
+            return head;
+        }        
+        //If the ll is odd and the k is the middle of linked list, to handle that
+        if(begin == end){
+            head = trim(head);
+            return head;
+        }
+        
+        //Basivally both the nodes are deleted from their previous position and inserted back to their new positions
+        prevToBegin -> next = prevToBegin -> next -> next;
+        prevToEnd -> next = prevToEnd -> next -> next;
+
+        end -> next = prevToBegin -> next;
+        prevToBegin -> next = end;
+        
+        begin -> next = prevToEnd -> next;
+        prevToEnd -> next = begin;
+        
+        head = trim(head);
+        return head;
+    }
+};
