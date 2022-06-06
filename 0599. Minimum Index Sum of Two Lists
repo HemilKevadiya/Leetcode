@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        unordered_map<string,int> list1_map;
+        unordered_map<string,int> list2_map;
+        int list1_size = list1.size();
+        int list2_size = list2.size();
+        
+        for(int i = 0; i < list1_size; i++){
+            list1_map[list1[i]] = i;
+        }
+        
+        for(int i = 0; i < list2_size; i++){
+            list2_map[list2[i]] = i;
+        }
+        
+        int least = INT_MAX;
+        string curr;
+        for(auto j:list1_map){
+            string temp = j.first;
+            int index = j.second;
+            if(list2_map.find(temp) != list2_map.end()){
+                int idxSum = list2_map[temp] + index;
+                if(least > idxSum){
+                    curr = temp;
+                    least = idxSum;
+                }
+            }
+        }
+        if(curr == ""){
+            return {};
+        }
+        vector<string> res;
+        list1_map.erase(list1_map.find(curr));
+        list2_map.erase(list2_map.find(curr));
+        res.push_back(curr);
+        
+        for(auto j:list1_map){
+            string temp = j.first;
+            int index = j.second;
+            if(list2_map.find(temp) != list2_map.end()){
+                int idxSum = list2_map[temp] + index;
+                if(least == idxSum){
+                    res.push_back(temp);
+                }
+            }
+        }
+        return res;
+    }
+};
