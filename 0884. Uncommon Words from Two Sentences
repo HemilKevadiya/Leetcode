@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string s1, string s2) {
+        unordered_map<string, int> map1;
+        unordered_map<string, int> map2;
+
+        s1.push_back(' ');
+        s1.insert(s1.begin(), ' ');
+        
+        s2.push_back(' ');
+        s2.insert(s2.begin(), ' ');
+        
+        int string1_length = s1.length();
+        int string2_length = s2.length();
+        int space = 0;
+        
+        for(int i = 1; i < string1_length; i++){
+            if(s1[i] == ' '){
+                int total_chars = i - space - 1;
+                string word = s1.substr(space + 1, total_chars);
+                map1[word]++;
+                space = i;
+            }
+        }
+        
+        space = 0;
+        for(int i = 1; i < string2_length; i++){
+            if(s2[i] == ' '){
+                int total_chars = i - space - 1;
+                string word = s2.substr(space + 1, total_chars);
+                map2[word]++;
+                space = i;
+            }
+        }
+        vector<string> res;
+        for(auto j:map1){
+            string word = j.first;
+            int freq = j.second;
+            if(map2.find(word) == map2.end() && map1[word] == 1){
+                res.push_back(word);
+            }
+        }
+        
+        for(auto j:map2){
+            string word = j.first;
+            int freq = j.second;
+            if(map1.find(word) == map1.end() && map2[word] == 1){
+                res.push_back(word);
+            }
+        }
+        return res;
+    }
+};
