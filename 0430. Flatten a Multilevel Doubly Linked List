@@ -1,0 +1,33 @@
+//If any node's child pointer is not NULL, we call a DFS on that node and explore it while assigning the nodes into a new flattened LL
+
+class Solution {
+public:
+    Node* newList = new Node(0);
+    Node* temp = newList;
+    void DFS(Node* head){
+        Node* tempHead = head;
+        while(tempHead != NULL){
+            Node* newNode = new Node(tempHead -> val);
+            temp -> next = newNode;
+            temp = temp -> next;
+            if(tempHead -> child){
+                DFS(tempHead -> child);
+            }
+            tempHead = tempHead -> next;
+        }
+    } 
+    Node* flatten(Node* head) {
+        if(!head) return head;
+        DFS(head);
+        Node* temp = newList -> next;
+        Node* prev = newList;
+        while(temp != NULL){
+            temp -> prev = prev;
+            prev = temp;
+            temp = temp -> next;
+        }
+        newList = newList -> next;
+        newList -> prev = NULL;
+        return newList;
+    }
+};
