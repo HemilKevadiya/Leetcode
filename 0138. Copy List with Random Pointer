@@ -1,0 +1,63 @@
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == NULL) return head;
+        unordered_map<Node*, int> nodeMap;
+        unordered_map<Node*, int> randomMap;
+        
+        Node* newList = new Node(0);
+        Node* newListTemp = newList;
+        Node* temp = head;
+        
+        int i = 0;
+        
+        //As we need to point the random nodes to an index, we need to first map the nodes to their indices
+        while(temp != NULL){
+            nodeMap[temp] = i++;
+            temp = temp -> next;
+        }
+        
+        temp = head;
+        //The, for every node the random pointer points to a node instead of giving the index, so we need to get their index into a map(here, randomMap)
+        while(temp != NULL){
+            Node* randomNode = temp -> random;
+            if(randomNode == NULL){
+                randomMap[temp] = -1;
+            }else{
+                int randomIdx = nodeMap[randomNode];
+                randomMap[temp] = randomIdx;
+            }
+            temp = temp -> next;
+        }
+        
+        temp = head;
+        i = 0;
+        unordered_map<int, Node*> idxMap;
+        //Then, we create the list with indices as the key and the new Nodes of the new list as their values
+        while(temp != NULL){
+            Node* newNode = new Node(temp -> val);
+            newListTemp -> next = newNode;
+            idxMap[i++] = newNode;
+            temp = temp -> next;
+            newListTemp = newListTemp -> next;
+        }
+        
+        temp = head;
+        newListTemp = newList -> next;
+        //Then, for every node fetch the old list's random pointers and their indices and then point the new list's nodes there
+        while(temp != NULL){
+            Node* randomNode = temp -> random;
+            if(randomMap[temp] == -1){
+                newListTemp -> random = NULL;
+            }
+            else{
+                int randomIdx = randomMap[temp];
+                newListTemp -> random = idxMap[randomIdx];
+            }
+            newListTemp = newListTemp -> next;
+            temp = temp -> next;
+        }
+        newList = newList -> next;
+        return newList;
+    }
+};
