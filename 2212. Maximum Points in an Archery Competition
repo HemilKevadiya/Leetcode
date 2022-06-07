@@ -1,0 +1,35 @@
+//BitMask solution, for every set bit, we can shoot some arrows on that target index if the remaining arrows are greater than or equal to what we want to shoot
+//If we are choosing to shoot arrows then the minimum and maximum both are equal to alice's shot arrows plus 1
+//Try out all possible combinations while keeping a sum, for any array combination pick out the max Sum and that array which has given the max answer
+//Then, an edge case is if at the end of the algo, if there are any remaining arrows then we have to shoot it on target 0
+
+class Solution {
+public:
+    vector<int> maximumBobPoints(int numArrows, vector<int>& aliceArrows) {
+        vector<int> bob(12);
+        int n = (1 << 12) - 1;
+        int maxSum = INT_MIN;
+        for(int i = 1; i <= n; i++){
+            vector<int> b(12);
+            int temp = numArrows;
+            int sum = 0;
+            for(int j = 11; j >= 0; j--){
+                if(i & (1 << j)){
+                    int shotArrows = aliceArrows[j] + 1;
+                    if(temp >= shotArrows){
+                        b[j] = shotArrows;
+                        temp -= shotArrows;
+                        sum += j;
+                    }
+                }
+            }
+            if(sum > maxSum){
+                maxSum = sum;
+                bob = b;
+            }
+        }
+        int sum = accumulate(bob.begin(), bob.end(), 0);
+        bob[0] = numArrows - sum;
+        return bob;
+    }
+};
