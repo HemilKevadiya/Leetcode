@@ -1,0 +1,54 @@
+class MyCircularQueue {
+    int n, current;
+    ListNode* head = new ListNode(0);
+    ListNode* tail = new ListNode(0);
+public:
+    MyCircularQueue(int k) {
+        n = k;
+        current = 0;
+    }
+    bool enQueue(int value) {
+        if(current == n){
+            return false;
+        }
+        
+        ListNode* newNode = new ListNode(value);
+        ListNode* temp = head;
+        while(temp -> next){
+            temp = temp -> next;
+        }
+        temp -> next = newNode;
+        tail = newNode;
+        
+        ++current;
+        return true;
+    }
+    
+    bool deQueue() {
+        if(current == 0){
+            return false;
+        }
+        
+        head -> next = head -> next -> next;
+        --current;
+        return true;
+    }
+    
+    int Front() {
+        if(head -> next == NULL) return -1;
+        else return head -> next -> val;
+    }
+    
+    int Rear() {
+        if(head -> next == NULL) return -1;
+        else return tail -> val;
+    }
+    
+    bool isEmpty() {
+        return head -> next == NULL;
+    }
+    
+    bool isFull() {
+        return current == n;
+    }
+};
