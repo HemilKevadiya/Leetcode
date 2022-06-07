@@ -1,0 +1,36 @@
+//A very straight bitMask solution
+//For the string generate every possible subsequnce and then check if it is a palindrome, if it is then insert the current bitmask value with the string's length in a vector
+//Then after generating every possible palindromic subsequnce
+//Start traversing the vector, compare every bitmask value with the other bitmask values, if the 'AND' of any bitmask values is 0 then it means that the subsequences corresponding to those masks are disjoint so we include that in our answer and take th max of it
+//After doing all this, the maximum answer will be there
+
+class Solution {
+public:
+    int maxProduct(string s) {
+        int n = s.length();
+        int bitMask = (1 << n) - 1;
+        vector<pair<int, int>> allSubs;
+        for(int i = 1; i <= bitMask; i++){
+            string curr;
+            for(int j = 0; j < n; j++){
+                if(i & (1 << j)) curr += s[j];
+            }
+            string temp = curr;
+            reverse(temp.begin(), temp.end());
+            if(temp == curr){
+                allSubs.push_back({i, curr.length()});
+            }
+        }
+        int ans = INT_MIN;
+        int len = allSubs.size();
+        for(int i = 0; i < len - 1; i++){
+            for(int j = i + 1; j < len; j++){
+                if(!(allSubs[i].first & allSubs[j].first)){
+                    int temp = allSubs[i].second * allSubs[j].second;
+                    ans = max(ans, temp);
+                }
+            }
+        }
+        return ans;
+    }
+};
