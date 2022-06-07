@@ -1,0 +1,72 @@
+class FrontMiddleBackQueue {
+    ListNode* head = new ListNode();
+public:
+    FrontMiddleBackQueue() {
+        
+    }
+    
+    void pushFront(int val) {
+        ListNode* newNode = new ListNode(val);
+        newNode -> next = head -> next;
+        head -> next = newNode;
+    }
+    
+    void pushMiddle(int val) {
+        ListNode* newNode = new ListNode(val);
+        ListNode* ptr1 = head;
+        ListNode* ptr2 = head -> next;
+        while(ptr2 != NULL && ptr2 -> next != NULL){
+            ptr1 = ptr1 -> next;
+            ptr2 = ptr2 -> next -> next;
+        }
+        newNode -> next = ptr1 -> next;
+        ptr1 -> next = newNode;
+    }
+    
+    void pushBack(int val) {
+        ListNode* newNode = new ListNode(val);
+        ListNode* temp = head;
+        while(temp -> next != NULL) 
+            temp = temp -> next;
+        temp -> next = newNode;
+    }
+    
+    int popFront() {
+        if(head -> next == NULL) return -1;
+        int temp = head -> next -> val;
+        head -> next = head -> next -> next;
+        return temp;
+    }
+    
+    int popMiddle() {
+        if(head -> next == NULL) return -1;
+        ListNode* prev = head;
+        ListNode* ptr1 = head -> next;
+        ListNode* ptr2 = head -> next -> next;
+        while(ptr2 != NULL && ptr2 -> next != NULL){
+            prev = ptr1;
+            ptr1 = ptr1 -> next;
+            ptr2 = ptr2 -> next -> next;
+        }
+        int temp = ptr1 -> val;
+        prev -> next = ptr1 -> next;
+        return temp;
+    }
+    
+    int popBack() {
+        if(head -> next == NULL) return -1;
+        ListNode* temp = head -> next;
+        int value;
+        if(temp -> next == NULL){
+            value = temp -> val;
+            head -> next = NULL;
+            return value;
+        }
+        while(temp -> next -> next != NULL){
+            temp = temp -> next;
+        }
+        value = temp -> next -> val;
+        temp -> next = NULL;
+        return value;
+    }
+};
