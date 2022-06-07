@@ -1,0 +1,23 @@
+//The intuition here is that, if the string is written in reverse order then the palindromic subsequence(if any) which was there in the original string will be in the same order in the reversed string, too
+//So, if we take the LCS of both the string then we have got our answer(because the LCS of them will be a palindrome which will be the longest)
+
+class Solution {
+public:
+    int longestPalindromeSubseq(string s1) {
+        string s2 = s1;
+        reverse(s1.begin(), s1.end());
+        int n = s1.length();
+        vector<int> prev(n + 1), curr(n + 1);
+        for(int i = 1; i < n + 1; i++){
+            for(int j = 1; j < n + 1; j++){
+                if(s1[i - 1] == s2[j - 1]){
+                    curr[j] = 1 + prev[j - 1];
+                }else{
+                    curr[j] = max(prev[j], curr[j - 1]);
+                }
+            }
+            prev = curr;
+        }
+        return prev[n];
+    }
+};
