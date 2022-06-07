@@ -1,0 +1,29 @@
+//First, we scan the string for any palindromic subsequences(If there are any, take the longest one's length using LPS algorithm)
+//Then, the intuition is that, if any subsequence is palindrome then we keep it intact and the characters that are not palindrome are to be inserted in between those plaindromic characters in reverse order
+//Ex. leetcode -> here, the longest palindrome is = ete
+//So, we keep them intact and for the remanining characters l,e,c,o,d their corresponding characters need to be inserted in the right position
+//for le, the resultant string after inserting 2 characters will become -> leetcodeel
+//for cod, the resultant string after inserting 3 characters will become -> leedoctcodeel
+//the number of min. operations will be equal to len of string - length of LPS
+//For more explanation, watch striver
+
+class Solution {
+public:
+    int minInsertions(string s) {
+        string s1 = s, s2 = s;
+        reverse(s2.begin(), s2.end());
+        int n = s.length();
+        vector<int> curr(n + 1), prev(n + 1);
+        for(int i = 1; i < n + 1; i++){
+            for(int j = 1; j < n + 1; j++){
+                if(s1[i - 1] == s2[j - 1]){
+                    curr[j] = 1 + prev[j - 1];
+                }else{
+                    curr[j] = max(prev[j], curr[j - 1]);
+                }
+            }
+            prev = curr;
+        }
+        return (n - prev[n]);
+    }
+};
