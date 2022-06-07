@@ -1,0 +1,37 @@
+//Recursion + Memoization Gave TLE
+//Tabulation works fine
+//Recursion Explanation -
+//If a character at any index matches then we need to go to the previous index
+//If a character doesn't match then there are 2 possibilities that the character might match any previous character from the strings, so we consider moving both the pointers of s1 and s2 one by one while keeping the other one static and taking the max result possible out of both
+
+class Solution {
+    int solve(string s1, string s2, int idx1, int idx2, vector<vector<int>>& dp){
+        if(idx1 < 0 || idx2 < 0){
+            return 0;
+        }
+        if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
+        
+        if(s1[idx1] == s2[idx2]){
+            return dp[idx1][idx2] = 1 + solve(s1, s2, idx1 - 1, idx2 - 1, dp);
+        }
+        
+        return dp[idx1][idx2] = max(solve(s1, s2, idx1 - 1, idx2, dp), solve(s1, s2, idx1, idx2 - 1, dp));
+    }
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int m = text1.length();
+        int n = text2.length();
+        vector<vector<int>> dp(m + 1, vector<int> (n + 1, 0));
+        
+        for(int i = 1; i < m + 1; i++){
+            for(int j = 1; j < n + 1; j++){
+                if(text1[i - 1] == text2[j - 1]){
+                    dp[i][j] =  1 + dp[i - 1][j - 1];
+                }else{
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
