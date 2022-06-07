@@ -1,0 +1,32 @@
+//A simple Recursive Solution also works here
+//If at any point the characters are matching and the next character after the current one in pattern is a '*' then we have 2 options, either include the preceding character some times and to not include it and skip the '*', to skip the '*', we move 2 indices ahead in pattern string and to include the character that is before '*' by keeping the pointer of j intact and keep the pointer on the main string moving till we don't find a match
+//For more Explanation, watch neetCode
+
+class Solution {
+    bool solve(string& s, string& p, int i, int j, int m, int n, 
+               vector<vector<int>>& dp){
+        if(i >= m && j >= n){
+            return true;
+        }
+        if(j >= n) return false;
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        bool match = i < m && (s[i] == p[j] || p[j] == '.');
+        if(j < n && p[j + 1] == '*'){
+            return dp[i][j] = (match && solve(s, p, i + 1, j, m, n, dp)) || 
+                            solve(s, p, i, j + 2, m, n, dp);
+        }
+        if(match){
+            return dp[i][j] = solve(s, p, i + 1, j + 1, m, n, dp);
+        }else{
+            return dp[i][j] = false;
+        }
+    }
+public:
+    bool isMatch(string s, string p) {
+        int m = s.length();
+        int n = p.length();
+        vector<vector<int>> dp(m + 1, vector<int> (n, -1));
+        return solve(s, p, 0, 0, m, n, dp);
+    }
+};
