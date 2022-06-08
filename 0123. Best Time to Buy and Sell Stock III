@@ -44,3 +44,37 @@ public:
         return dp[0][2][0];
     }
 };
+
+//WE can optimize it by doing this
+//just omit the stock parameter which indicates whether to buy or to sell
+//Now, to indicate whether we can buy or we can sell, we will use transation numbers
+//At even indexes, there will be a buy and vice versa
+//When buying a stock increase the transaction number by 1 which indicates that we have bought a stock and we can sell it on the next transaction and same for selling
+//If we have reached the total limit of transactions then we need to stop(return 0)
+
+class Solution {
+    int solve(vector<int>& prices, int t, int i, int n, vector<vector<int>>& dp){
+        if(i == n || t == 4){
+            return 0;
+        } 
+        if(dp[i][t] != -1) return dp[i][t];
+        
+        int profit = 0;
+        if(t % 2 == 0){
+            profit = max(-prices[i] + solve(prices, t + 1, i + 1, n, dp),
+                                      solve(prices, t, i + 1, n, dp));
+        }else{
+            profit = max(prices[i] + solve(prices, t + 1, i + 1, n, dp),
+                                     solve(prices, t, i + 1, n, dp));
+        }
+        
+        return dp[i][t] = profit;
+    }
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> dp(n, vector<int> (4, -1));
+        
+        return solve(prices, 0, 0, n, dp);
+    }
+};
