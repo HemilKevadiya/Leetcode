@@ -4,6 +4,7 @@
 //In memoization approach, we also need to pass a 3rd parameter for the change in number of transactions
 
 class Solution {
+    //Recursion + Memoization(With 3D DP)
     int solve(vector<int>& prices, int t, int i, int n, bool stock,
               vector<vector<vector<int>>>& dp){
         if(i == n || t == 0){
@@ -24,6 +25,7 @@ class Solution {
         return dp[i][t - 1][stock] = profit;
     }
 public:
+    //Tabulation(3D DP)
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         vector<vector<vector<int>>> dp(n + 1, vector<vector<int>> (3, vector<int> (2, 0)));
@@ -53,6 +55,7 @@ public:
 //If we have reached the total limit of transactions then we need to stop(return 0)
 
 class Solution {
+    //Recursion + Memoization(Using 2D DP)
     int solve(vector<int>& prices, int t, int i, int n, vector<vector<int>>& dp){
         if(i == n || t == 4){
             return 0;
@@ -71,10 +74,44 @@ class Solution {
         return dp[i][t] = profit;
     }
 public:
+    //Tabulation(2D DP)
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        vector<vector<int>> dp(n, vector<int> (4, -1));
+        vector<vector<int>> dp(n + 1, vector<int> (5, 0));
+        dp[n][4] = 0;
         
-        return solve(prices, 0, 0, n, dp);
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = 0; j < 4; j++){
+                int profit;
+                if(j & 1){
+                    profit = max(prices[i] + dp[i + 1][j + 1], dp[i + 1][j]);
+                }else{
+                    profit = max(-prices[i] + dp[i + 1][j + 1], dp[i + 1][j]);
+                }
+                dp[i][j] = profit;
+            }
+        }
+        return dp[0][0];
+    }
+};
+
+public:
+    //Tabulation(Space Optimization)
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> next(5), curr(5);        
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = 0; j < 4; j++){
+                int profit;
+                if(j & 1){
+                    profit = max(prices[i] + next[j + 1], next[j]);
+                }else{
+                    profit = max(-prices[i] + next[j + 1], next[j]);
+                }
+                curr[j] = profit;
+            }
+            next = curr;
+        }
+        return next[0];
     }
 };
