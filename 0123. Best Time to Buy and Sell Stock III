@@ -1,0 +1,46 @@
+//The same approach as buy and sell stock II, but here we have a limited amount of transactions
+//After selling a stock, we subtract 1 from the transactions
+//If the transactions become 0 at any point then we return 0
+//In memoization approach, we also need to pass a 3rd parameter for the change in number of transactions
+
+class Solution {
+    int solve(vector<int>& prices, int t, int i, int n, bool stock,
+              vector<vector<vector<int>>>& dp){
+        if(i == n || t == 0){
+            return 0;
+        }
+        
+        if(dp[i][t - 1][stock] != -1) return dp[i][t - 1][stock];
+        
+        int profit = 0;
+        if(!stock){
+            profit = max(-prices[i] + solve(prices, t, i + 1, n, true, dp),
+                                      solve(prices, t, i + 1, n, false, dp));
+        }else{
+            profit = max(prices[i] + solve(prices, t - 1, i + 1, n, false, dp),
+                                     solve(prices, t, i + 1, n, true, dp));
+        }
+        
+        return dp[i][t - 1][stock] = profit;
+    }
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<vector<int>>> dp(n + 1, vector<vector<int>> (3, vector<int> (2, 0)));
+        dp[n][0][0] = dp[n][0][1] = 0;
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = 2; j > 0; j--){
+                for(int k = 0; k < 2; k++){
+                    int profit;
+                    if(!k){
+                        profit = max(-prices[i] + dp[i + 1][j][1], dp[i + 1][j][0]);
+                    }else{
+                        profit = max(prices[i] + dp[i + 1][j - 1][0], dp[i + 1][j][1]);
+                    }
+                    dp[i][j][k] = profit;
+                }
+            }
+        }
+        return dp[0][2][0];
+    }
+};
