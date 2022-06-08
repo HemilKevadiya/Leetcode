@@ -1,0 +1,61 @@
+//For every stock, we have 2 possibilities
+//We can buy a stock, if we currently aren't holding a stock
+//For buying a stock we have 2 options, either to buy it or not buy it
+//We can sell a stock, if we currently have a stock
+//For selling a stock we have 2 options again, either to sell it or hold it
+//Consider every possibility and take the maximum of it
+
+class Solution {
+    //Recursion + Memoization
+    int solve(vector<int>& prices, bool stock, int i, vector<vector<int>>& dp, int n){
+        if(i == n){
+            return 0;
+        }
+        
+        if(dp[stock][i] != -1) return dp[stock][i];
+        int profit1 = 0, profit2 = 0;
+        if(!stock){
+            profit1 = max(-prices[i] + solve(prices, true, i + 1, dp, n),
+                          solve(prices, false, i + 1, dp, n));
+        }else{
+            profit2 = max(prices[i] + solve(prices, false, i + 1, dp, n),
+                          solve(prices, true, i + 1, dp, n));
+        }
+        return dp[stock][i] = max({profit1, profit2});
+    }
+public:
+    //Tabulation
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> dp(n + 1, vector<int> (2, 0));
+        dp[n][0] = dp[n][1] = 0;
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = 0; j < 2; j++){
+                if(!j){
+                    dp[i][j] = max(-prices[i] + dp[i + 1][1], dp[i + 1][0]);
+                }else{
+                    dp[i][j] = max(prices[i] + dp[i + 1][0], dp[i + 1][1]);
+                }
+            }
+        }
+        return dp[0][0];
+    }
+    
+    //Space Optimization Approach
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> next(2), curr(2);
+        next[0] = next[1] = 0;
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = 0; j < 2; j++){
+                if(!j){
+                    curr[j] = max(-prices[i] + next[1], next[0]);
+                }else{
+                    curr[j] = max(prices[i] + next[0], next[1]);
+                }
+            }
+            next = curr;
+        }
+        return next[0];
+    }
+};
