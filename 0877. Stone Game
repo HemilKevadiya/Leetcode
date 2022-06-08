@@ -1,0 +1,31 @@
+//For every index, we have to first check the player and then there are 2 options
+//get all the stones from the first pile or get all the stones from the last pile
+//Consider both the possibilities and return it's 'OR' as the answer
+
+class Solution {
+    bool solve(vector<int>& piles, int score1, int score2, int i, int j, bool player, int n, vector<vector<vector<int>>>& dp){
+        if(i > j){
+            if(score1 > score2){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        if(dp[i][j][player] != -1) return dp[i][j][player];
+        bool ans;
+        if(player){
+            ans = solve(piles, score1 + piles[i], score2, i + 1, j, !player, n, dp) || 
+                  solve(piles, score1 + piles[j], score2, i, j - 1, !player, n, dp);
+        }else{
+            ans = solve(piles, score1, score2 + piles[i], i + 1, j, !player, n, dp) || 
+                  solve(piles, score1, score2 + piles[j], i, j - 1, !player, n, dp);
+        }
+        return dp[i][j][player] = ans;
+    }
+public:
+    bool stoneGame(vector<int>& piles) {
+        int n = piles.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>> (n, vector<int> (2, - 1)));
+        return solve(piles, 0, 0, 0, n - 1, true, n, dp);
+    }
+};
