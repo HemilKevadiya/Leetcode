@@ -1,0 +1,39 @@
+//Traverse through the string and then from every index start executing the instructions and if at any point we have moved out of bounds then we return whatever number of instructions we have executed
+
+class Solution {
+    int solve(int idx, string& s, int n, int i, int j, int len){
+        int instructions = 0;
+        for(int k = idx; k < len; k++){
+            if(s[k] == 'L' && (j - 1) >= 0){
+                instructions++;
+                j -= 1;
+            }
+            else if(s[k] == 'R' && (j + 1) < n){
+                instructions++;
+                j += 1;
+            }
+            else if(s[k] == 'U' && (i - 1) >= 0){
+                instructions++;
+                i -= 1;
+            }
+            else if(s[k] == 'D' && (i + 1) < n){
+                instructions++;
+                i += 1;
+            }
+            else{
+                break;
+            }
+        }
+        return instructions;
+    }
+public:
+    vector<int> executeInstructions(int n, vector<int>& startPos, string s) {
+        int len = s.length();
+        vector<int> all;
+        for(int i = 0; i < len; i++){
+            int ans = solve(i, s, n, startPos[0], startPos[1], len);   
+            all.push_back(ans);
+        }
+        return all;
+    }
+};
