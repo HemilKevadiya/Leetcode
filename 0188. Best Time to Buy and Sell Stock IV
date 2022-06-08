@@ -1,0 +1,79 @@
+//The same thing as buy and sell stock III, but we have k transactions here
+
+class Solution {
+    //Recursion + Memo(using 3D DP)
+    int solve(vector<int>& prices, int k, int i, bool stock, int n,
+              vector<vector<vector<int>>>& dp){
+        if(i == n || k == 0){
+            return 0;
+        }
+        if(dp[i][k - 1][stock] != -1) return dp[i][k - 1][stock];
+        int profit = 0;
+        if(!stock){
+            profit = max(-prices[i] + solve(prices, k, i + 1, true, n, dp),
+                         solve(prices, k, i + 1, false, n, dp));
+        }else{
+            profit = max(prices[i] + solve(prices, k - 1, i + 1, false, n, dp),
+                         solve(prices, k, i + 1, true, n, dp));
+        }
+        
+        return dp[i][k - 1][stock] = profit;
+    }
+public:
+    //Tabulation(3D DP)
+    int maxProfit(int t, vector<int>& prices) {
+        int n = prices.size();
+        if(t == 0 || n == 0) return 0;
+        vector<vector<vector<int>>> dp(n + 1, vector<vector<int>> (t + 1, vector<int> (2, 0)));
+        
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = t; j > 0; j--){
+                for(int k = 0; k < 2; k++){
+                    int profit;
+                    if(!k){
+                        profit = max(-prices[i] + dp[i + 1][j][1], dp[i + 1][j][0]);
+                    }else{
+                        profit = max(prices[i] + dp[i + 1][j - 1][0], dp[i + 1][j][1]);
+                    }
+                    dp[i][j][k] = profit;
+                }
+            }
+        }
+        return dp[0][t][0];
+        // return solve(prices, k, 0, false, n, dp);
+    }
+};
+
+//A really optimized version just like buy and sell stock III
+
+class Solution {
+    int solve(vector<int>& prices, int k, int i, int n, vector<vector<int>>& dp, 
+              int total){
+        if(i == n || k == total){
+            return 0;
+        }
+        if(dp[i][k] != -1) {
+            return dp[i][k];
+        }
+        
+        int profit = 0;
+        if(k % 2 == 0){
+            profit = max(-prices[i] + solve(prices, k + 1, i + 1, n, dp, total),
+                         solve(prices, k, i + 1, n, dp, total));
+        }else{
+            profit = max(prices[i] + solve(prices, k + 1, i + 1, n, dp, total),
+                         solve(prices, k, i + 1, n, dp, total));
+        }
+        return dp[i][k] = profit;
+    }
+    
+    //Tabulation can be written like buy and sell stock III
+public:
+    int maxProfit(int t, vector<int>& prices) {
+        int n = prices.size();
+        if(t == 0 || n == 0) return 0;
+        int total = 2 * t;
+        vector<vector<int>> dp(n, vector<int> (total, -1));
+        return solve(prices, 0, 0, n, dp, total);
+    }
+};
