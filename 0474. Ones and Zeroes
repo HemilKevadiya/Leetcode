@@ -1,0 +1,40 @@
+//First, count 0's and 1's in every string
+//If the number of 1's and 0's in the current string is less than what is currently allowed, then we can either choose to include it or not include it
+
+class Solution {
+    int solve(int m, int n, vector<vector<int>>& count, int i, int len, vector<vector<vector<int>>>& dp){
+        if(i == len){
+            return 0;
+        }
+        if(dp[i][m][n] != -1) return dp[i][m][n];
+        int ans = 0;
+        if(count[i][0] <= m && count[i][1] <= n){
+            int rem1 = m - count[i][0];
+            int rem2 = n - count[i][1];
+            ans = max(1 + solve(rem1, rem2, count, i + 1, len, dp), 
+                      solve(m, n, count, i + 1, len, dp));
+        }
+        else{
+            ans = solve(m, n, count, i + 1, len, dp);
+        }
+        
+        return dp[i][m][n] = ans;
+    }
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int total = strs.size();
+        vector<vector<int>> count(total, vector<int> (2, 0));
+        for(int i = 0; i < total; i++){
+            int len = strs[i].length();
+            for(int j = 0; j < len; j++){
+                if(strs[i][j] == '0'){
+                    count[i][0]++;
+                }else{
+                    count[i][1]++;
+                }
+            }
+        }
+        vector<vector<vector<int>>> dp(total, vector<vector<int>> (m + 1, vector<int> (n + 1, -1)));
+        return solve(m, n, count, 0, total, dp);
+    }
+};
