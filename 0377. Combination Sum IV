@@ -1,0 +1,30 @@
+//Same thing as unbounded knapsack
+//But after including any element, we start searching from the start again, as there are redundant combinations also possible
+
+class Solution {
+    int solve(vector<int>& nums, int target, int i, int n, vector<vector<int>>& dp){
+        if(i < 0){
+            return 0;
+        }
+        if(target == 0){
+            return 1;
+        }
+        
+        if(dp[i][target] != -1) return dp[i][target]; 
+        int ans = 0;
+        if(nums[i] <= target){
+            ans += solve(nums, target - nums[i], n - 1, n, dp);
+            ans += solve(nums, target, i - 1, n, dp);
+        }else{
+            ans += solve(nums, target, i - 1, n, dp);
+        }
+        
+        return dp[i][target] = ans;
+    }
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int> (target + 1, -1));
+        return solve(nums, target, n - 1, n, dp);
+    }
+};
