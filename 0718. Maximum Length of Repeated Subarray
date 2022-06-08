@@ -1,0 +1,25 @@
+//The same approach as LCS but, if we have found a non - matching character then there are no possibilities, we just have to put a 0 there as the continuity is broken
+//While filling the table, keep track of the max and then return it
+
+class Solution {
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size();
+        int n = nums2.size();
+        vector<int> prev(n + 1), curr(n + 1);
+        
+        int ans = INT_MIN;
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                if(nums1[i - 1] == nums2[j - 1]){
+                    curr[j] = 1 + prev[j - 1];
+                }else{
+                    curr[j] = 0;
+                }
+                ans = max(ans, curr[j]);
+            }
+            prev = curr;
+        }
+        return ans;
+    }
+};
