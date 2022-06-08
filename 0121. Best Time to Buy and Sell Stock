@@ -12,3 +12,34 @@ public:
         return profit;
     }
 };
+
+//In this problem, the solution using DP is not that efficient
+//Tried using the same formula as buy and sell stock II
+//The previous solution is the more efficient one
+
+class Solution {
+    int solve(vector<int>& prices, int n, int i, vector<vector<int>>& dp, int t){
+        if(i == n || t == 2){
+            return 0;
+        }
+        
+        if(dp[i][t] != -1) return dp[i][t];
+        
+        int profit;
+        if(t % 2 == 0){
+            profit = max(-prices[i] + solve(prices, n, i + 1, dp, t + 1),
+                         solve(prices, n, i + 1, dp, t));
+        }else{
+            profit = max(prices[i] + solve(prices, n, i + 1, dp, t + 1),
+                         solve(prices, n, i + 1, dp, t));
+        }
+        
+        return dp[i][t] = profit;
+    }
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> dp(n, vector<int> (2, -1));
+        return solve(prices, n, 0, dp, 0);
+    }
+};
