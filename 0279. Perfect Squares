@@ -1,0 +1,32 @@
+//Unbounded Knapsack Problem and the same approach as Coin Change I
+
+class Solution {
+    int solve(int n, vector<int>& a, int i, vector<vector<int>>& dp){
+        if(i < 0){
+            return 1e7;
+        }
+        if(n == 0){
+            return 0;
+        }
+        
+        if(dp[i][n] != -1) return dp[i][n];
+        int include = 1e7, not_include = 1e7;
+        
+        include = 1 + solve(n - a[i], a, i, dp);
+        not_include = solve(n, a, i - 1, dp);
+        
+        return dp[i][n] = min(include, not_include);
+    }
+public:
+    int numSquares(int n) {
+        vector<int> allPerfectSquares;
+        int i = 1;
+        while(pow(i, 2) <= n){
+            allPerfectSquares.push_back(pow(i, 2));
+            i++;
+        }
+        int len = allPerfectSquares.size();
+        vector<vector<int>> dp(len, vector<int> (n + 1, -1));
+        return solve(n, allPerfectSquares, len - 1, dp);
+    }
+};
