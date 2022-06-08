@@ -1,0 +1,38 @@
+//The valid numbers are 0, 1 and 8
+//The numbers that are valid and also form a different number after being rotated are 2, 5, 6 and 9
+//So, for every invalid number, we take dp[i] = 0
+//For every valid but not different after being rotated number, we take dp[i] = 1
+//For every valid and different after being rotated number, we take dp[i] = 2
+//If the number is less than 0 then directly check for valid, invalid numbers
+//If it is greater than 0 then we take the first digit's value and the last digit's value and check if they both are valid
+
+class Solution {
+public:
+    int rotatedDigits(int n) {
+        int count = 0;
+        vector<int> dp(n + 1);
+        for(int i = 0; i <= n; i++){
+            if(i < 10){
+                if(i == 0 || i == 1 || i == 8){
+                    dp[i] = 1;
+                }
+                else if(i == 2 || i == 5 || i == 6 || i == 9){
+                    dp[i] = 2;
+                    count++;
+                }
+            }
+            else{
+                int first = dp[i / 10];
+                int last = dp[i % 10];
+                if(first == 1 && last == 1){
+                    dp[i] = 1;
+                }
+                else if(first >= 1 && last >= 1){
+                    dp[i] = 2;
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};
