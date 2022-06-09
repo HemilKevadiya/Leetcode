@@ -1,0 +1,36 @@
+class Solution {
+    //Recursion + Memo (gives TLE)
+    //If we can choose an element then we have 2 options, either we choose it or we don't choose it, we can choose an element if we haven't previously chosen any element or if the current element we are at is less than the previously taken element
+    int solve(vector<int>& nums, int i, int prev, int n, vector<vector<int>>& dp){
+        if(i >= n){
+            return 0;
+        }
+        
+        if(dp[i][prev + 1] != -1) return dp[i][prev + 1];
+        
+        int pick = 0, not_pick = 0;
+        not_pick = solve(nums, i + 1, prev, n, dp);
+        if(prev == -1 || nums[i] > nums[prev]){
+            pick = 1 + solve(nums, i + 1, i, n, dp);
+        }
+        
+        return dp[i][prev + 1] = max(pick, not_pick);
+    }
+public:
+    //Tabulation + space optimization (works fine)
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> curr(n + 1), next(n + 1);
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = i - 1; j >= -1; j--){
+                int len = next[j + 1];
+                if(j == -1 || nums[i] > nums[j]){
+                    len = max(len, 1 + next[i + 1]);
+                }
+                curr[j + 1] = len;
+            }
+            next = curr;
+        }
+        return next[0];
+    }
+};
