@@ -1,0 +1,19 @@
+//As we need it to be continuous, we keep comparing every element with it's previous one, if any element breaks the seqeunce then we reset the currLen and assign it to maxLen first
+
+class Solution {
+public:
+    int findLengthOfLCIS(vector<int>& nums) {
+        int n = nums.size();
+        int currLen = 1, maxLen = INT_MIN;
+        for(int i = 1; i < n; i++){
+            if(nums[i] > nums[i - 1]){
+                currLen++;
+            }
+            else{
+                maxLen = max(currLen, maxLen);
+                currLen = 1;
+            }
+        }
+        return max(currLen, maxLen);
+    }
+};
