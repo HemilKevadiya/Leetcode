@@ -1,12 +1,46 @@
 class Solution {
-    public int[] twoSum(int[] numbers, int target) {
-        for(int i=0;i<numbers.length - 1;i++){
-            for(int j=i+1;j<numbers.length;j++){
-                if(numbers[j]==target-numbers[i]){
-                    return new int[] {i+1,j+1};
-                }
+public:
+    //Binary Search Approach
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int n = numbers.size();
+        int i, idx;
+        for(i = 0; i < n - 1; i++){
+            int search = target - numbers[i];
+            idx = lower_bound(numbers.begin() + (i + 1), numbers.end(), search) - numbers.begin();
+            if(idx != n && numbers[idx] == search){
+                break;
             }
         }
-        return null;
+        return {i + 1, idx + 1};
     }
-}
+};
+
+class Solution {
+public:
+    //Two Pointers Approach
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int n = numbers.size();
+        int i = 0, j = n - 1;
+        while(i < j){
+            if(i > 0 && numbers[i] == numbers[i - 1]){
+                ++i;
+                continue;
+            }
+            if(j < n - 1 && numbers[j] == numbers[j + 1]){
+                --j;
+                continue;
+            }
+            int currSum = numbers[i] + numbers[j];
+            if(currSum == target){
+                break;
+            }
+            else if(currSum > target){
+                --j;
+            }
+            else{
+                ++i;
+            }
+        }
+        return {i + 1, j + 1};
+    }
+};
