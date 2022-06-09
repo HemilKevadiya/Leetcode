@@ -1,0 +1,30 @@
+//There will only be 2 characters in any valid partition(0 to 26), so we first check the validity of a substring by taking a substr of length 1 and then of length 2 and if it is valid then call the same function from the next index
+
+class Solution {
+public:
+    bool isValid(string s){
+        if(s[0] == '0' || stoi(s) > 26) return false;
+        else return true;
+    }
+    long long solve(string s, int idx, int n, vector<long long>& dp){
+        if(idx == n){
+            return 1;
+        }
+        
+        if(dp[idx] != -1) return dp[idx];
+        
+        long long one = 0, two = 0;
+        if(isValid(s.substr(idx, 1))){
+            one = solve(s, idx + 1, n, dp);
+        }
+        if(idx + 1 < n && isValid(s.substr(idx, 2))){
+            two = solve(s, idx + 2, n, dp);
+        }
+        return dp[idx] = one + two;
+    }
+    int numDecodings(string s) {
+        int n = s.length();
+        vector<long long> dp(n, -1);
+        return solve(s, 0, n, dp);
+    }
+};
