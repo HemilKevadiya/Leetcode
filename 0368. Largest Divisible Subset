@@ -1,0 +1,34 @@
+class Solution {
+    //The approach of printing the longest increasing subsequnce
+    //As we need subset, we can sort it then apply LIS on it and as the array is sorted , if an element is divisible by its previous element then, it is also divisible by every element taken in the subset
+    //For more explanation, striver
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        vector<int> ans;
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        vector<int> dp(n, 1), hash(n);
+        int last = 0;
+        int currMax = 1;
+        for(int i = 0; i < n; i++){
+            hash[i] = i;
+            for(int j = 0; j < i; j++){
+                if(nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1){
+                    dp[i] = dp[j] + 1;
+                    hash[i] = j;
+                }
+            }
+            if(dp[i] > currMax){
+                currMax = dp[i];
+                last = i;
+            }
+        }
+        ans.push_back(nums[last]);
+        while(hash[last] != last){
+            last = hash[last];
+            ans.push_back(nums[last]);
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
