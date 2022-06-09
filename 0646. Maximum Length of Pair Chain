@@ -1,0 +1,37 @@
+//Almost the same thing as Longest Increasing Subsequence
+//Here, the previous is a pair and whichever pair we choose becomes the previous for the next element
+
+class Solution {
+    //Recursive + Memo(also works)
+    int solve(vector<vector<int>>& pairs, int i, int prev, int n, 
+              vector<vector<int>>& dp){
+        if(i == n){
+            return 0;
+        }
+        if(dp[i][prev + 1] != -1) return dp[i][prev + 1];
+        int ans = 0;
+        if(prev == -1 || pairs[prev][1] < pairs[i][0]){
+            ans = 1 + solve(pairs, i + 1, i, n, dp);
+        }
+        ans = max(ans, solve(pairs, i + 1, prev, n, dp));
+        return dp[i][prev + 1] = ans;
+    }
+public:
+    //Really well optimized DP solution(with space optimization)
+    int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(), pairs.end());
+        int n = pairs.size();
+        vector<int> curr(n + 1), next(n + 1);
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = i - 1; j >= -1; j--){
+                int maxLen = next[j + 1];
+                if(j == -1 || pairs[j][1] < pairs[i][0]){
+                    maxLen = max(maxLen, 1 + next[i + 1]);
+                }
+                curr[j + 1] = maxLen; 
+            }
+            next = curr;
+        }
+        return next[0];
+    }
+};
