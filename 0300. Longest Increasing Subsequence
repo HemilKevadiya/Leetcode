@@ -34,3 +34,25 @@ public:
         return next[0];
     }
 };
+
+class Solution {
+public:
+    //Binary Search Approach
+    //This approach basically keeps track of the size of the lis
+    //For more understanding, watch striver
+    
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> lis;
+        lis.push_back(nums[0]);
+        for(int i = 1; i < n; i++){
+            int idx = lower_bound(lis.begin(), lis.end(), nums[i]) - lis.begin();
+            if(idx == lis.size()){
+                lis.push_back(nums[i]);
+            }else{
+                lis[idx] = nums[i];
+            }
+        }
+        return lis.size();
+    }
+};
