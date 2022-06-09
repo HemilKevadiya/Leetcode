@@ -1,0 +1,38 @@
+bool comp(const string& a, const string& b){
+    return a.size() < b.size();
+}
+//similar to longest increasing subsequence(O(n) space approach(Striver)) but the condition is different this time
+//If the word1 can be converted to word2 by inserting only one character then it is valid to include it in our answer
+class Solution {
+    bool valid(string& s1, string& s2){
+        int m = s1.size(), n = s2.size();
+        if((m - n) != 1) return false;
+        int i = 0, j = 0;
+        while(i < m){
+            if(j < n && s1[i] == s2[j]){
+                i++; j++;
+            }
+            else{
+                i++;
+            }
+        }
+        if(j == n && i == m) return true;
+        else return false;
+    }
+public:
+    int longestStrChain(vector<string>& words) {
+        sort(words.begin(), words.end(), comp);
+        int n = words.size();
+        vector<int> dp(n, 1);
+        int maxi = 1;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(valid(words[i], words[j])){
+                    dp[i] = max(dp[i], 1 + dp[j]);
+                }
+            }
+            maxi = max(maxi, dp[i]);
+        }
+        return maxi;
+    }
+};
