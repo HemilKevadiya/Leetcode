@@ -1,0 +1,42 @@
+//First, map every key to the keys where we can go from there
+//Then traverse over the current key's vector and keep adding every possibility
+
+class Solution {
+    long long solve(int n, unordered_map<int, vector<int>>& keyMap, int currKey, vector<vector<int>>& dp){
+        if(n == 0){
+            return 1;
+        }
+        if(dp[n][currKey] != -1) return dp[n][currKey];
+        
+        if(currKey == 5){
+            return dp[n][currKey] = 0;
+        }
+        
+        vector<int> temp = keyMap[currKey];
+        long long ans = 0;
+        for(int i = 0; i < temp.size(); i++){
+            ans += solve(n - 1, keyMap, temp[i], dp);
+        }
+        return dp[n][currKey] = ans % (int)(1e9 + 7);
+    }
+public:
+    int knightDialer(int n) {
+        unordered_map<int, vector<int>> keyMap;
+        keyMap[0] = {4, 6};
+        keyMap[1] = {8, 6}; 
+        keyMap[2] = {7, 9};
+        keyMap[3] = {4, 8};
+        keyMap[4] = {0, 3, 9},
+        keyMap[6] = {0, 1, 7},
+        keyMap[7] = {6, 2},
+        keyMap[8] = {1, 3},
+        keyMap[9] = {2, 4};
+        
+        vector<vector<int>> dp(n, vector<int> (10, -1));
+        long long ans = 0;
+        for(int i = 0; i <= 9; i++){
+            ans += solve(n - 1, keyMap, i, dp);
+        }
+        return ans % (int)(1e9 + 7);
+    }
+};
