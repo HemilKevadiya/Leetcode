@@ -1,0 +1,30 @@
+//Here, the minReq relation is alternated
+//If it goes less than 0 then it means there is a positive cell and the min health required to reach that cell is 1 that is why we return 1 and if minReq is positive it means there was a negative cell and the hp required to reach there will be equal to the minReq
+//Basically, our dp stores the minimum hp required to reach any cell
+
+class Solution {
+    int solve(vector<vector<int>>& dungeon, int i, int j, int m, int n, vector<vector<int>>& dp){
+        if(i == m || j == n){
+            return 1e7;
+        }
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        if(i == m - 1 && j == n - 1){
+            return dp[i][j] = (dungeon[i][j] <= 0) ? 1 - dungeon[i][j] : 1;
+        }
+                
+        int down = solve(dungeon, i + 1, j, m, n, dp);
+        int right = solve(dungeon, i, j + 1, m, n, dp);
+       
+        int minReq = min(down, right) - dungeon[i][j];
+        return dp[i][j] = (minReq <= 0) ? 1 : minReq;
+    }
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int m = dungeon.size();
+        int n = dungeon[0].size();
+        vector<vector<int>> dp(m, vector<int> (n, -1));
+        return solve(dungeon, 0, 0, m, n, dp);
+    }
+};
