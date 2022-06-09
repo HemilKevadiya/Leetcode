@@ -1,0 +1,24 @@
+class Solution {
+    //Basically, every number of given A's is divisible by a prime number
+    //Any prime number can be made using the exact number of moves
+    //Ex. 7 can be made in 7 moves
+    //So, we determine if the given number is divisible by any prime number or not
+    //For more explanation, pepcoding
+public:
+    int minSteps(int n) {
+        int ans = 0;
+        int i = 2;
+        while(i <= n / 2){
+            if(n % i == 0){
+                ans += i;
+                n /= i;
+            }else{
+                i++;
+            }
+        }
+        if(n != 1){
+            ans += n;
+        }
+        return ans;
+    }
+};
