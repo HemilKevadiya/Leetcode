@@ -1,0 +1,48 @@
+class Solution {
+    //According to the traversal, there is a lower diagonal and upper diagonal
+    //For keeping track of diagonal we maintain a variable diag
+    //where diag being true means, we have to traverse a lower diagonal and it means false means we have to traverse an upper diagonal
+    //Now, we initially set it to false because the first element itself is a upper diagonal
+    //After the upper diagonal traversal is over, we need to move our pointer one column ahead, if that is not possible then we have no other option but to move it to the next row(when this is also not possible we have already reached the last element)
+    //And for the lower diagonal the preferences are altered 
+    
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        vector<int> ans;
+        int m = mat.size();
+        int n = mat[0].size();
+        int i = 0, j = 0;
+        bool diag = false; //true = lower, false = upper
+        while(ans.size() != (m * n)){
+            if(diag){
+                while(i + 1 < m && j - 1 >= 0){
+                    ans.push_back(mat[i][j]);
+                    i += 1;
+                    j -= 1;
+                }
+                ans.push_back(mat[i][j]);
+                if(i + 1 < m){
+                    i += 1;
+                }else{
+                    j += 1;
+                }
+                diag = !diag;
+            }
+            else{
+                while(i - 1 >= 0 && j + 1 < n){
+                    ans.push_back(mat[i][j]);
+                    i -= 1;
+                    j += 1;
+                }
+                ans.push_back(mat[i][j]);
+                if(j + 1 < n){
+                    j += 1;
+                }else{
+                    i += 1;
+                }
+                diag = !diag;
+            }
+        }
+        return ans;
+    }
+};
