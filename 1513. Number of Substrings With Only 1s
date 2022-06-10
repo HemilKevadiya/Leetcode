@@ -1,0 +1,19 @@
+class Solution {
+    //Same approach as count number of homogeneous substrings
+    //But in this one, we check the current index for a '1' then if it is '1' we increase the current frequency of 1's else we reset it to 0 but first adding the current '1' substrings into the answer
+public:
+    int numSub(string s) {
+        long long currFreq = 0, ans = 0;
+        int n = s.length();
+        for(int i = 0; i < n; i++){
+            if(s[i] == '1'){
+                currFreq++;
+            }else{
+                ans += (currFreq * (currFreq + 1)) / 2;
+                currFreq = 0;
+            }
+        }
+        ans += (currFreq * (currFreq + 1)) / 2;
+        return ans % (int)(1e9 + 7);
+    }
+};
