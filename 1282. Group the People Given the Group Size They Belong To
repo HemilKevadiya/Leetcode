@@ -1,0 +1,22 @@
+//Map every group size with a vector containing the current members in that group size
+//If the group is full(meaning there are enough members that can form a group of that size then we clear that vector and add it to our answer)
+
+class Solution {
+public:
+    vector<vector<int>> groupThePeople(vector<int>& g) {
+        unordered_map<int, vector<int>> groupMap;
+        vector<vector<int>> ans;
+        int n = g.size();
+        for(int i = 0; i < n; i++){
+            int currSize = g[i];
+            vector<int> temp = groupMap[currSize];
+            temp.push_back(i);
+            if(temp.size() == currSize){
+                ans.push_back(temp);
+                temp.clear();
+            }
+            groupMap[currSize] = temp;
+        }
+        return ans;
+    }
+};
