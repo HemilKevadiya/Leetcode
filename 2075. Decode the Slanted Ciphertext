@@ -1,0 +1,36 @@
+class Solution {
+    //First, make a matrix from the given string 
+    //Now, traverse diagonal to diagonal inserting the characters coming along in the answer string
+public:
+    string decodeCiphertext(string s, int rows) {
+        if(s == "") return "";
+        if(rows == 1) return s;
+        int len = s.length();
+        int cols = len / rows;
+        vector<vector<char>> grid(rows, vector<char> (cols));
+        int k = 0;
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                grid[i][j] = s[k++];
+            }
+        }
+        string ans;
+        int i = 0, j = 0;
+        while(j < cols){
+            int k = j;
+            while(k < cols && i < rows){
+                ans += grid[i][k];
+                k += 1;
+                i += 1;
+            }
+            i = 0;
+            j += 1;
+        }
+        int last = ans.size() - 1;
+        while(ans[last] == ' '){
+            ans.pop_back();
+            last--;
+        }
+        return ans;
+    }
+};
