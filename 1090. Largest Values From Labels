@@ -1,0 +1,26 @@
+//Sort the values vector while keeping a pair of the current value and it's label
+//Then greedily choose the values starting from the greatest one and ending when the total wanted items reach 0
+
+class Solution {
+public:
+    int largestValsFromLabels(vector<int>& values, vector<int>& labels, int numWanted, int useLimit) {
+        vector<pair<int,int>> a;
+        int n = values.size(), value = 0;
+        for(int i = 0; i < n; i++){
+            a.push_back({values[i], labels[i]});
+        }
+        sort(a.begin(), a.end(), greater<pair<int,int>>());
+        unordered_map<int, int> label;
+        for(int i = 0; i < n; i++){
+            if(numWanted == 0){
+                break;
+            }
+            if(label[a[i].second] < useLimit){
+                label[a[i].second]++;
+                value += a[i].first;
+                numWanted--;
+            }
+        }
+        return value;
+    }
+};
