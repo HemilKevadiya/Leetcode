@@ -1,0 +1,24 @@
+//Same approach as longest substring without repeating characters but we need to use the hashSet approach as we need to find the sum
+
+class Solution {
+public:
+    int maximumUniqueSubarray(vector<int>& nums) {
+        unordered_set<int> eleSet;
+        int n = nums.size();
+        int left = 0, right = 0, maxSum = INT_MIN, currSum = 0;
+        while(left < n && right < n){
+            int currNum = nums[right];
+            if(eleSet.find(currNum) != eleSet.end()){
+                maxSum = max(currSum, maxSum);
+                currSum -= nums[left];
+                eleSet.erase(eleSet.find(nums[left]));
+                left++;
+            }else{
+                eleSet.insert(currNum);
+                currSum += currNum;
+                right++;
+            }
+        }
+        return max(currSum, maxSum);
+    }
+};
