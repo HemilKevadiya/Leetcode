@@ -1,0 +1,51 @@
+//There will only be collisions when an asteroid is positive and the next one is negative
+//There won't be a collision if the first one is negative and the next one is positive
+//We use a stack to maintain the current asteroid
+//while the current asteroid is negative and the asteroid on top of the stack is positive, we need to handle the collisions
+//If the size of the negative one is greater than the size of the top of the stack asteroid then we need to pop it out of the stack(keep doing this till we get a negative on top of the stack or the stack becomes empty or the current asteroid is broken due to same sizes or the current asteroid's size is lesser than that on the top of the stack)
+//If the sizes are equal it means both the ateroids are destroyed and it won't further contribute in any other asteroid's destruction, so we break the loop
+//Then, we push the current asteroid on the stack if it wasn't broken
+
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& a) {
+        int n = a.size();
+        stack<int> s;
+        bool flag;
+        for(int i = 0; i < n; i++){
+            if(s.empty()){
+                s.push(a[i]);
+                continue;
+            }
+            if(!s.empty() && ((s.top() > 0 && a[i] > 0) || (s.top() < 0 && a[i] < 0) || (s.top() < 0 && a[i] > 0))){
+                s.push(a[i]);
+                continue;
+            }
+            while(!s.empty() && s.top() > 0 && a[i] < 0){
+                if(abs(a[i]) > s.top()){
+                    flag = true;
+                    s.pop();
+                }
+                else if(abs(a[i]) == s.top()){
+                    flag = false;
+                    s.pop();
+                    break;
+                }
+                else{
+                    flag = false;
+                    break;
+                }
+            }
+            if(a[i] < 0 && flag){
+                s.push(a[i]);
+            }
+        }
+        vector<int> ans;
+        while(!s.empty()){
+            ans.push_back(s.top());
+            s.pop();
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
