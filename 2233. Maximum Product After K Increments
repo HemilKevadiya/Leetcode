@@ -1,0 +1,26 @@
+//Greedily keep taking the minimum element and increment it
+//To keep track of the current minimum we use a minHeap
+
+class Solution {
+public:
+    int maximumProduct(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq;
+        int n = nums.size(), mod = 1e9 + 7;
+        for(int i = 0; i < n; i++){
+            pq.push(nums[i]);
+        }
+        while(k--){
+            int curr = pq.top();
+            pq.pop();
+            curr += 1;
+            pq.push(curr);
+        }
+        long long ans = 1;
+        while(!pq.empty()){
+            ans *= pq.top();
+            ans %= mod;
+            pq.pop();
+        }
+        return ans;
+    }
+};
