@@ -1,0 +1,42 @@
+class Solution {
+    //If we sort all the strings then the lexico.. smaller element will be on the first indices, count the frequency of that and store it in a vector for both queries and words
+    //Then, sort the word frequency storing vector and traverse over queries vector finding out the upper bound of current element in word frequency vector, wherever the upper bound points, we can count the number of strings with frequency strictly greater than our current word using that index
+public:
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        vector<int> queryFreq, wordFreq;
+        int n = queries.size(), m = words.size();
+        for(int i = 0; i < n; i++){
+            string str = queries[i];
+            sort(str.begin(), str.end());
+            int len = str.length(), freq = 1;
+            for(int i = 1; i < len; i++){
+                if(str[i] != str[i - 1]){
+                    break;
+                }else{
+                    freq++;
+                }
+            }
+            queryFreq.push_back(freq);
+        }
+        for(int i = 0; i < m; i++){
+            string str = words[i];
+            sort(str.begin(), str.end());
+            int len = str.length(), freq = 1;
+            for(int i = 1; i < len; i++){
+                if(str[i] != str[i - 1]){
+                    break;
+                }else{
+                    freq++;
+                }
+            }
+            wordFreq.push_back(freq);
+        }
+        vector<int> ans(n);
+        sort(wordFreq.begin(), wordFreq.end());
+        for(int i = 0; i < n; i++){
+            int idx = upper_bound(wordFreq.begin(), wordFreq.end(), queryFreq[i]) - wordFreq.begin();
+            ans[i] += (m - idx);
+        }
+        return ans;
+    }
+};
