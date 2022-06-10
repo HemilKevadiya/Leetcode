@@ -1,0 +1,24 @@
+//Sliding window approach
+//Same as longest substring without repeating characters but we need to store the length of the shortest subaray with only one repeating number
+//The approach can be modified accordingly
+
+class Solution {
+public:
+    int minimumCardPickup(vector<int>& cards) {
+        int minPick = INT_MAX, n = cards.size();
+        int i = 0, j = 0;
+        unordered_map<int, int> cardMap;
+        while(j < n){
+            int currCard = cards[j];
+            if(cardMap.find(currCard) != cardMap.end() && cardMap[currCard] + 1 > i){
+                int len = j - cardMap[currCard] + 1;
+                minPick = min(minPick, len);
+                i = cardMap[currCard] + 1;
+            }
+            cardMap[currCard] = j;
+            j++;
+        }
+        if(minPick == INT_MAX) return -1;
+        return minPick;
+    }
+};
