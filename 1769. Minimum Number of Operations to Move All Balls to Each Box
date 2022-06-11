@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> minOperations(string boxes) {
+        unordered_set<int> onePos;
+        int n = boxes.length();
+        vector<int> ans(n);
+        for(int i = 0; i < n; i++){
+            if(boxes[i] == '1'){
+                onePos.insert(i);
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(auto j:onePos){
+                int curr = j;
+                ans[i] += abs(i - curr);
+            }
+        }
+        return ans;
+    }
+};
