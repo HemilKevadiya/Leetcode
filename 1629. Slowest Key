@@ -1,0 +1,20 @@
+class Solution {
+public:
+    char slowestKey(vector<int>& r, string keysPressed) {
+        char ans = keysPressed[0];
+        int maxPress = r[0];
+        int n = r.size();
+        for(int i = 1; i < n; i++){
+            int diff = r[i] - r[i - 1];
+            char key = keysPressed[i];
+            if(diff > maxPress){
+                maxPress = diff;
+                ans = key;
+            }
+            else if(diff == maxPress && key > ans){
+                ans = key;
+            }
+        }
+        return ans;
+    }
+};
