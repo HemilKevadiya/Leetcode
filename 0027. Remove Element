@@ -4,12 +4,13 @@ public:
         int n = nums.size();
         int i = 0, j = n - 1, count = 0;
         while(i <= j){
-            while(i <= j && nums[i] == val){
+            if(nums[i] == val){
                 swap(nums[i], nums[j]);
                 count++;
                 --j;
+            }else{
+                ++i;
             }
-            ++i;
         }
         return n - count;
     }
