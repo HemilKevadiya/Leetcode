@@ -1,0 +1,19 @@
+class Solution {
+    //We need to find the least number that we can get for any particular spell value that the product with any number greater than our desired number will always be greater than our target value
+    //Ex. target - 16 and spell value - 3 then we at least need a potion with at least a value of 6 to make the product greater than or equal to target
+    //Find the value in the potions vector using lower bound(sort the vector first), the elements ahead of our lower bound will always be greater than or equal to the value we are looing for, so that also contributes to our answer
+public:
+    vector<int> successfulPairs(vector<int>& spells, vector<int>& potions, long long success) {
+        int n = spells.size();
+        int m = potions.size();
+        vector<int> ans(n);
+        sort(potions.begin(), potions.end());
+        for(int i = 0; i < n; i++){
+            long long curr = spells[i];
+            long long temp = (success % curr == 0) ? success/curr : (success/curr) + 1;
+            int idx = lower_bound(potions.begin(), potions.end(), temp) - potions.begin();
+            ans[i] = (m - idx);
+        }
+        return ans;
+    }
+};
