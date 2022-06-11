@@ -1,0 +1,42 @@
+//A really maths based problem
+//First sort the array(as we need the sum to be minimum, we add minimum unique elements)
+//Then for a range nums[i] to nums[i + 1], get the elements that you can add in between these ranges
+//Then some maths will be applied to get how much sum the elements to be added will have 
+//If the elements to be added are greater than k then only k elements will be added
+//And those k elements will be in the range (first, first + k] and then get their sum using the same formula
+
+class Solution {
+    long getSum(long long n){
+        return (n * (n + 1)) / 2;
+    }
+public:
+    long long minimalKSum(vector<int>& nums, int k) {
+        long long sum = 0, currNum = 1;
+        sort(nums.begin(), nums.end());
+        nums.insert(nums.begin(), 0);
+        int n = nums.size();
+        for(int i = 1; i < n; i++){
+            if(k == 0) break;
+            long long curr = nums[i], prev = nums[i - 1];
+            if(curr - prev > 1){
+                long long toAdd = curr - prev - 1;
+                if(k < toAdd){
+                    long long temp = prev + k;
+                    //As we have to include the last number in that range, don;t subtract it
+                    sum += getSum(temp) - getSum(prev);
+                    k = 0;
+                }else{
+                    //As the last element in the range(curr) is already in the array it shouldn't be included in the sum, so subtract it
+                    sum += getSum(curr) - getSum(prev) - curr;
+                    k -= toAdd;
+                }
+            }
+        }
+        if(k != 0){
+            long long last = nums[n - 1];
+            long long temp = last + k;
+            sum += getSum(temp) - getSum(last);
+        }
+        return sum;
+    }
+};
