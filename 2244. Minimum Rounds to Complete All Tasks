@@ -1,0 +1,22 @@
+//Sort the input and keep counting the number of same tasks, if at any point, some other number comes then we add the current task's frequency to rounds using some simple math and then reset the count by 1(as there is already an element with that task number)
+
+class Solution {
+public:
+    int minimumRounds(vector<int>& tasks) {
+        int n = tasks.size(), rounds = 0;
+        sort(tasks.begin(), tasks.end());
+        int currFreq = 1;
+        for(int i = 1; i < n; i++){
+            if(tasks[i] != tasks[i - 1]){
+                if(currFreq == 1) return -1;
+                rounds += (currFreq % 3 == 0) ? (currFreq / 3) : (currFreq / 3) + 1;
+                currFreq = 1;
+            }else{
+                currFreq += 1;
+            }
+        }
+        if(currFreq == 1) return -1;
+        else rounds += (currFreq % 3 == 0) ? (currFreq / 3) : (currFreq / 3) + 1;
+        return rounds;
+    }
+};
