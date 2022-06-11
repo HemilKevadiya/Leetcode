@@ -1,0 +1,19 @@
+//First, sort the elements
+//As there is no limit to the number of operations, turn the first element into 1(given condition)
+//Then, keep checking the absolute diff between 2 adjacent elements, if it is greater than 1 then convert the current number into previous number plus 1(as wee need the maximum possible number)
+
+class Solution {
+public:
+    int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        int n = arr.size(), ans = 1;
+        arr[0] = 1;
+        for(int i = 1; i < n; i++){
+            if(abs(arr[i] - arr[i - 1]) > 1){
+                arr[i] = arr[i - 1] + 1;
+            }
+            ans = max(ans, arr[i]);
+        }
+        return ans;
+    }
+};
