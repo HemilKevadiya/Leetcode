@@ -1,0 +1,45 @@
+struct compare{
+    //Struct to perform binary search on vector of pairs
+    bool operator()(const pair<int, string>& a, const int& b){
+        return a.first < b;
+    }
+    bool operator()(const int& a, const pair<int, string>& b){
+        return a < b.first;
+    }
+};
+
+class TimeMap {
+    unordered_map<string, vector<pair<int, string>>> map;
+public:
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        if(map.find(key) == map.end()){
+            vector<pair<int, string>> temp;
+            temp.push_back({timestamp, value});
+            map[key] = temp;
+        }else{
+            map[key].push_back({timestamp, value});
+        }
+    }
+    
+    string get(string key, int timestamp) {
+        if(map.find(key) == map.end()){
+            return "";
+        }
+        int idx = lower_bound(map[key].begin(), map[key].end(), timestamp, compare()) - map[key].begin();
+        if(idx == map[key].size()) return map[key][idx - 1].second;
+        if(map[key][idx].first == timestamp) return map[key][idx].second;
+        if(idx > 0 && map[key][idx - 1].first <= timestamp) return map[key][idx - 1].second;
+        return "";
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
