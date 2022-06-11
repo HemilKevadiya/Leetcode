@@ -1,0 +1,25 @@
+//We basically have to find the longest subarray whose sum is equal to total sum - x
+//The remaining elements will need to be removed because their sum will be x and the middle subarray won't have to be removed
+//So, we just find the longest subarray with the maximum length to minimize the removals of elements from left and right
+//So, we just start traversing from the left and sum the elements and store the prefix sum till that index in a map
+//If at any point, we have found a prefix sum that is greater than the target and some prefix sum from the past operations can be removed to shrink the size of the subarray we have to consider it's index while keeping the maximum length factor in mind
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
+        int n = nums.size();
+        int newTarget = accumulate(nums.begin(), nums.end(), 0) - x;
+        if(newTarget == 0) return n;
+        int sum = 0, ans = INT_MIN;
+        unordered_map<int,int> prefixSum;
+        prefixSum[0] = -1;
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+            if(prefixSum.find(sum - newTarget) != prefixSum.end()){
+                ans = max(ans, i - prefixSum[sum - newTarget]);
+            }
+            prefixSum[sum] = i;
+        }
+        return ans == INT_MIN ? -1 : n - ans;
+    }
+};
