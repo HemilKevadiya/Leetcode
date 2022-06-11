@@ -1,0 +1,24 @@
+//Keep adding every even number starting from 2 till n becomes 0 or, we find a value that can get repeated in further operations
+
+class Solution {
+public:
+    vector<long long> maximumEvenSplit(long long n) {
+        if(n & 1) return {};
+        vector<long long> ans;
+        int i = 2;
+        unordered_set<long long> set;
+        while(n != 0){
+            set.insert(i);
+            long long temp = n - i;
+            if(set.find(temp) != set.end()){
+                ans.push_back(n);
+                n = 0;
+                continue;
+            }
+            n -= i;
+            ans.push_back(i);
+            i += 2;
+        }
+        return ans;
+    }
+};
