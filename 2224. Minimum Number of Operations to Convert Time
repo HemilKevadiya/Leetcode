@@ -1,0 +1,27 @@
+class Solution {
+    int convert(string s){
+        int total = stoi(s.substr(0, 2));
+        total *= 60;
+        total += stoi(s.substr(3,2));
+        return total;
+    }
+public:
+    int convertTime(string current, string correct) {
+        int time1 = convert(current);
+        int time2 = convert(correct);
+        int op = 0;
+        while(time1 != time2){
+            if(time1 + 60 <= time2){
+                time1 += 60;
+            }else if(time1 + 15 <= time2){
+                time1 += 15;
+            }else if(time1 + 5 <= time2){
+                time1 += 5;
+            }else{
+                time1 += 1;
+            }
+            op++;
+        }
+        return op;
+    }
+};
