@@ -1,19 +1,23 @@
+//First go from left to right whilee moving all the balls on the left of the current box to the current box
+//The operations needed to move all the balls on the left of the current box will be determined by operations variable
+//Then do the same thing from right to left
+
 class Solution {
 public:
     vector<int> minOperations(string boxes) {
-        unordered_set<int> onePos;
         int n = boxes.length();
         vector<int> ans(n);
+        int operations = 0, count = 0;
         for(int i = 0; i < n; i++){
-            if(boxes[i] == '1'){
-                onePos.insert(i);
-            }
+            ans[i] += operations;
+            count += boxes[i] == '1' ? 1 : 0;
+            operations += count;
         }
-        for(int i = 0; i < n; i++){
-            for(auto j:onePos){
-                int curr = j;
-                ans[i] += abs(i - curr);
-            }
+        count = operations = 0;
+        for(int i = n - 1; i >= 0; i--){
+            ans[i] += operations;
+            count += boxes[i] == '1' ? 1 : 0;
+            operations += count;
         }
         return ans;
     }
