@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<vector<int>> minimumAbsDifference(vector<int>& nums) {
+        vector<vector<int>> ans;
+        int n = nums.size(), minDiff = INT_MAX;
+        sort(nums.begin(), nums.end());
+        for(int i = 1; i < n; i++){
+            int currDiff = abs(nums[i] - nums[i - 1]);
+            if(currDiff == minDiff){
+                ans.push_back({nums[i - 1], nums[i]});
+            }
+            else if(currDiff < minDiff){
+                minDiff = currDiff;
+                ans.clear();
+                ans.push_back({nums[i - 1], nums[i]});
+            }
+            sort(ans[ans.size() - 1].begin(), ans[ans.size() - 1].end());
+        }
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
