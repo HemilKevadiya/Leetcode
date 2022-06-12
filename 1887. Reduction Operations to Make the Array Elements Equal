@@ -1,0 +1,22 @@
+//We can observe that all the elements are basically converted into the minimum element of the array
+//So, for every element to be converted into the minimum element, we need to find the number of operations required
+//To find that, first sort the array and traverse through it finding out the minimum to maximum(note that they have tp be strictly increasing which means that for every common element the number of operations will be the same)
+//Ex. 1,1,2,2,3 -> For 2 to be converted into 1(the operations required are 1)
+//Dry run a test case and you will get the idea
+
+class Solution {
+public:
+    int reductionOperations(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size(), currPri = 0, count = 0;
+        vector<int> priority(n, 0);
+        for(int i = 1; i < n; i++){
+            if(nums[i] != nums[i - 1]){
+                currPri++;
+            }
+            priority[i] = currPri;
+            count += priority[i];
+        }
+        return count;
+    }
+};
