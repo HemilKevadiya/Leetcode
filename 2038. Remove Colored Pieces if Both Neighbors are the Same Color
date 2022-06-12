@@ -1,0 +1,46 @@
+//If there are adjacent characters then and then any player can make a move
+//So, count the number of adjacent A's and B's(if it is greater than 0 then there is a possibility of any move by the players)
+//If alice's moves are not strictly greater than bob's moves then we just return false
+
+class Solution {
+public:
+    bool winnerOfGame(string colors) {
+        int n = colors.length();
+        int a = 0, b = 0, moves1 = 0, moves2 = 0;
+        if(colors[0] == 'A') a++;
+        else b++;
+        for(int i = 1; i < n; i++){
+            if(colors[i] == 'A' && colors[i - 1] == 'A'){
+                a++;
+            }
+            else if(colors[i] == 'B' && colors[i - 1] == 'B'){
+                b++;
+            }
+            else if(colors[i] == 'B' && colors[i - 1] == 'A'){
+                if(a > 1){
+                    moves1 += a - 2;
+                }
+                a = 0;
+                b++;
+            }
+            else if(colors[i] == 'A' && colors[i - 1] == 'B'){
+                if(b > 1){
+                    moves2 += b - 2;
+                }
+                b = 0;
+                a++;
+            }
+        }
+        if(a > 1){
+            moves1 += a - 2;
+        }
+        if(b > 1){
+            moves2 += b - 2;
+        }
+        if(moves1 > moves2){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
