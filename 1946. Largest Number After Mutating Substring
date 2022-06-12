@@ -1,0 +1,23 @@
+class Solution {
+public:
+    string maximumNumber(string num, vector<int>& change) {
+        int n = num.size();
+        bool flag = false;
+        for(int i = 0; i < n; i++){
+            int curr = num[i] - '0';
+            if(curr <= change[curr]){
+                num[i] = change[curr] + '0';
+                if(curr != change[curr]){
+                    flag = true;
+                }
+            }else{
+                if(flag){
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+        return num;
+    }
+};
