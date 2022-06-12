@@ -1,0 +1,32 @@
+//Another example of dp on grid with variable starting point and variable ending point
+//We take every element of the first row and check for the minimum path cost from there
+//And take the minimum of all the paths and return that answer
+//From every cell, try out every possibility of reaching all the next columns in the next row and takr the minimum path cost
+
+class Solution {
+    int solve(vector<vector<int>>& grid, vector<vector<int>>& moveCost, int i, int j, int currVal, int m, int n, vector<vector<vector<int>>>& dp){
+        if(i == m - 1){
+            return grid[i][j];
+        }
+        if(dp[i][j][currVal] != -1) return dp[i][j][currVal];
+        int ans = 1e7;
+        for(int k = 0; k < n; k++){
+            int cost = moveCost[currVal][k];
+            ans = min(ans, currVal + cost + solve(grid, moveCost, i + 1, k, 
+                                                  grid[i + 1][k], m, n, dp)); 
+                
+        }
+        return dp[i][j][currVal] = ans;
+    }
+public:
+    int minPathCost(vector<vector<int>>& grid, vector<vector<int>>& moveCost) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int ans = INT_MAX;
+        vector<vector<vector<int>>> dp(m, vector<vector<int>> (n, vector<int> (m * n, -1)));
+        for(int i = 0; i < n; i++){
+            ans = min(ans, solve(grid, moveCost, 0, i, grid[0][i], m, n, dp));
+        }
+        return ans;
+    }
+};
