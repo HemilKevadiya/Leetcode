@@ -1,0 +1,26 @@
+class Solution {
+public:
+    double calculateTax(vector<vector<int>>& brackets, int income) {
+        if(income == 0) return 0;
+        double ans = 0;
+        int n = brackets.size();
+        if(brackets[0][0] > income){
+            ans += (double)(income * brackets[0][1]) / 100;
+            return ans;
+        }else{
+            ans += (double)(brackets[0][0] * brackets[0][1]) / 100;
+            income -= brackets[0][0];
+        }
+        for(int i = 1; i < n; i++){
+            int dollars = brackets[i][0] - brackets[i - 1][0], cost = brackets[i][1];
+            if(dollars > income){
+                ans += double(income * cost) / 100;
+                break;
+            }else{
+                ans += (double)(dollars * cost) / 100;
+                income -= dollars;
+            }
+        }
+        return ans;
+    }
+};
