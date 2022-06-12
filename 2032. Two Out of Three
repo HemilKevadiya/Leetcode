@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> twoOutOfThree(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3) {
+        unordered_map<int, int> freqMap;
+        unordered_set<int> distinct;
+        vector<int> ans;
+        int m = nums1.size(), n = nums2.size(), k = nums3.size();
+        
+        for(int i = 0; i < m; i++){
+            int curr = nums1[i];
+            if(distinct.find(curr) != distinct.end()){
+                continue;
+            }
+            freqMap[curr]++;
+            distinct.insert(curr);
+        }
+        distinct.clear();
+        
+        for(int i = 0; i < n; i++){
+            int curr = nums2[i];
+            if(distinct.find(curr) != distinct.end()){
+                continue;
+            }
+            freqMap[curr]++;
+            distinct.insert(curr);
+        }
+        distinct.clear();
+        
+        for(int i = 0; i < k; i++){
+            int curr = nums3[i];
+            if(distinct.find(curr) != distinct.end()){
+                continue;
+            }
+            freqMap[curr]++;
+            distinct.insert(curr);
+        }
+        
+        for(auto j:freqMap){
+            if(j.second >= 2){
+                ans.push_back(j.first);
+            }
+        }
+        return ans;
+    }
+};
