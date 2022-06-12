@@ -1,0 +1,26 @@
+//Backtracking Approach
+//Try to give every bag of cookies to every child and when the distribution is over, find out the maximum number of cookies that a child has and assign it to a min variable
+//And then return the minimum distribution as the answer
+
+class Solution {
+    int ans = INT_MAX;
+    void solve(vector<int>& cookies, vector<int>& children, int idx, int k, int n){
+        if(idx == n){
+            int currMax = max_element(children.begin(), children.end()) - children.begin();
+            ans = min(ans, children[currMax]);
+            return;
+        }
+        for(int i = 0; i < k; i++){
+            children[i] += cookies[idx];
+            solve(cookies, children, idx + 1, k, n);
+            children[i] -= cookies[idx];
+        }
+    }
+public:
+    int distributeCookies(vector<int>& cookies, int k) {
+        vector<int> children(k, 0);
+        int n = cookies.size();
+        solve(cookies, children, 0, k, n);
+        return ans;
+    }
+};
