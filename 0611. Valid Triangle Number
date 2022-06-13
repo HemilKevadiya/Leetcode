@@ -1,0 +1,17 @@
+//Find the lower bound of every pair of sums and the valid triplets from that index will be equal to (current idx - lower bound - 1)
+
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        int n = nums.size(), validTriplets = 0;
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i <= n - 3; i++){
+            for(int j = i + 1; j < n - 1; j++){
+                int sum = nums[i] + nums[j];
+                int idx = lower_bound(nums.begin() + (j + 1), nums.end(), sum) - nums.begin();
+                validTriplets += (idx - j - 1);
+            }
+        }
+        return validTriplets;
+    }
+};
