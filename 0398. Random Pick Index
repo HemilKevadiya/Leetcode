@@ -1,0 +1,27 @@
+//Maintain a queue for every number, which stores the indices of that number's occurences
+//As we have to have an equal probability, after every pick call, we push the current front index to the last in the queue and return tht front as the answer
+
+class Solution {
+    unordered_map<int, queue<int>> numsQueue;
+public:
+    Solution(vector<int>& nums) {
+        int n = nums.size();
+        for(int i = 0; i < n; i++){
+            int curr = nums[i];
+            numsQueue[curr].push(i);
+        }
+    }
+    
+    int pick(int target) {
+        int idx = numsQueue[target].front();
+        numsQueue[target].pop();
+        numsQueue[target].push(idx);
+        return idx;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(nums);
+ * int param_1 = obj->pick(target);
+ */
