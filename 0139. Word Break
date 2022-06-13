@@ -1,0 +1,35 @@
+//A simple Recursive solution turned to memoization
+//The Basic intuition is that, at every index we have to consider every substring starting from that index which has a size between the minimum word and the maximum word in the word dictionary(That's how we can reduce the amount of calculations very drastically)
+//Consider every substring like that and if we have found it in the dictionary then call the function from the index after that to check for other strings
+//If we reach the end of the string then we can say that the word can be broken successfully and return true
+
+class Solution {
+    bool solve(string& s, unordered_set<string>& words, int idx, int minSize, int maxSize, int n, vector<int>& dp){
+        if(idx == n) return true;
+        
+        if(dp[idx] != -1) return dp[idx];
+        
+        for(int i = minSize; i <= maxSize; i++){
+            if(idx + i > n) break;
+            string temp = s.substr(idx, i);
+            if(words.find(temp) != words.end()){
+                if(solve(s, words, idx + i, minSize, maxSize, n, dp)) return true;
+            }
+        }
+        return dp[idx] = false;
+    }
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> words;
+        int minSize = INT_MAX, maxSize = INT_MIN;
+        for(auto j:wordDict){
+            int len = j.size();
+            words.insert(j);
+            minSize = min(minSize, len);
+            maxSize = max(maxSize, len);
+        }
+        int n = s.length();
+        vector<int> dp(n, -1);
+        return solve(s, words, 0, minSize, maxSize, n, dp);
+    }
+};
