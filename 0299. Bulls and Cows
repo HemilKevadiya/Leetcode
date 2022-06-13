@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        unordered_map<char, int> freqMap;
+        unordered_set<int> same;
+        int n = guess.length();
+        for(int i = 0; i < n; i++){
+            freqMap[guess[i]]++;
+        }
+        int bulls = 0, cows = 0;
+        for(int i = 0; i < n; i++){
+            char check = guess[i], curr = secret[i];
+            if(curr == check){
+                bulls++;
+                same.insert(i);
+                freqMap[curr]--;
+            }
+        }
+        for(int i = 0; i < n; i++){
+            char curr = secret[i];
+            if(same.find(i) == same.end() && freqMap[curr] > 0){
+                freqMap[curr]--;
+                cows++;
+            }
+        }
+        return to_string(bulls) + "A" + to_string(cows) + "B";
+    }
+};
