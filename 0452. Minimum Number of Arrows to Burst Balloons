@@ -1,0 +1,23 @@
+//If the intervals are overlapping then we need to merge them but we have to shrink the resulting interval because if the intervals are overlapping
+//Ex. [2, 6], [1, 8] -> we can't shoot an arrow at position '1' to burst both the balloons ot at '7' or '8', the optimal range of shooting the arrow will be [2, 6], as it will be benefical for both the balloons
+
+class Solution {
+public:
+    int findMinArrowShots(vector<vector<int>>& points) {
+        sort(points.begin(), points.end());
+        pair<int, int> currPair = {points[0][0], points[0][1]};
+        int n = points.size();
+        vector<pair<int, int>> merge;
+        for(int i = 1; i < n; i++){
+            if(points[i][0] >= currPair.first && points[i][0] <= currPair.second){
+                currPair.first = max(currPair.first, points[i][0]);
+                currPair.second = min(currPair.second, points[i][1]);
+            }else{
+                merge.push_back(currPair);
+                currPair = {points[i][0], points[i][1]};
+            }
+        }
+        merge.push_back(currPair);
+        return merge.size();
+    }
+};
