@@ -1,0 +1,36 @@
+//Here, we are given the mappings of every character
+//We can use that to determine how many particular vowels will be there in the next iteration using the current number of vowels
+//Ex. a's can come after 'e', 'i' or 'u', so in the current iteration, the number of a's will be equal to the number of e's + i's and u's in the previous iteration
+//We can use DP for to keep track of the last iteration and current iteration
+
+class Solution {
+public:
+    int countVowelPermutation(int n) {
+        vector<long long> curr(5, 1), prev(5, 1);
+        long long sum = 5;
+        int mod = 1e9 + 7;
+        for(int i = 2; i <= n; i++){
+            sum = 0;
+            for(int j = 0; j < 5; j++){
+                if(j == 0){
+                    curr[j] = (prev[1] + prev[2] + prev[4]) % mod;
+                }
+                else if(j == 1){
+                    curr[j] = (prev[0] + prev[2]) % mod;
+                }
+                else if(j == 2){
+                    curr[j] = (prev[1] + prev[3]) % mod;
+                }
+                else if(j == 3){
+                    curr[j] = prev[2];
+                }
+                else{
+                    curr[j] = (prev[2] + prev[3]) % mod;
+                }
+                sum += curr[j] % mod;
+            }
+            prev = curr;
+        }
+        return sum % mod;
+    }
+};
