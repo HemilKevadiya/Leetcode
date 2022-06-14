@@ -1,0 +1,42 @@
+class Solution {
+public:
+    //Sorting Approach
+    
+    bool divideArray(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size(), ans = 0, currFreq = 1;
+        for(int i = 1; i < n; i++){
+            if(nums[i] != nums[i - 1]){
+                if(currFreq & 1) return false;
+                else currFreq = 1;
+            }else{
+                currFreq++;
+            }
+        }
+        return true;
+    }
+    
+    //HashMap Approach
+    
+    bool divideArray(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int, int> freqMap;
+        for(int i = 0; i < n; i++){
+            freqMap[nums[i]]++;
+        }
+        for(auto j:freqMap){
+            if(j.second & 1) return false;
+        }
+        return true;
+    }
+    
+    //A new approach, which checks every elements' frequency to be even/odd
+    
+    bool divideArray(vector<int>& nums) {
+        vector<int> count(501);
+        for(int n:nums){
+            ++count[n];
+        }
+        return all_of(count.begin(), count.end(), [](int cnt){return cnt % 2 == 0;});
+    }
+};
