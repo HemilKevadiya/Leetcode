@@ -1,0 +1,38 @@
+//We have to make a sequence of 0's followed by 1's followed by 2's
+//So, at every index we have to check if we can select that particular element or not
+//And we have to keep the track of previously selected element
+//We can only select an element if it is equal to the previous one or it is equal to previous + 1
+//Then again we have 2 choices, whether to select it or not
+//For the case, where we might be just starting the sequence the previous will be passed as -1 and if the element at current idx is 0 then and then we can select that
+//Because our sequence must start with a 0
+
+class Solution {
+    long long solve(vector<int>& nums, int idx, int select, int n, vector<vector<int>>& dp){
+        if(idx == n){
+            if(select == 2){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        if(dp[idx][select + 1] != -1) return dp[idx][select + 1];
+        
+        long long ans = 0;
+        if(select != - 1  && (nums[idx] == select || nums[idx] == select + 1)){
+            ans = solve(nums, idx + 1, select, n, dp) + solve(nums, idx + 1, nums[idx], n, dp);
+        }else if(select == -1 && nums[idx] == 0){ 
+            ans = solve(nums, idx + 1, select, n, dp) + solve(nums, idx + 1, nums[idx], n, dp);
+        }
+        else{
+            ans = solve(nums, idx + 1, select, n, dp);
+        }
+        return dp[idx][select + 1] = ans % (int)(1e9 + 7);
+    }
+public:
+    int countSpecialSubsequences(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int> (4, -1));
+        int ans = solve(nums, 0, -1, n, dp);
+        return ans;
+    }
+};
