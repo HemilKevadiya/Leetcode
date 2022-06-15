@@ -1,0 +1,47 @@
+//Another Example of Unbounded knapsack
+//But there are some more conditions
+//We can only take an offer, if it doesn't have any item which is greater than what we need at that moment
+//So, first check if it satisfies this condition and then there are two options, whether to take that offer or to not take that offer
+//For the take case, like unbounded knapsack, we have to look at the same offer again
+
+class Solution {
+    int solve(vector<int>& price, vector<vector<int>>& special, vector<int>& needs, int idx, int sLen, int n){
+        if(idx == sLen){
+            int cost = 0;
+            for(int i = 0; i < n; i++){
+                cost += (needs[i] * price[i]);
+            }
+            return cost;
+        }
+        
+        bool flag = true;
+        for(int i = 0; i < n; i++){
+            if(special[idx][i] > needs[i]){
+                flag = false;
+                break;
+            }
+        }
+        
+        int ans = 1e7;
+        
+        if(flag){
+            vector<int> tempNeeds = needs;
+            for(int i = 0; i < n; i++){
+                tempNeeds[i] -= special[idx][i];
+            }
+            ans = min(special[idx][n] + solve(price, special, tempNeeds, idx, sLen, n),                       solve(price, special, needs, idx + 1, sLen, n));
+        }else{
+            ans = solve(price, special, needs, idx + 1, sLen, n);
+        }
+        return ans;
+    }
+public:
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        int n = price.size(), sLen = special.size();
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            ans += price[i] * needs[i];
+        }
+        return min(ans, solve(price, special, needs, 0, sLen, n));
+    }
+};
