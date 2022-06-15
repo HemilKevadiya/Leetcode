@@ -1,0 +1,46 @@
+//This Problem is a version of Matrix Chain Multiplication
+//Watch Striver for more explanation
+
+class Solution {
+    //Recursive + Memoization
+    int solve(int i, int j, vector<int>& cuts, vector<vector<int>>& dp){
+        if(i > j){
+            return 0;
+        }
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int minCost = 1e7;
+        for(int k = i ; k <= j; k++){
+            int cost = (cuts[j + 1] - cuts[i - 1]) + solve(i, k - 1, cuts, dp) + 
+                                                     solve(k + 1, j, cuts, dp);
+            minCost = min(minCost, cost);
+        }
+        return dp[i][j] = minCost;
+    }
+public:
+    //Tabulation
+    int minCost(int n, vector<int>& cuts) {
+        sort(cuts.begin(), cuts.end());
+        cuts.insert(cuts.begin(), 0);
+        cuts.push_back(n);
+        int cutSize = cuts.size();
+        vector<vector<int>> dp(cutSize, vector<int> (cutSize, 0));
+        
+        for(int i = cutSize - 2; i >= 1; i--){
+            for(int j = 1; j < cutSize - 1; j++){
+                if(i > j) continue; 
+                int minCost = 1e7;
+                for(int k = i ; k <= j; k++){
+                    int cost = (cuts[j + 1] - cuts[i - 1]) + dp[i][k - 1] + 
+                        dp[k + 1][j];
+                    minCost = min(minCost, cost);
+                }
+                dp[i][j] = minCost;
+            }
+        }
+        
+        return dp[1][cutSize - 2];
+        // return solve(1, cutSize - 2, cuts, dp);
+    }
+};
