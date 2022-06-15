@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int n = nums.size(), currMax = nums[0], leftInterval = 0, nextMax = currMax;
+        for(int i = 0; i < n - 1; i++){
+            //We have to check the next elements with the max of the current subarray
+            //If any elements comes out to be greater than the current max then there is a possibility of that element being in the right subarray(so we assign it into a next max because there might come some elements that belong to the left half after that) If this case arises then the left half becomes longer and the max is assigned as whatever was is the nextMax
+            if(nums[i + 1] >= currMax){
+                nextMax = max(nextMax, nums[i + 1]);
+            }else{
+                currMax = nextMax;
+                leftInterval = i + 1;
+            }
+        }
+        return (leftInterval + 1);
+    }
+};
