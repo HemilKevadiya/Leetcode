@@ -1,0 +1,37 @@
+//Basically, we put cameras in postorder traversal(leaves to root)
+//-1 indicates that a node needs camera
+//0 indicates that a node has a camera
+//1 indicates that a node doesn't have a camera and is covered by another node
+//And if the node is NULL at any point, it means it is already covered(Base Case)
+//Traverse in a regular post order manner but after the calls are done check both the left child and right child's state(the states are returned to their parent)
+//If any child has returned -1, it means they need to get covered, so we put a camera on that node and return 0 to that node's parent
+//If no child want a camera, then check if one of the child has a camera, if they have one, it means that node is covered by that camera and return 1 to it's parent
+//Now, If no node needs a camera and they also do not have a camera, it means the current node needs to covered and return a -1
+
+class Solution {
+    int cameras;
+    int minCameras(TreeNode* root){
+        if(root == NULL){
+            return 1;
+        }
+        
+        int left = minCameras(root -> left);
+        int right = minCameras(root -> right);
+        
+        if(left == -1 || right == -1){
+            cameras++;
+            return 0;
+        }
+        
+        if(left == 0 || right == 0){
+            return 1;
+        }
+        
+        return -1;
+    }
+public:
+    int minCameraCover(TreeNode* root) {
+        if(minCameras(root) == -1) cameras++;
+        return cameras;
+    }
+};
