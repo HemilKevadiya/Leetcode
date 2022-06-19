@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string greatestLetter(string s) {
+        unordered_set<char> letters(s.begin(), s.end());
+        int n = s.length();
+        char ans;
+        bool flag = false;
+        for(int i = 0; i < n; i++){
+            char curr = s[i];
+            if(curr >= 'A' && curr <= 'Z'){
+                char toFind = curr + 32;
+                if(letters.find(toFind) != letters.end()){
+                    if(toFind > ans){
+                        flag = true;
+                        ans = toFind;
+                    }
+                }
+            }
+            
+            if(curr >= 'a' && curr <= 'z'){
+                char toFind = curr - 32;
+                if(letters.find(toFind) != letters.end()){
+                    if(toFind > ans){
+                        flag = true;
+                        ans = toFind;
+                    }
+                }
+            }
+        }
+        if(!flag) return "";
+        string a;
+        a.push_back(toupper(ans));
+        return a;
+    }
+};
