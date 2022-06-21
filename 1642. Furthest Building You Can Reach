@@ -1,0 +1,27 @@
+//The basic idea is to use ladders for the biggest height differences and use bricks for the smaller height differences
+//Maintain a min-heap for every height difference we have seen
+//For any difference greater than 0, try using ladders first
+//Then, if at any point we can't use any ladders(the size of min heap describes that) then we pop out the top difference(which is the minimum) ans use bricks for that difference instead
+//And after doing this if the bricks are also exhausted it means this is the furthest we can reach
+
+class Solution {
+public:
+    int furthestBuilding(vector<int>& h, int bricks, int ladders) {
+        int n = h.size();
+        priority_queue<int, vector<int>, greater<int>> heightDiff;
+        for(int i = 0; i < n - 1; i++){
+            int diff = h[i + 1] - h[i];
+            if(diff > 0){
+                heightDiff.push(diff);
+            }
+            if(heightDiff.size() > ladders){
+                bricks -= heightDiff.top();
+                heightDiff.pop();
+            }
+            if(bricks < 0){
+                return i;
+            }
+        }
+        return n - 1;
+    }
+};
