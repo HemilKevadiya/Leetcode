@@ -1,0 +1,20 @@
+class Solution {
+    //Make a comparator to sort the given strings in order of their actual values
+    //It can be done with a simple logic, if the sizes of the strings are equal then we compare their values and sort them accordingly or we sort them according to their size, the largest sized string stays at the bottom(minHeap)
+public:
+    string kthLargestNumber(vector<string>& nums, int k) {
+        auto comp = [](const string& a, const string& b){
+            if(a.size() == b.size()){
+                return a > b;
+            }else{
+                return a.size() > b.size();
+            }
+        };
+        priority_queue<string, vector<string>, decltype(comp)> pq(comp);
+        for(int i = 0; i < nums.size(); i++){
+            pq.push(nums[i]);
+            if(pq.size() > k) pq.pop();
+        }
+        return pq.top();
+    }
+};
