@@ -1,0 +1,29 @@
+bool comp(const vector<int>& a, vector<int>& b){
+    return a[1] < b[1];
+}
+
+class Solution {
+    //Basically, we first sort all the courses by their end days, take those courses first which has their end day very strict(less)
+    //Every course we can take, we push their durations into a maxHeap
+    //Then if at any point the current course can't be taken and while taking the previous courses according to their end days, we might have ended up taking a course with a bigger duration than the current one
+    //So, we look at the maxHeap's top, if it is greater than the current duration then it means a course with a bigger duration was taken
+    //So, we instead take the current course and pop the top course out of the maxHeap
+    
+public:
+    int scheduleCourse(vector<vector<int>>& courses) {
+        sort(courses.begin(), courses.end(), comp);
+        int n = courses.size(), currTime = 0;
+        priority_queue<int> pq;
+        for(int i = 0; i < n; i++){
+            if(courses[i][0] + currTime <= courses[i][1]){
+                pq.push(courses[i][0]);
+                currTime += courses[i][0];
+            }else if(!pq.empty() && pq.top() > courses[i][0]){
+                currTime += courses[i][0] - pq.top();
+                pq.pop();
+                pq.push(courses[i][0]);
+            }
+        }
+        return pq.size();
+    }
+};
