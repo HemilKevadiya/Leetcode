@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& target) {
+        long long sum = 0, n = target.size();
+        priority_queue<int> pq;
+        for(int i = 0; i < n; i++){
+            sum += target[i];
+            pq.push(target[i]);
+        }
+        while(true){
+            int curr = pq.top();
+            pq.pop();
+            sum -= curr;
+            if(curr == 1 || sum == 1){
+                return true;
+            }
+            if(curr < sum || sum == 0 || curr % sum == 0){
+                return false;
+            }
+            curr %= sum;
+            sum += curr;
+            pq.push(curr);
+        }
+    }
+};
