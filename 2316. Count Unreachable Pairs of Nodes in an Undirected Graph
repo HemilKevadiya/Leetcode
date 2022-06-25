@@ -1,0 +1,47 @@
+class Solution {
+    void DFS(vector<vector<int>>& adjList, int start, vector<int>& visited){
+        for(auto j:adjList[start]){
+            if(!visited[j]){
+                componentSize++;
+                visited[j] = 1;
+                DFS(adjList, j, visited);
+            }
+        }
+    }
+    //We need to get all the components and their sizes
+    //To do that we call a DFS on every node that is not visited(for any node that is not visited, it will be forming a component), so after the DFS call is over, we push that component's size into a vector and after getting all the components, we sort the vector and get the suffix sum array of all the sizes
+    //Then traverse through all the component sizes and multiply them with suffix of [i + 1], because we don't want to get duplicate pairs, we just multiply them with suffix sum and not prefix sum
+public:
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adjList(n);
+        for(auto& j:edges){
+            adjList[j[0]].push_back(j[1]);
+            adjList[j[1]].push_back(j[0]);
+        }
+        vector<int> visited(n, 0);
+        vector<long long> all;
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                visited[i] = 1;
+                DFS(adjList, i, visited);
+                
+            }
+            if(componentSize != 0){
+                all.push_back(componentSize);
+            }
+            componentSize = 0;
+        }
+        sort(all.begin(), all.end());
+        long long ans = 0;
+        int curr = all.size();
+        vector<long long> suff(curr);
+        suff[curr - 1] = all[curr - 1];
+        for(int i = curr - 2; i >= 0; i--){
+            suff[i] = all[i] + suff[i + 1];
+        }
+        for(int i = 0; i < curr - 1; i++){
+            ans += all[i] * suff[i + 1];
+        }
+        return ans;
+    }
+};
