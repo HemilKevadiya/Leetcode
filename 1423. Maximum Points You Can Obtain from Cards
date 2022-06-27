@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxScore(vector<int>& c, int k) {
+        int n = c.size();
+        long long sum = 0, currWindow = 0, minSum = INT_MAX;
+        for(int i = 0; i < n; i++){
+            if(i < (n - k)){
+                currWindow += c[i];
+            }
+            sum += c[i];
+        }
+        minSum = min(minSum, currWindow);
+        int i = 0, j = n - k;
+        while(j < n){
+            currWindow -= c[i];
+            currWindow += c[j];
+            ++i; ++j;
+            minSum = min(minSum, currWindow);
+        }
+        return sum - min(minSum, currWindow);
+    }
+};
