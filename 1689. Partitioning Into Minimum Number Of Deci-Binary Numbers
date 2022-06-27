@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int minPartitions(string n) {
+        int len = n.length(), maxDig = INT_MIN;
+        for(int i = 0; i < len; i++){
+            maxDig = max(maxDig, n[i] - '0');
+            if(maxDig == 9) break;
+        }
+        return maxDig;
+    }
+};
