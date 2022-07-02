@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxArea(int h, int w, vector<int>& hc, vector<int>& vc) {
+        sort(hc.begin(), hc.end());
+        sort(vc.begin(), vc.end());
+        hc.insert(hc.begin(), 0);
+        vc.insert(vc.begin(), 0);
+        hc.push_back(h);
+        vc.push_back(w);
+        int maxDiff1 = INT_MIN, maxDiff2 = INT_MIN, m = hc.size(), n = vc.size();
+        for(int i = 0; i < m - 1; i++){
+            maxDiff1 = max(maxDiff1, (hc[i + 1] - hc[i]));
+        }
+        for(int i = 0; i < n - 1; i++){
+            maxDiff2 = max(maxDiff2, (vc[i + 1] - vc[i]));
+        }
+        return (1ll * maxDiff1 * maxDiff2) % (int)(1e9 + 7);
+    }
+};
